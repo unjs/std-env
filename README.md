@@ -28,6 +28,7 @@ console.log(env)
   test: false,
   dev: false,
   production: false,
+  debug: false,
   ci: false,
   tty: true,
   minimalCLI: false
