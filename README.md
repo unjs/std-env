@@ -26,7 +26,7 @@ console.log(env)
 /*
 {
   test: false,
-  dev: false,
+  dev: true,
   production: false,
   debug: false,
   ci: false,
