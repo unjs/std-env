@@ -31,7 +31,8 @@ console.log(env)
   debug: false,
   ci: false,
   tty: true,
-  minimalCLI: false
+  minimalCLI: false,
+  windows: false
 }
 */
 ```

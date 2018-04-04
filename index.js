@@ -9,7 +9,8 @@ const env = {
   debug: Boolean(DEBUG),
   ci: Boolean(isCI),
   tty: Boolean(process.stdout.isTTY),
-  minimalCLI: undefined
+  minimalCLI: undefined,
+  windows: /^win/.test(process.platform)
 }
 
 env.minimalCLI = env.ci || env.test || env.producion || !env.tty
