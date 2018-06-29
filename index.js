@@ -13,6 +13,6 @@ const env = {
   windows: /^win/.test(process.platform)
 }
 
-env.minimalCLI = env.ci || env.test || env.producion || !env.tty
+env.minimalCLI = env.ci || env.test || env.production || !env.tty
 
 module.exports = env
