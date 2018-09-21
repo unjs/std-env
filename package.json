@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/pi0/std-env#readme",
   "dependencies": {
-    "is-ci": "^1.1.0"
+    "ci-info": "^1.6.0"
   }
 }

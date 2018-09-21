@@ -1,4 +1,4 @@
-const isCI = require('is-ci')
+const isCI = require('ci-info').isCI
 
 const { DEBUG, NODE_ENV = 'development' } = process.env
 
