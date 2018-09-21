@@ -6,7 +6,7 @@ var nodeENV = 'development'
 var browser = typeof window !== 'undefined'
 var platform = ''
 
-// Process depenendet fields
+// Process dependent fields
 if (typeof process !== 'undefined') {
   if (process.platform) {
     platform = String(process.platform)
