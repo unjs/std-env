@@ -1,18 +1,59 @@
-const isCI = require('ci-info').isCI
+// Gather initial information
+var isCI = false
+var debug = false
+var tty = false
+var nodeENV = 'development'
+var browser = typeof window !== 'undefined'
+var platform = ''
 
-const { DEBUG, NODE_ENV = 'development' } = process.env
+// Process depenendet fields
+if (typeof process !== 'undefined') {
+  if (process.platform) {
+    platform = String(process.platform)
+  }
 
-const env = {
-  test: NODE_ENV === 'test',
-  dev: NODE_ENV === 'development' || NODE_ENV === 'dev',
-  production: NODE_ENV === 'production',
-  debug: Boolean(DEBUG),
-  ci: Boolean(isCI),
-  tty: Boolean(process.stdout.isTTY),
-  minimalCLI: undefined,
-  windows: /^win/.test(process.platform)
+  if (process.env) {
+    // isCI
+    isCI = Boolean(require('ci-info').isCI)
+
+    // NODE_ENV
+    if (process.NODE_ENV) {
+      nodeENV = String(process.env.NODE_ENV)
+    }
+
+    // DEBUG
+    if (process.DEBUG) {
+      debug = Boolean(process.env.DEBUG)
+    }
+
+    // TTY
+    if (process.stdout) {
+      tty = Boolean(process.stdout.isTTY)
+    }
+  }
 }
 
+// Construct env object
+var env = {
+  browser: browser,
+
+  test: nodeENV === 'test',
+  dev: nodeENV === 'development' || nodeENV === 'dev',
+  production: nodeENV === 'production',
+  debug: debug,
+
+  ci: isCI,
+  tty: tty,
+
+  minimalCLI: undefined,
+
+  windows: /^win/i.test(platform),
+  darwin: /^darwin/i.test(platform),
+  linux: /^linux/i.test(platform),
+}
+
+// Compute minimalCLI
 env.minimalCLI = env.ci || env.test || env.production || !env.tty
 
+// Export env
 module.exports = env

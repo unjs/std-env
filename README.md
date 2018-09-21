@@ -19,12 +19,13 @@ npm i std-env
 ## Usage
 
 ```js
-cost env = require('std-env')
+const env = require('std-env')
 
 console.log(env)
 
 /*
 {
+  browser: false,
   test: false,
   dev: true,
   production: false,
@@ -32,7 +33,9 @@ console.log(env)
   ci: false,
   tty: true,
   minimalCLI: false,
-  windows: false
+  windows: false,
+  darwin: true,
+  linux: false
 }
 */
 ```
