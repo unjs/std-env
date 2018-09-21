@@ -1,4 +1,7 @@
-# STD-ENV
+# std-env
+
+[![npm](https://img.shields.io/npm/dt/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
+[![npm](https://img.shields.io/npm/v/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
 
 Detect running environment of the current Node.js process.
 
