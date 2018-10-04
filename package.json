@@ -2,20 +2,12 @@
   "name": "std-env",
   "version": "2.0.1",
   "description": "Detect running environment of the current Node.js process",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pi0/std-env.git"
-  },
-  "author": "Pooya Parsa <pooya@pi0.ir>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/pi0/std-env/issues"
-  },
-  "homepage": "https://github.com/pi0/std-env#readme",
+  "main": "index.js",
+  "repository": "blindmedia/std-env",
+  "contributes": [
+    "Pooya Parsa <pooya@pi0.ir>"
+  ],
   "dependencies": {
     "ci-info": "^1.6.0"
   },
