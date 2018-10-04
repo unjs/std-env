@@ -18,5 +18,8 @@
   "homepage": "https://github.com/pi0/std-env#readme",
   "dependencies": {
     "ci-info": "^1.6.0"
-  }
+  },
+  "files": [
+    "index.js"
+  ]
 }
