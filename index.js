@@ -56,4 +56,4 @@ var env = {
 env.minimalCLI = env.ci || env.test || env.production || !env.tty
 
 // Export env
-module.exports = env
+module.exports = Object.freeze(env)
