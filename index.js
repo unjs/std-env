@@ -17,7 +17,7 @@ if (typeof process !== 'undefined') {
     isCI = Boolean(require('ci-info').isCI)
 
     // NODE_ENV
-    if (process.NODE_ENV) {
+    if (process.env.NODE_ENV) {
       nodeENV = String(process.env.NODE_ENV)
     }
 
