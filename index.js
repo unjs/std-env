@@ -53,7 +53,7 @@ var env = {
 }
 
 // Compute minimalCLI
-env.minimalCLI = env.ci || env.test || env.production || !env.tty
+env.minimalCLI = env.ci || env.test || !env.tty
 
 // Export env
 module.exports = Object.freeze(env)
