@@ -4,7 +4,7 @@
   "description": "Detect running environment of the current Node.js process",
   "license": "MIT",
   "main": "index.js",
-  "repository": "blindmedia/std-env",
+  "repository": "jsless/std-env",
   "contributes": [
     "Pooya Parsa <pooya@pi0.ir>"
   ],
