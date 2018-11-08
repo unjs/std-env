@@ -64,7 +64,7 @@ var env = {
 
 // Compute minimal
 env.minimal = minimal || env.ci || env.test || !env.tty
-emv.minimalCLI = env.minimal
+env.minimalCLI = env.minimal
 
 // Export env
 module.exports = Object.freeze(env)
