@@ -5,6 +5,7 @@ var tty = false
 var nodeENV = 'development'
 var browser = typeof window !== 'undefined'
 var platform = ''
+var minimal = false
 
 // Boolean helper
 function toBoolean(val) {
@@ -35,6 +36,9 @@ if (typeof process !== 'undefined') {
 
     // DEBUG
     debug = toBoolean(process.env.DEBUG)
+
+    // MINIMAL
+    minimal = toBoolean(process.env.MINIMAL)
   }
 }
 
@@ -50,6 +54,7 @@ var env = {
   ci: isCI,
   tty: tty,
 
+  minimal: undefined,
   minimalCLI: undefined,
 
   windows: /^win/i.test(platform),
@@ -57,8 +62,9 @@ var env = {
   linux: /^linux/i.test(platform),
 }
 
-// Compute minimalCLI
-env.minimalCLI = env.ci || env.test || !env.tty
+// Compute minimal
+env.minimal = minimal || env.ci || env.test || !env.tty
+emv.minimalCLI = env.minimal
 
 // Export env
 module.exports = Object.freeze(env)
