@@ -6,30 +6,35 @@ var nodeENV = 'development'
 var browser = typeof window !== 'undefined'
 var platform = ''
 
-// Process dependent fields
+// Boolean helper
+function toBoolean(val) {
+  return (!val || val === 'false') ? false : true
+}
+
+// Process dependent
 if (typeof process !== 'undefined') {
+  // Platform
   if (process.platform) {
     platform = String(process.platform)
   }
 
-  if (process.env) {
-    // isCI
-    isCI = Boolean(require('ci-info').isCI)
+  // TTY
+  if (process.stdout) {
+    tty = toBoolean(process.stdout.isTTY)
+  }
 
+  // Is CI
+  isCI = Boolean(require('ci-info').isCI)
+
+  // Env dependent
+  if (process.env) {
     // NODE_ENV
     if (process.env.NODE_ENV) {
-      nodeENV = String(process.env.NODE_ENV)
+      nodeENV = process.env.NODE_ENV
     }
 
     // DEBUG
-    if (process.DEBUG) {
-      debug = Boolean(process.env.DEBUG)
-    }
-
-    // TTY
-    if (process.stdout) {
-      tty = Boolean(process.stdout.isTTY)
-    }
+    debug = toBoolean(process.env.DEBUG)
   }
 }
 
