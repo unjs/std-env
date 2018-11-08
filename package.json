@@ -1,6 +1,6 @@
 {
   "name": "std-env",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Detect running environment of the current Node.js process",
   "license": "MIT",
   "main": "index.js",
