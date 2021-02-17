@@ -7,13 +7,13 @@ Detect running environment of the current Node.js process.
 
 ## Installation
 
-Using yarn:
+Using Yarn:
 
 ```
 yarn add std-env
 ```
 
-Usin npm:
+Using npm:
 
 ```
 npm i std-env
