@@ -10,7 +10,7 @@
     "Pooya Parsa <pooya@pi0.ir>"
   ],
   "dependencies": {
-    "ci-info": "^3.0.0"
+    "ci-info": "^3.1.1"
   },
   "files": [
     "index.js",
