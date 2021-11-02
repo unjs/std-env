@@ -1,11 +1,11 @@
 // Gather initial information
-var isCI = false
-var debug = false
-var tty = false
-var nodeENV = 'development'
-var browser = typeof window !== 'undefined'
-var platform = ''
-var minimal = false
+let isCI = false
+let debug = false
+let tty = false
+let nodeENV = 'development'
+let browser = typeof window !== 'undefined'
+let platform = ''
+let minimal = false
 
 // Boolean helper
 function toBoolean(val) {
@@ -43,7 +43,7 @@ if (typeof process !== 'undefined') {
 }
 
 // Construct env object
-var env = {
+const env = {
   browser: browser,
 
   test: nodeENV === 'test',
@@ -67,4 +67,4 @@ env.minimal = minimal || env.ci || env.test || !env.tty
 env.minimalCLI = env.minimal
 
 // Export env
-module.exports = Object.freeze(env)
+export default Object.freeze(env)
