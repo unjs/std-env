@@ -1,4 +1,5 @@
 import { EnvInfo } from './types'
+import { vendors } from 'ci-info/vendors.json'
 
 // Gather initial information
 let isCI = false
