@@ -1,7 +1,7 @@
 {
   "name": "std-env",
   "version": "3.0.0-0",
-  "description": "Simplified way to detect current running Javascript environment",
+  "description": "Detect current Javascript environment",
   "repository": "unjs/std-env",
   "license": "MIT",
   "sideEffects": false,

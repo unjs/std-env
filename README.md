@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
 [![bundlephobia](https://img.shields.io/bundlephobia/min/std-env/latest.svg?style=flat-square)](https://bundlephobia.com/result?p=std-env)
 
-> Simplified way to detect current running Javascript environment
+> Detect current Javascript environment
 
 ## Installation
 
