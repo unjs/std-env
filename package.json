@@ -9,15 +9,15 @@
     "import": "./dist/index.mjs",
     "require": "./dist/index.cjs"
   },
-  "main": "./index.cjs",
-  "types": "./index.d.ts",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "prepack": "unbuild",
-    "test": "node test.cjs",
-    "release": "yarn test && standard-version && git push --follow-tags && npm publish"
+    "release": "yarn test && standard-version && git push --follow-tags && npm publish",
+    "test": "node test.cjs"
   },
   "devDependencies": {
     "standard-version": "^9.3.2",
