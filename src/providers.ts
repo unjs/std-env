@@ -26,7 +26,7 @@ const providers: InternalProvider[] = [
   ["HUDSON", "HUDSON_URL"],
   ["JENKINS", "JENKINS_URL"],
   ["MAGNUM"],
-  ["netlify"],
+  ["NETLIFY"],
   ["NEVERCODE"],
   ["RENDER"],
   ["SAIL", "SAILCI"],
