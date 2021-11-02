@@ -16,7 +16,8 @@
   ],
   "scripts": {
     "prepack": "unbuild",
-    "release": "standard-version && git push --follow-tags && npm publish"
+    "test": "node test.cjs",
+    "release": "yarn test && standard-version && git push --follow-tags && npm publish"
   },
   "devDependencies": {
     "standard-version": "^9.3.2",
