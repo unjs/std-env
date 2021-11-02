@@ -25,6 +25,8 @@ import envInfo from 'std-env'
 const envInfo = require('std-env')
 ```
 
+You can read more about `envInfo` from [./src/types.ts](./src/types.ts)
+
 ## License
 
 MIT

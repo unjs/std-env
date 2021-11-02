@@ -1,3 +1,5 @@
+import { EnvInfo } from './types'
+
 // Gather initial information
 let isCI = false
 let debug = false
@@ -43,7 +45,7 @@ if (typeof process !== 'undefined') {
 }
 
 // Construct env object
-const env = {
+const env: EnvInfo = {
   browser: browser,
 
   test: nodeENV === 'test',
@@ -55,7 +57,6 @@ const env = {
   tty: tty,
 
   minimal: undefined,
-  minimalCLI: undefined,
 
   windows: /^win/i.test(platform),
   darwin: /^darwin/i.test(platform),
@@ -64,7 +65,6 @@ const env = {
 
 // Compute minimal
 env.minimal = minimal || env.ci || env.test || !env.tty
-env.minimalCLI = env.minimal
 
 // Export env
 export default Object.freeze(env)
