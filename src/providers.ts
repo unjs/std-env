@@ -41,7 +41,8 @@ const providers: InternalProvider[] = [
   ["TRAVIS"],
   ["VERCEL", "NOW_BUILDER"],
   ["APPCENTER", "APPCENTER_BUILD_ID"],
-  ["CODESANDBOX", "CODESANDBOX_SSE", { ci: false }]
+  ["CODESANDBOX", "CODESANDBOX_SSE", { ci: false }],
+  ["STACKBLITZ"],
 ]
 
 export type ProviderName = Lowercase<(typeof providers)[number][0]>
@@ -56,6 +57,13 @@ export function detectProvider(env: Record<string, string>): ProviderInfo | null
         name: provider[0].toLowerCase(),
         ...provider[2] as any
       }
+    }
+  }
+
+  // Stackblitz / Webcontainer
+  if (env.SHELL && env.SHELL === '/bin/jsh') {
+    return {
+      name: 'STACKBLITZ'
     }
   }
 
