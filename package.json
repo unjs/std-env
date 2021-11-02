@@ -1,27 +1,25 @@
 {
   "name": "std-env",
   "version": "2.3.1",
-  "description": "Running environment information",
+  "description": "Simplified way to detect current running Javascript environment",
   "repository": "unjs/std-env",
   "license": "MIT",
-  "main": "./index.cjs",
+  "sideEffects": false,
   "exports": {
     "import": "./dist/index.mjs",
     "require": "./dist/index.cjs"
   },
+  "main": "./index.cjs",
   "types": "./index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prepack": "unbuild",
     "release": "standard-version && git push --follow-tags && npm publish"
   },
-  "files": [
-    "dist"
-  ],
-  "dependencies": {
-    "ci-info": "^3.1.1"
-  },
   "devDependencies": {
-    "standard-version": "^9.3.1",
+    "standard-version": "^9.3.2",
     "unbuild": "^0.5.11"
   }
 }

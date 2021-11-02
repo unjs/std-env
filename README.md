@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/dm/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
 [![npm](https://img.shields.io/npm/v/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
 
-Detect running environment of the current Node.js process.
+> Simplified way to detect current running Javascript environment
 
 ## Installation
 
@@ -19,13 +19,32 @@ npm i std-env
 
 ```js
 // ESM
-import envInfo from 'std-env'
+import { isWindows } from 'std-env'
 
 // CommonJS
-const envInfo = require('std-env')
+const { isCI } = require('std-env')
 ```
 
-You can read more about `envInfo` from [./src/types.ts](./src/types.ts)
+Available exports:
+
+- `hasTTY`
+- `hasWindow`
+- `isCI`
+- `isDebug`
+- `isDevelopment`
+- `isLinux`
+- `isMacOS`
+- `isMinimal`
+- `isProduction`
+- `isTest`
+- `isWindows`
+- `platform`
+- `provider`
+
+You can read more about how each flag works from [./src/index.ts](./src/index.ts).
+
+List of well known providers can be found from [./src/providers.ts](./src/providers.ts).
+
 
 ## License
 
