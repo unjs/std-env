@@ -1,22 +1,26 @@
 {
   "name": "std-env",
   "version": "2.3.1",
-  "description": "Detect running environment of the current Node.js process",
+  "description": "Simplified way to detect current running Javascript environment",
   "repository": "unjs/std-env",
   "license": "MIT",
-  "main": "./index.js",
-  "types": "./index.d.ts",
-  "scripts": {
-    "release": "standard-version && git push --follow-tags && npm publish"
+  "sideEffects": false,
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs"
   },
+  "main": "./index.cjs",
+  "types": "./index.d.ts",
   "files": [
-    "index.js",
-    "index.d.ts"
+    "dist"
   ],
-  "dependencies": {
-    "ci-info": "^3.1.1"
+  "scripts": {
+    "prepack": "unbuild",
+    "test": "node test.cjs",
+    "release": "yarn test && standard-version && git push --follow-tags && npm publish"
   },
   "devDependencies": {
-    "standard-version": "^9.3.1"
+    "standard-version": "^9.3.2",
+    "unbuild": "^0.5.11"
   }
 }
