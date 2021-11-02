@@ -5,6 +5,7 @@ type InternalProvider = [vendorName: string, envName?: string, meta?: Record<str
 const providers: InternalProvider[] = [
   ["APPVEYOR"],
   ["AZURE_PIPELINES", "SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"],
+  ["AZURE_STATIC", "INPUT_AZURE_STATIC_WEB_APPS_API_TOKEN"],
   ["APPCIRCLE", "AC_APPCIRCLE"],
   ["BAMBOO", "bamboo_planKey"],
   ["BITBUCKET", "BITBUCKET_COMMIT"],
