@@ -1,4 +1,4 @@
-import { detectProvider } from './providers'
+import { detectProvider, ProviderName } from './providers'
 
 export type { ProviderName, ProviderInfo } from './providers'
 
@@ -11,7 +11,7 @@ const nodeENV = envShim.NODE_ENV || ''
 export const platform = processShim.platform
 
 /** Current current provider name */
-export const provider = providerInfo.name
+export const provider: ProviderName = providerInfo.name
 
 /** Detect if `CI` environment variable is set or a provider CI detected */
 export const isCI = toBoolean(envShim.CI) || providerInfo.ci !== false
