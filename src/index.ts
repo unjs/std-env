@@ -10,7 +10,7 @@ const nodeENV = envShim.NODE_ENV || ''
 /** Value of process.platform */
 export const platform = processShim.platform
 
-/** Current current provider name */
+/** Current provider name */
 export const provider: ProviderName = providerInfo.name
 
 /** Detect if `CI` environment variable is set or a provider CI detected */

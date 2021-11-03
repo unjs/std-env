@@ -2,7 +2,7 @@
 
 
 export type ProviderName =
-  'appveyor' | 'azure_pipelines' | 'azure_static' | 'appcircle' | 'bamboo' |
+  '' | 'appveyor' | 'azure_pipelines' | 'azure_static' | 'appcircle' | 'bamboo' |
   'bitbucket' | 'bitrise' | 'buddy' | 'buildkite' | 'circle' | 'cirrus' |
   'codebuild' | 'codefresh' | 'drone' | 'drone' | 'dsari' | 'github_actions' |
   'gitlab' | 'gitlab' | 'gocd' | 'layerci' | 'hudson' | 'jenkins' | 'magnum' |
@@ -57,7 +57,7 @@ const providers: InternalProvider[] = [
 
 export type ProviderInfo = { name: ProviderName, [meta: string]: any }
 
-export function detectProvider(env: Record<string, string>): ProviderInfo | null {
+export function detectProvider(env: Record<string, string>): ProviderInfo {
   // Based on env
   for (const provider of providers) {
     const envName = provider[1] || provider[0]
@@ -72,7 +72,7 @@ export function detectProvider(env: Record<string, string>): ProviderInfo | null
   // Stackblitz / Webcontainer
   if (env.SHELL && env.SHELL === '/bin/jsh') {
     return {
-      name: 'STACKBLITZ'
+      name: 'stackblitz'
     }
   }
 
