@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/unjs/std-env/compare/v3.0.0...v3.0.1) (2021-11-05)
+
+
+### Bug Fixes
+
+* set `ci: false` for unkown envs ([2d5a646](https://github.com/unjs/std-env/commit/2d5a6467e2c503e60a11a7e64f98c15d84350d27))
+
 ## [3.0.0](https://github.com/unjs/std-env/compare/v3.0.0-0...v3.0.0) (2021-11-03)
 
 
