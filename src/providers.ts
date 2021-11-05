@@ -72,11 +72,13 @@ export function detectProvider(env: Record<string, string>): ProviderInfo {
   // Stackblitz / Webcontainer
   if (env.SHELL && env.SHELL === '/bin/jsh') {
     return {
-      name: 'stackblitz'
+      name: 'stackblitz',
+      ci: false
     }
   }
 
   return {
-    name: ''
+    name: '',
+    ci: false
   }
 }
