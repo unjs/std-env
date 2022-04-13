@@ -53,7 +53,7 @@ const providers: InternalProvider[] = [
   ['APPCENTER', 'APPCENTER_BUILD_ID'],
   ['CODESANDBOX', 'CODESANDBOX_SSE', { ci: false }],
   ['STACKBLITZ'],
-  ['STORMKIT']
+  ['STORMKIT'],
 ]
 
 export type ProviderInfo = { name: ProviderName, [meta: string]: any }
