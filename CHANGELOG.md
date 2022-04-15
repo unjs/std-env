@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.1](https://github.com/unjs/std-env/compare/v3.1.0...v3.1.1) (2022-04-15)
+
+
+### Bug Fixes
+
+* **pkg:** emit cjs dist ([a64d409](https://github.com/unjs/std-env/commit/a64d40955046efbb5a39f92b64c43d6417812a33))
+
 ## [3.1.0](https://github.com/unjs/std-env/compare/v3.0.1...v3.1.0) (2022-04-15)
 
 
