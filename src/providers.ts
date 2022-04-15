@@ -1,6 +1,5 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
 
-
 export type ProviderName =
   '' | 'appveyor' | 'azure_pipelines' | 'azure_static' | 'appcircle' | 'bamboo' |
   'bitbucket' | 'bitrise' | 'buddy' | 'buildkite' | 'circle' | 'cirrus' |
@@ -53,12 +52,12 @@ const providers: InternalProvider[] = [
   ['APPCENTER', 'APPCENTER_BUILD_ID'],
   ['CODESANDBOX', 'CODESANDBOX_SSE', { ci: false }],
   ['STACKBLITZ'],
-  ['STORMKIT'],
+  ['STORMKIT']
 ]
 
 export type ProviderInfo = { name: ProviderName, [meta: string]: any }
 
-export function detectProvider(env: Record<string, string>): ProviderInfo {
+export function detectProvider (env: Record<string, string>): ProviderInfo {
   // Based on env
   for (const provider of providers) {
     const envName = provider[1] || provider[0]

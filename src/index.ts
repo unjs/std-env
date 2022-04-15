@@ -48,6 +48,6 @@ export const isMacOS = /^darwin/i.test(platform)
 
 // -- Utils --
 
-function toBoolean(val) {
+function toBoolean (val) {
   return val ? (val !== 'false') : false
 }
