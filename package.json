@@ -15,6 +15,7 @@
     "dist"
   ],
   "scripts": {
+    "build": "unbuild",
     "dev": "vitest",
     "lint": "eslint --ext .ts .",
     "prepack": "unbuild",
