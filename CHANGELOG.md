@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/unjs/std-env/compare/v3.0.1...v3.1.0) (2022-04-15)
+
+
+### Features
+
+* detect stormkit environment ([#21](https://github.com/unjs/std-env/issues/21)) ([88874af](https://github.com/unjs/std-env/commit/88874afa01d7385fe7769733a5747d028c5bb018))
+
 ### [3.0.1](https://github.com/unjs/std-env/compare/v3.0.0...v3.0.1) (2021-11-05)
 
 
