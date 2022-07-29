@@ -4,8 +4,8 @@ export type ProviderName =
   '' | 'appveyor' | 'azure_pipelines' | 'azure_static' | 'appcircle' | 'bamboo' |
   'bitbucket' | 'bitrise' | 'buddy' | 'buildkite' | 'circle' | 'cirrus' |
   'codebuild' | 'codefresh' | 'drone' | 'drone' | 'dsari' | 'github_actions' |
-  'gitlab' | 'gitlab' | 'gocd' | 'layerci' | 'hudson' | 'jenkins' | 'magnum' |
-  'netlify' | 'netlify' | 'nevercode' | 'render' | 'sail' | 'semaphore' |
+  'gitlab' | 'gocd' | 'layerci' | 'hudson' | 'jenkins' | 'magnum' |
+  'netlify' | 'nevercode' | 'render' | 'sail' | 'semaphore' |
   'screwdriver' | 'shippable' | 'solano' | 'strider' | 'teamcity' | 'travis' |
   'vercel' | 'appcenter' | 'codesandbox' | 'stackblitz' | 'stormkit'
 
