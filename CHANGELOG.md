@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/unjs/std-env/compare/v3.1.1...v3.2.0) (2022-08-12)
+
+
+### Features
+
+* detect `cloudflare_pages` provider ([#31](https://github.com/unjs/std-env/issues/31)) ([411b3c0](https://github.com/unjs/std-env/commit/411b3c0ec641721a00ae62c9911587444de6ed48))
+
 ### [3.1.1](https://github.com/unjs/std-env/compare/v3.1.0...v3.1.1) (2022-04-15)
 
 
