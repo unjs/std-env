@@ -2,7 +2,7 @@
 
 export type ProviderName =
   '' | 'appveyor' | 'azure_pipelines' | 'azure_static' | 'appcircle' | 'bamboo' |
-  'bitbucket' | 'bitrise' | 'buddy' | 'buildkite' | 'circle' | 'cirrus' |
+  'bitbucket' | 'bitrise' | 'buddy' | 'buildkite' | 'circle' | 'cirrus' | 'cloudflare_pages' |
   'codebuild' | 'codefresh' | 'drone' | 'drone' | 'dsari' | 'github_actions' |
   'gitlab' | 'gocd' | 'layerci' | 'hudson' | 'jenkins' | 'magnum' |
   'netlify' | 'nevercode' | 'render' | 'sail' | 'semaphore' |
@@ -23,6 +23,7 @@ const providers: InternalProvider[] = [
   ['BUILDKITE'],
   ['CIRCLE', 'CIRCLECI'],
   ['CIRRUS', 'CIRRUS_CI'],
+  ['CLOUDFLARE_PAGES', 'CF_PAGES', { ci: true }],
   ['CODEBUILD', 'CODEBUILD_BUILD_ARN'],
   ['CODEFRESH', 'CF_BUILD_ID'],
   ['DRONE'],
