@@ -7,7 +7,7 @@ export type ProviderName =
   'gitlab' | 'gocd' | 'layerci' | 'hudson' | 'jenkins' | 'magnum' |
   'netlify' | 'nevercode' | 'render' | 'sail' | 'semaphore' |
   'screwdriver' | 'shippable' | 'solano' | 'strider' | 'teamcity' | 'travis' |
-  'vercel' | 'appcenter' | 'codesandbox' | 'stackblitz' | 'stormkit'
+  'vercel' | 'appcenter' | 'codesandbox' | 'stackblitz' | 'stormkit' | 'cleavr'
 
 type InternalProvider = [providerName: Uppercase<ProviderName>, envName?: string, meta?: Record<string, any>]
 
@@ -53,7 +53,8 @@ const providers: InternalProvider[] = [
   ['APPCENTER', 'APPCENTER_BUILD_ID'],
   ['CODESANDBOX', 'CODESANDBOX_SSE', { ci: false }],
   ['STACKBLITZ'],
-  ['STORMKIT']
+  ['STORMKIT'],
+  ['CLEAVR']
 ]
 
 export type ProviderInfo = { name: ProviderName, [meta: string]: any }
