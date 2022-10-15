@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/unjs/std-env/compare/v3.2.1...v3.3.0) (2022-10-15)
+
+
+### Features
+
+* detect cleavr provider ([#36](https://github.com/unjs/std-env/issues/36)) ([c24c8ed](https://github.com/unjs/std-env/commit/c24c8edf61d52b371f379f3d44b89a8eb1028091))
+
 ### [3.2.1](https://github.com/unjs/std-env/compare/v3.2.0...v3.2.1) (2022-08-12)
 
 ## [3.2.0](https://github.com/unjs/std-env/compare/v3.1.1...v3.2.0) (2022-08-12)
