@@ -1,4 +1,4 @@
-import { defineBuildConfig } from 'unbuild'
+import { defineBuildConfig } from "unbuild";
 
 export default defineBuildConfig({
   declaration: true,
@@ -6,6 +6,6 @@ export default defineBuildConfig({
     emitCJS: true
   },
   entries: [
-    'src/index'
+    "src/index"
   ]
-})
+});

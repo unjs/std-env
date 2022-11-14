@@ -1,8 +1,8 @@
-import { expect, it, describe } from 'vitest'
-import * as stdEnv from '../src'
+import { expect, it, describe } from "vitest";
+import * as stdEnv from "../src";
 
-describe('std-env', () => {
-  it('has all exports (dummy)', () => {
+describe("std-env", () => {
+  it("has all exports (dummy)", () => {
     expect(Object.keys(stdEnv)).toMatchInlineSnapshot(`
       [
         "platform",
@@ -19,6 +19,6 @@ describe('std-env', () => {
         "isLinux",
         "isMacOS",
       ]
-    `)
-  })
-})
+    `);
+  });
+});
