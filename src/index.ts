@@ -3,7 +3,7 @@ import { detectProvider, ProviderName } from "./providers";
 export type { ProviderName, ProviderInfo } from "./providers";
 
 const processShim: typeof process = typeof process !== "undefined" ? process : {} as typeof process;
-const envShim = processShim.env || {} as typeof process;
+const envShim = processShim.env || {} as typeof process.env;
 const providerInfo = detectProvider(envShim);
 const nodeENV = envShim.NODE_ENV || "";
 
