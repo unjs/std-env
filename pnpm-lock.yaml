@@ -6,6 +6,7 @@ specifiers:
   eslint: ^8.33.0
   eslint-config-unjs: ^0.1.0
   jiti: ^1.16.2
+  prettier: ^2.8.3
   standard-version: ^9.5.0
   typescript: ^4.9.5
   unbuild: ^1.1.1
@@ -17,6 +18,7 @@ devDependencies:
   eslint: 8.33.0
   eslint-config-unjs: 0.1.0_4vsywjlpuriuw3tl5oq6zy5a64
   jiti: 1.16.2
+  prettier: 2.8.3
   standard-version: 9.5.0
   typescript: 4.9.5
   unbuild: 1.1.1
@@ -3377,6 +3379,12 @@ packages:
   /prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+    dev: true
+
+  /prettier/2.8.3:
+    resolution: {integrity: sha512-tJ/oJ4amDihPoufT5sM0Z1SKEuKay8LfVAMlbbhnnkvt6BUserZylqo2PN+p9KeljLr0OHa2rXHU1T8reeoTrw==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: true
 
   /pretty-bytes/6.0.0:

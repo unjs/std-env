@@ -2,8 +2,9 @@ import { detectProvider, ProviderName } from "./providers";
 
 export type { ProviderName, ProviderInfo } from "./providers";
 
-const processShim: typeof process = typeof process !== "undefined" ? process : {} as typeof process;
-const envShim = processShim.env || {} as typeof process.env;
+const processShim: typeof process =
+  typeof process !== "undefined" ? process : ({} as typeof process);
+const envShim = processShim.env || ({} as typeof process.env);
 const providerInfo = detectProvider(envShim);
 const nodeENV = envShim.NODE_ENV || "";
 
@@ -35,7 +36,8 @@ export const isProduction = nodeENV === "production";
 export const isDevelopment = nodeENV === "dev" || nodeENV === "development";
 
 /** Detect if MINIMAL environment variable is set, running in CI or test or TTY is unavailable */
-export const isMinimal = toBoolean(envShim.MINIMAL) || isCI || isTest || !hasTTY;
+export const isMinimal =
+  toBoolean(envShim.MINIMAL) || isCI || isTest || !hasTTY;
 
 /** Detect if process.platform is Windows */
 export const isWindows = /^win/i.test(platform);
@@ -48,6 +50,6 @@ export const isMacOS = /^darwin/i.test(platform);
 
 // -- Utils --
 
-function toBoolean (val) {
-  return val ? (val !== "false") : false;
+function toBoolean(val) {
+  return val ? val !== "false" : false;
 }

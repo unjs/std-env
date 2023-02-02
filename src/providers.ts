@@ -1,15 +1,54 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
 
 export type ProviderName =
-  "" | "appveyor" | "azure_pipelines" | "azure_static" | "appcircle" | "bamboo" |
-  "bitbucket" | "bitrise" | "buddy" | "buildkite" | "circle" | "cirrus" | "cloudflare_pages" |
-  "codebuild" | "codefresh" | "drone" | "drone" | "dsari" | "github_actions" |
-  "gitlab" | "gocd" | "layerci" | "hudson" | "jenkins" | "magnum" |
-  "netlify" | "nevercode" | "render" | "sail" | "semaphore" |
-  "screwdriver" | "shippable" | "solano" | "strider" | "teamcity" | "travis" |
-  "vercel" | "appcenter" | "codesandbox" | "stackblitz" | "stormkit" | "cleavr"
+  | ""
+  | "appveyor"
+  | "azure_pipelines"
+  | "azure_static"
+  | "appcircle"
+  | "bamboo"
+  | "bitbucket"
+  | "bitrise"
+  | "buddy"
+  | "buildkite"
+  | "circle"
+  | "cirrus"
+  | "cloudflare_pages"
+  | "codebuild"
+  | "codefresh"
+  | "drone"
+  | "drone"
+  | "dsari"
+  | "github_actions"
+  | "gitlab"
+  | "gocd"
+  | "layerci"
+  | "hudson"
+  | "jenkins"
+  | "magnum"
+  | "netlify"
+  | "nevercode"
+  | "render"
+  | "sail"
+  | "semaphore"
+  | "screwdriver"
+  | "shippable"
+  | "solano"
+  | "strider"
+  | "teamcity"
+  | "travis"
+  | "vercel"
+  | "appcenter"
+  | "codesandbox"
+  | "stackblitz"
+  | "stormkit"
+  | "cleavr";
 
-type InternalProvider = [providerName: Uppercase<ProviderName>, envName?: string, meta?: Record<string, any>]
+type InternalProvider = [
+  providerName: Uppercase<ProviderName>,
+  envName?: string,
+  meta?: Record<string, any>
+];
 
 const providers: InternalProvider[] = [
   ["APPVEYOR"],
@@ -54,19 +93,21 @@ const providers: InternalProvider[] = [
   ["CODESANDBOX", "CODESANDBOX_SSE", { ci: false }],
   ["STACKBLITZ"],
   ["STORMKIT"],
-  ["CLEAVR"]
+  ["CLEAVR"],
 ];
 
-export type ProviderInfo = { name: ProviderName, [meta: string]: any }
+export type ProviderInfo = { name: ProviderName; [meta: string]: any };
 
-export function detectProvider (env: Record<string, string | undefined>): ProviderInfo {
+export function detectProvider(
+  env: Record<string, string | undefined>
+): ProviderInfo {
   // Based on env
   for (const provider of providers) {
     const envName = provider[1] || provider[0];
     if (env[envName]) {
       return {
         name: provider[0].toLowerCase(),
-        ...provider[2] as any
+        ...(provider[2] as any),
       };
     }
   }
@@ -75,12 +116,12 @@ export function detectProvider (env: Record<string, string | undefined>): Provid
   if (env.SHELL && env.SHELL === "/bin/jsh") {
     return {
       name: "stackblitz",
-      ci: false
+      ci: false,
     };
   }
 
   return {
     name: "",
-    ci: false
+    ci: false,
   };
 }
