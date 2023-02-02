@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.3.2
+
+
+### 🩹 Fixes
+
+  - Detect `isTest` from `NODE_ENV` as well (#39)
+
+### 🏡 Chore
+
+  - Update dev dependencies (cdb65ab)
+  - Use changelogen for release (62b8d85)
+
+### 🎨 Styles
+
+  - Format with prettier (0469d74)
+
+### ❤️  Contributors
+
+- Pooya Parsa <pooya@pi0.io>
+- Daniel Roe <daniel@roe.dev>
+
 ### [3.3.1](https://github.com/unjs/std-env/compare/v3.3.0...v3.3.1) (2022-11-14)
 
 ## [3.3.0](https://github.com/unjs/std-env/compare/v3.2.1...v3.3.0) (2022-10-15)
