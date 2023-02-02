@@ -26,7 +26,7 @@ export const hasWindow = typeof window !== "undefined";
 export const isDebug = toBoolean(envShim.DEBUG);
 
 /** Detect if `NODE_ENV` environment variable is `test` */
-export const isTest = toBoolean(envShim.TEST);
+export const isTest = nodeENV === "test" || toBoolean(envShim.TEST);
 
 /** Detect if `NODE_ENV` environment variable is `production` */
 export const isProduction = nodeENV === "production";
