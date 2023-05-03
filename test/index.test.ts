@@ -37,6 +37,6 @@ describe("std-env", () => {
       isWindows: expect.any(Boolean),
       isLinux: expect.any(Boolean),
       isMacOS: expect.any(Boolean),
-    })
+    });
   });
 });
