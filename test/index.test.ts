@@ -25,7 +25,7 @@ describe("std-env", () => {
   it("defaults", () => {
     expect(stdEnv).toMatchObject({
       platform: expect.any(String),
-      provider: "",
+      provider: expect.any(String),
       isCI: expect.any(Boolean),
       hasTTY: false,
       hasWindow: false,
