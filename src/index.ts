@@ -6,7 +6,9 @@ const processShim: typeof process =
   typeof process !== "undefined" ? process : ({} as typeof process);
 const envShim = processShim.env || ({} as typeof process.env);
 const providerInfo = detectProvider(envShim);
-const nodeENV = envShim.NODE_ENV || "";
+
+const nodeENV =
+  (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || "";
 
 /** Value of process.platform */
 export const platform = processShim.platform;
