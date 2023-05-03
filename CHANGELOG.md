@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.3.3
+
+[compare changes](https://undefined/undefined/compare/v3.3.2...v3.3.3)
+
+
+### 🩹 Fixes
+
+  - **pkg:** Add `types` field to the `exports` (#51)
+  - Support static `process.env.NODE_ENV` (#45)
+
+### 🏡 Chore
+
+  - Fix coverage test (92152a1)
+  - Git ignore `coverage` dir (cd52a9e)
+  - Lint (3832bcd)
+  - Update dev dependencies (acd471d)
+
+### ✅ Tests
+
+  - Add defaults test (17009d9)
+  - Expect any provider (a7d8c43)
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Ntnyq ([@ntnyq](http://github.com/ntnyq))
+
 ## v3.3.2
 
 
