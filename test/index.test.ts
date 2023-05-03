@@ -2,7 +2,7 @@ import { expect, it, describe } from "vitest";
 import * as stdEnv from "../src";
 
 describe("std-env", () => {
-  it("has all exports (dummy)", () => {
+  it("has expected exports", () => {
     expect(Object.keys(stdEnv)).toMatchInlineSnapshot(`
       [
         "platform",
@@ -20,5 +20,23 @@ describe("std-env", () => {
         "isMacOS",
       ]
     `);
+  });
+
+  it("defaults", () => {
+    expect(stdEnv).toMatchObject({
+      platform: expect.any(String),
+      provider: "",
+      isCI: expect.any(Boolean),
+      hasTTY: false,
+      hasWindow: false,
+      isDebug: false,
+      isTest: true,
+      isProduction: false,
+      isDevelopment: false,
+      isMinimal: true,
+      isWindows: expect.any(Boolean),
+      isLinux: expect.any(Boolean),
+      isMacOS: expect.any(Boolean),
+    })
   });
 });
