@@ -89,6 +89,7 @@ const providers: InternalProvider[] = [
   ["TEAMCITY", "TEAMCITY_VERSION"],
   ["TRAVIS"],
   ["VERCEL", "NOW_BUILDER"],
+  ["VERCEL", "VERCEL_ENV"],
   ["APPCENTER", "APPCENTER_BUILD_ID"],
   ["CODESANDBOX", "CODESANDBOX_SSE", { ci: false }],
   ["STACKBLITZ"],
