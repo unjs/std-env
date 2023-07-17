@@ -88,6 +88,7 @@ const providers: InternalProvider[] = [
   ["STRIDER"],
   ["TEAMCITY", "TEAMCITY_VERSION"],
   ["TRAVIS"],
+  ["VERCEL", "VERCEL"],
   ["VERCEL", "NOW_BUILDER"],
   ["VERCEL", "VERCEL_ENV"],
   ["APPCENTER", "APPCENTER_BUILD_ID"],
