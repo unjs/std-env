@@ -28,6 +28,8 @@ const { isCI } = require('std-env')
 
 Available exports:
 
+- `env`
+- `nodeENV`
 - `hasTTY`
 - `hasWindow`
 - `isCI`
