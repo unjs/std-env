@@ -48,6 +48,14 @@ export const isLinux = /^linux/i.test(platform);
 /** Detect if process.platform is macOS (darwin kernel) */
 export const isMacOS = /^darwin/i.test(platform);
 
+/** Color Support */
+export const isColorSupported =
+  !toBoolean(env.NO_COLOR) &&
+  (toBoolean(env.FORCE_COLOR) ||
+    (isWindows && !(env.TERM === "dumb")) ||
+    (hasTTY && env.TERM && !(env.TERM !== "dumb")) ||
+    isCI);
+
 // -- Utils --
 
 function toBoolean(val) {

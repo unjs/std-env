@@ -43,6 +43,7 @@ Available exports:
 - `isWindows`
 - `platform`
 - `provider`
+- `isColorSupported`
 
 You can read more about how each flag works from [./src/index.ts](./src/index.ts).
 

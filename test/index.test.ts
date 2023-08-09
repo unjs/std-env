@@ -20,6 +20,7 @@ describe("std-env", () => {
         "isWindows",
         "isLinux",
         "isMacOS",
+        "isColorSupported",
       ]
     `);
   });
@@ -39,6 +40,7 @@ describe("std-env", () => {
       isWindows: expect.any(Boolean),
       isLinux: expect.any(Boolean),
       isMacOS: expect.any(Boolean),
+      isColorSupported: expect.any(Boolean),
     });
   });
 });
