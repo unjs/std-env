@@ -5,7 +5,7 @@ const _getEnv = (useShim?: boolean) =>
   globalThis.process?.env ||
   (useShim ? _envShim : globalThis);
 
-export const env = new Proxy(_envShim, {
+export const env = new Proxy<Record<string, string | undefined>>(_envShim, {
   get(_, prop) {
     const env = _getEnv();
     return env[prop as any] ?? _envShim[prop];

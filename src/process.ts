@@ -1,12 +1,11 @@
 import { env } from "./env";
 
-export const process = new Proxy(globalThis.process || Object.create(null), {
+type StdProcess = Partial<typeof globalThis.process> & { env: typeof env };
+
+export const process = new Proxy<StdProcess>(globalThis.process || { env }, {
   get(target, prop) {
     if (prop in target) {
       return target[prop];
-    }
-    if (prop === "env") {
-      return env;
     }
   },
 });
