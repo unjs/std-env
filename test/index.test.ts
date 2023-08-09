@@ -5,6 +5,7 @@ describe("std-env", () => {
   it("has expected exports", () => {
     expect(Object.keys(stdEnv)).toMatchInlineSnapshot(`
       [
+        "detectProvider",
         "env",
         "nodeENV",
         "platform",
