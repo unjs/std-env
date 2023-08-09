@@ -21,10 +21,11 @@
     "lint": "eslint --ext .ts . && prettier -c src test",
     "lint:fix": "eslint --fix --ext .ts . && prettier -w src test",
     "prepack": "unbuild",
+    "play:bun": "bun playground/bun.ts",
+    "play:deno": "pnpm build && deno run -A playground/deno.ts",
+    "play:node": "pnpm build && node playground/node.mjs",
     "release": "pnpm test && changelogen --release && npm publish && git push --follow-tags",
     "test": "pnpm lint && pnpm typecheck && vitest run --coverage",
-    "play:node": "pnpm build && node playground/node.mjs",
-    "play:deno": "pnpm build && deno run -A playground/deno.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
