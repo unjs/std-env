@@ -3,8 +3,10 @@ const _envShim = Object.create(null);
 export type EnvObject = Record<string, string | undefined>;
 
 const _getEnv = (useShim?: boolean) =>
-  (globalThis as unknown as { __env__: EnvObject }).__env__ ||
   globalThis.process?.env ||
+  (import.meta as unknown as { env: EnvObject }).env ||
+  ((globalThis as any).Deno?.env.toObject() as EnvObject) ||
+  (globalThis as unknown as { __env__: EnvObject }).__env__ ||
   (useShim ? _envShim : globalThis);
 
 export const env = new Proxy<EnvObject>(_envShim, {

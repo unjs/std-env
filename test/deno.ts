@@ -1,4 +1,7 @@
-// @ts-ignore
+// @ts-nocheck
+
 import * as stdEnv from "../dist/index.mjs";
 
-console.log(stdEnv.process.env.HOME);
+Deno.env.set("FOOBAR", "baz");
+
+console.log(stdEnv.process.env.FOOBAR);
