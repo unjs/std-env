@@ -22,6 +22,7 @@ describe("std-env", () => {
         "isLinux",
         "isMacOS",
         "isColorSupported",
+        "_process",
         "process",
         "detectProvider",
       ]

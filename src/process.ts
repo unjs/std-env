@@ -6,7 +6,7 @@ export interface Process
   versions: Record<string, string>;
 }
 
-const _process = (globalThis.process ||
+export const _process = (globalThis.process ||
   Object.create(null)) as unknown as Process;
 
 const processShims: Partial<Process> = {
