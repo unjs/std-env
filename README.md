@@ -43,6 +43,8 @@ const { env, isDevelopment, isProduction } = require("std-env");
 - `isWindows`
 - `platform`
 - `isColorSupported`
+- `nodeVersion`
+- `nodeMajorVersion`
 
 You can read more about how each flag works from [./src/flags.ts](./src/flags.ts).
 

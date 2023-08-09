@@ -50,3 +50,8 @@ export const isColorSupported =
     (isWindows && !(env.TERM === "dumb")) ||
     (hasTTY && env.TERM && !(env.TERM !== "dumb")) ||
     isCI);
+
+/** Node.js versions */
+export const nodeVersion =
+  (_process.versions?.node || "").replace(/^v/, "") || null;
+export const nodeMajorVersion = Number(nodeVersion?.split(".")[0]) || null;
