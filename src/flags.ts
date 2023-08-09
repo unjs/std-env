@@ -4,7 +4,7 @@ import { toBoolean } from "./_utils";
 import { process } from "./process";
 
 /** Value of process.platform */
-export const platform = process.platform;
+export const platform = process.platform || "";
 
 /** Current provider info */
 export const providerInfo = detectProvider(env);
