@@ -1,21 +1,20 @@
 import { detectProvider, ProviderName } from "./providers";
 import { env, nodeENV } from "./env";
 import { toBoolean } from "./_utils";
-import { _process } from "./_process";
-
-const _providerInfo = detectProvider(env);
+import { process } from "./process";
 
 /** Value of process.platform */
-export const platform = _process.platform;
+export const platform = process.platform;
 
-/** Current provider name */
-export const provider: ProviderName = _providerInfo.name;
+/** Current provider info */
+export const providerInfo = detectProvider(env);
+export const provider: ProviderName = providerInfo.name;
 
 /** Detect if `CI` environment variable is set or a provider CI detected */
-export const isCI = toBoolean(env.CI) || _providerInfo.ci !== false;
+export const isCI = toBoolean(env.CI) || providerInfo.ci !== false;
 
 /** Detect if stdout.TTY is available */
-export const hasTTY = toBoolean(_process.stdout && _process.stdout.isTTY);
+export const hasTTY = toBoolean(process.stdout && process.stdout.isTTY);
 
 /** Detect if global `window` object is available */
 export const hasWindow = typeof window !== "undefined";

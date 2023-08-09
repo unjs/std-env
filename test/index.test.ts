@@ -9,6 +9,7 @@ describe("std-env", () => {
         "env",
         "nodeENV",
         "platform",
+        "providerInfo",
         "provider",
         "isCI",
         "hasTTY",
