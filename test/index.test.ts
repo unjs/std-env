@@ -5,7 +5,6 @@ describe("std-env", () => {
   it("has expected exports", () => {
     expect(Object.keys(stdEnv)).toMatchInlineSnapshot(`
       [
-        "detectProvider",
         "env",
         "nodeENV",
         "platform",
@@ -23,6 +22,8 @@ describe("std-env", () => {
         "isLinux",
         "isMacOS",
         "isColorSupported",
+        "process",
+        "detectProvider",
       ]
     `);
   });

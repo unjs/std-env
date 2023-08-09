@@ -81,6 +81,14 @@ List of well known providers can be found from [./src/providers.ts](./src/provid
 import { env } from "std-env";
 ```
 
+## Platform agnostic process
+
+`std-env` provides a lightweight proxy to access [`process`](https://nodejs.org/api/process.html) object in a platform agnostic way.
+
+```ts
+import { process } from "std-env";
+```
+
 ## License
 
 MIT
