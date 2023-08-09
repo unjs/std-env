@@ -5,7 +5,7 @@ export { env, nodeENV } from "./env";
 export type { ProviderName, ProviderInfo } from "./providers";
 
 const _process: typeof process =
-  typeof process !== "undefined" ? process : ({} as typeof process);
+  typeof process === "undefined" ? ({} as typeof process) : process;
 const envShim = _process.env || ({} as typeof process.env);
 const providerInfo = detectProvider(envShim);
 

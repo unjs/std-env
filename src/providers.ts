@@ -47,7 +47,7 @@ export type ProviderName =
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
   envName?: string,
-  meta?: Record<string, any>
+  meta?: Record<string, any>,
 ];
 
 const providers: InternalProvider[] = [
@@ -99,7 +99,7 @@ const providers: InternalProvider[] = [
 export type ProviderInfo = { name: ProviderName; [meta: string]: any };
 
 export function detectProvider(
-  env: Record<string, string | undefined>
+  env: Record<string, string | undefined>,
 ): ProviderInfo {
   // Based on env
   for (const provider of providers) {

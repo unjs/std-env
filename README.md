@@ -20,10 +20,10 @@ npm i std-env
 
 ```js
 // ESM
-import { isWindows } from 'std-env'
+import { isWindows } from "std-env";
 
 // CommonJS
-const { isCI } = require('std-env')
+const { isCI } = require("std-env");
 ```
 
 Available exports:
@@ -47,7 +47,6 @@ Available exports:
 You can read more about how each flag works from [./src/index.ts](./src/index.ts).
 
 List of well known providers can be found from [./src/providers.ts](./src/providers.ts).
-
 
 ## License
 
