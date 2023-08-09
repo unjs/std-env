@@ -1,20 +1,20 @@
-import { env } from "./env";
+import { EnvObject, env } from "./env";
 
 export interface Process
   extends Partial<Omit<typeof globalThis.process, "versions">> {
-  env: Record<string, string | undefined>;
+  env: EnvObject;
   versions: Record<string, string>;
 }
 
 const _process = (globalThis.process ||
   Object.create(null)) as unknown as Process;
 
-const processShims = {
+const processShims: Partial<Process> = {
   versions: {},
 };
 
 export const process = new Proxy<Process>(_process, {
-  get(target, prop) {
+  get(target, prop: keyof Process) {
     if (prop === "env") {
       return env;
     }
@@ -22,7 +22,7 @@ export const process = new Proxy<Process>(_process, {
       return target[prop];
     }
     if (prop in processShims) {
-      return processShims[prop as keyof typeof processShims];
+      return processShims[prop];
     }
   },
 });

@@ -1,11 +1,13 @@
 const _envShim = Object.create(null);
 
+export type EnvObject = Record<string, string | undefined>;
+
 const _getEnv = (useShim?: boolean) =>
-  globalThis.__env__ ||
+  (globalThis as unknown as { __env__: EnvObject }).__env__ ||
   globalThis.process?.env ||
   (useShim ? _envShim : globalThis);
 
-export const env = new Proxy<Record<string, string | undefined>>(_envShim, {
+export const env = new Proxy<EnvObject>(_envShim, {
   get(_, prop) {
     const env = _getEnv();
     return env[prop as any] ?? _envShim[prop];

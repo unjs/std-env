@@ -23,7 +23,7 @@
     "prepack": "unbuild",
     "release": "pnpm test && changelogen --release && npm publish && git push --follow-tags",
     "test": "pnpm lint && pnpm typecheck && vitest run --coverage",
-    "typecheck": "vitest typecheck"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^20.4.9",
