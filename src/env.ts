@@ -38,6 +38,4 @@ export const env = new Proxy<EnvObject>(_envShim, {
 });
 
 export const nodeENV =
-  (typeof process !== "undefined" && process.env && process.env.NODE_ENV) ||
-  env.NODE_ENV ||
-  "";
+  (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || "";
