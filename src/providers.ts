@@ -102,6 +102,7 @@ export type ProviderInfo = { name: ProviderName; [meta: string]: any };
 
 export function detectProvider(
   env: Record<string, string | undefined>,
+  ctx: { versions?: Record<string, string> } = {},
 ): ProviderInfo {
   // Based on env
   for (const provider of providers) {
@@ -115,7 +116,7 @@ export function detectProvider(
   }
 
   // Stackblitz / Webcontainer
-  if (env.SHELL && env.SHELL === "/bin/jsh") {
+  if (env.SHELL === "/bin/jsh" || ctx.versions?.webcontainer) {
     return {
       name: "stackblitz",
       ci: false,
