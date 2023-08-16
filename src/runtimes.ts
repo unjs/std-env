@@ -33,40 +33,26 @@ export const isNode = globalThis.process?.release?.name === "node";
 export const isBun = globalThis.process?.release?.name === "bun";
 export const isFastly = !!globalThis.fastly;
 
-export function detectRuntime(): RuntimeInfo {
-  let name: RuntimeName = "";
+const runtimeChecks: [boolean, RuntimeName][] = [
+  [isNetlify, "netlify"],
+  [isEdgeLight, "edge-light"],
+  [isWorkerd, "workerd"],
+  [isDeno, "deno"],
+  [isLagon, "lagon"],
+  [isNode, "node"],
+  [isBun, "bun"],
+  [isFastly, "fastly"],
+];
 
-  if (isNetlify) {
-    name = "netlify";
+export function detectRuntime(): RuntimeInfo | undefined {
+  const detectedRuntime = runtimeChecks.find((check) => check[0]);
+
+  if (detectedRuntime) {
+    const name = detectedRuntime[1];
+    return { name };
   }
-
-  if (isEdgeLight) {
-    name = "edge-light";
-  }
-
-  if (isWorkerd) {
-    name = "workerd";
-  }
-
-  if (isDeno) {
-    name = "deno";
-  }
-
-  if (isLagon) {
-    name = "lagon";
-  }
-
-  if (isNode) {
-    name = "node";
-  }
-
-  if (isBun) {
-    name = "bun";
-  }
-
-  if (isFastly) {
-    name = "fastly";
-  }
-
-  return { name };
 }
+
+export const runtimeInfo = detectRuntime();
+
+export const runtime = runtimeInfo?.name || "";

@@ -24,7 +24,6 @@ describe("std-env", () => {
         "isColorSupported",
         "nodeVersion",
         "nodeMajorVersion",
-        "runtimeName",
         "_process",
         "process",
         "detectProvider",
@@ -37,6 +36,8 @@ describe("std-env", () => {
         "isBun",
         "isFastly",
         "detectRuntime",
+        "runtimeInfo",
+        "runtime",
       ]
     `);
   });

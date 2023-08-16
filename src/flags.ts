@@ -56,6 +56,3 @@ export const isColorSupported =
 export const nodeVersion =
   (_process.versions?.node || "").replace(/^v/, "") || null;
 export const nodeMajorVersion = Number(nodeVersion?.split(".")[0]) || null;
-
-/** Current runtime name */
-export const runtimeName = detectRuntime().name;
