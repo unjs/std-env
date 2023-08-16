@@ -57,7 +57,10 @@ export const nodeVersion =
   (_process.versions?.node || "").replace(/^v/, "") || null;
 export const nodeMajorVersion = Number(nodeVersion?.split(".")[0]) || null;
 
+/** Current runtime name */
+export const runtimeName = detectRuntime().name;
+
 /** Detect the runtime type */
-export const isNode = detectRuntime() === "node";
-export const isDeno = detectRuntime() === "deno";
-export const isBun = detectRuntime() === "bun";
+export const isNode = runtimeName === "node";
+export const isDeno = runtimeName === "deno";
+export const isBun = runtimeName === "bun";
