@@ -2,7 +2,6 @@
 declare global {
   var EdgeRuntime: any;
   var Netlify: any;
-  var Bun: any;
   var Deno: any;
   var __lagon__: any;
   var fastly: any;
