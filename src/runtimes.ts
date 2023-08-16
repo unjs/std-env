@@ -9,7 +9,7 @@ declare global {
 }
 
 // https://runtime-keys.proposal.wintercg.org/
-export type Runtime =
+export type RuntimeName =
   | "workerd"
   | "deno"
   | "lagon"
@@ -20,44 +20,44 @@ export type Runtime =
   | "fastly"
   | "";
 
-// https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
-const CLOUDFLARE_WORKERS_NAVIGATOR = "Cloudflare-Workers";
+export type RuntimeInfo = { name: RuntimeName };
 
-// https://nodejs.org/api/process.html#processrelease
-const NODE_PROCESS_RELEASE_NAME = "node";
+export function detectRuntime(): RuntimeInfo {
+  let name: RuntimeName = "";
 
-export function detectRuntime(): Runtime {
-  if (typeof Netlify === "object") {
-    return "netlify";
+  if (globalThis.Netlify) {
+    name = "netlify";
   }
 
-  if (typeof EdgeRuntime === "string") {
-    return "edge-light";
+  if (globalThis.EdgeRuntime) {
+    name = "edge-light";
   }
 
-  if (globalThis.navigator?.userAgent === CLOUDFLARE_WORKERS_NAVIGATOR) {
-    return "workerd";
+  // https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
+  if (globalThis.navigator?.userAgent === "Cloudflare-Workers") {
+    name = "workerd";
   }
 
   if (globalThis.Deno) {
-    return "deno";
+    name = "deno";
   }
 
   if (globalThis.__lagon__) {
-    return "lagon";
+    name = "lagon";
   }
 
-  if (globalThis.process?.release?.name === NODE_PROCESS_RELEASE_NAME) {
-    return "node";
+  // https://nodejs.org/api/process.html#processrelease
+  if (globalThis.process?.release?.name === "node") {
+    name = "node";
   }
 
-  if (globalThis.Bun) {
-    return "bun";
+  if (globalThis.process?.release?.name === "bun") {
+    name = "bun";
   }
 
   if (globalThis.fastly) {
-    return "fastly";
+    name = "fastly";
   }
 
-  return "";
+  return { name };
 }

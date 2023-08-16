@@ -83,9 +83,12 @@ List of well known providers can be found from [./src/providers.ts](./src/provid
 `std-env` can automatically detect the current JavaScript runtime based on global variables, following the [WinterCG Runtime Keys proposal](https://runtime-keys.proposal.wintercg.org/):
 
 ```ts
-import { detectRuntime } from "std-env";
+import { runtimeName, detectRuntime } from "std-env";
 
 // "node" | "deno" | "bun" | "workerd" | "lagon" ...
+console.log(runtimeName);
+
+// { name: "node" }
 console.log(detectRuntime());
 ```
 
