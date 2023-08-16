@@ -1,4 +1,6 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
+import { env } from "./env";
+import { process } from "./process";
 
 export type ProviderName =
   | ""
@@ -98,25 +100,30 @@ const providers: InternalProvider[] = [
   ["CLEAVR"],
 ];
 
-export type ProviderInfo = { name: ProviderName; [meta: string]: any };
+export type ProviderInfo = {
+  name: ProviderName;
+  ci?: boolean;
+  [meta: string]: any;
+};
 
-export function detectProvider(
-  env: Record<string, string | undefined>,
-  ctx: { versions?: Record<string, string> } = {},
+function _detectProvider(
+  _process: Partial<typeof process> = process,
 ): ProviderInfo {
   // Based on env
-  for (const provider of providers) {
-    const envName = provider[1] || provider[0];
-    if (env[envName]) {
-      return {
-        name: provider[0].toLowerCase(),
-        ...(provider[2] as any),
-      };
+  if (_process.env) {
+    for (const provider of providers) {
+      const envName = provider[1] || provider[0];
+      if (_process.env[envName]) {
+        return {
+          name: provider[0].toLowerCase(),
+          ...(provider[2] as any),
+        };
+      }
     }
   }
 
   // Stackblitz / Webcontainer
-  if (env.SHELL === "/bin/jsh" || ctx.versions?.webcontainer) {
+  if (_process.env?.SHELL === "/bin/jsh" && _process.versions?.webcontainer) {
     return {
       name: "stackblitz",
       ci: false,
@@ -128,3 +135,7 @@ export function detectProvider(
     ci: false,
   };
 }
+
+/** Current provider info */
+export const providerInfo = _detectProvider();
+export const provider: ProviderName = providerInfo.name;

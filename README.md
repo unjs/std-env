@@ -72,15 +72,6 @@ console.log({
 });
 ```
 
-If you want to test provider based on a custom environment variable set, you can also directly use `detectProvider`:
-
-```ts
-import { detectProvider } from "std-env";
-
-// { name: "vercel", ci: false }
-console.log(detectProvider({ VERCEL: "1" }));
-```
-
 List of well known providers can be found from [./src/providers.ts](./src/providers.ts).
 
 ## Runtime Detection
