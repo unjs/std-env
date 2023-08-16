@@ -30,7 +30,7 @@ export const isDeno = !!globalThis.Deno;
 // https://nodejs.org/api/process.html#processrelease
 export const isLagon = !!globalThis.__lagon__;
 export const isNode = globalThis.process?.release?.name === "node";
-export const isBun = globalThis.process?.release?.name === "bun";
+export const isBun = !!(globalThis as any).bun || !!process.versions.bun;
 export const isFastly = !!globalThis.fastly;
 
 const runtimeChecks: [boolean, RuntimeName][] = [
