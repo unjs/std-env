@@ -97,7 +97,7 @@ console.log(runtime);
 console.log(runtimeInfo);
 ```
 
-You can also use `isNode`, `isDeno`, `isBun`, `isWorkerd`... helper methods.
+You can also use `isNode`, `isDeno`, `isBun`, `isWorkerd`,... helper exports.
 
 ## Platform agnostic env
 
