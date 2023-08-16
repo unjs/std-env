@@ -27,6 +27,16 @@ describe("std-env", () => {
         "_process",
         "process",
         "detectProvider",
+        "isNetlify",
+        "isEdgeLight",
+        "isWorkerd",
+        "isDeno",
+        "isLagon",
+        "isNode",
+        "isBun",
+        "isFastly",
+        "runtimeInfo",
+        "runtime",
       ]
     `);
   });

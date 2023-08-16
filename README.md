@@ -45,6 +45,14 @@ const { env, isDevelopment, isProduction } = require("std-env");
 - `isColorSupported`
 - `nodeVersion`
 - `nodeMajorVersion`
+- `isNetlify`
+- `isEdgeLight`
+- `isWorkerd`
+- `isDeno`
+- `isLagon`
+- `isNode`
+- `isBun`
+- `isFastly`
 
 You can read more about how each flag works from [./src/flags.ts](./src/flags.ts).
 
@@ -55,12 +63,12 @@ You can read more about how each flag works from [./src/flags.ts](./src/flags.ts
 You can use `isCI` and `platform` exports to detect it:
 
 ```ts
-import { isCI, platform, platformInfo } from "std-env";
+import { isCI, provider, providerInfo } from "std-env";
 
 console.log({
   isCI, // true
-  platform, // "github_actions"
-  platformInfo, // { name: "github_actions", isCI: true }
+  provider, // "github_actions"
+  providerInfo, // { name: "github_actions", isCI: true }
 });
 ```
 
@@ -75,7 +83,23 @@ console.log(detectProvider({ VERCEL: "1" }));
 
 List of well known providers can be found from [./src/providers.ts](./src/providers.ts).
 
-## Platform agnotic env
+## Runtime Detection
+
+`std-env` can automatically detect the current JavaScript runtime based on global variables, following the [WinterCG Runtime Keys proposal](https://runtime-keys.proposal.wintercg.org/):
+
+```ts
+import { runtime, runtimeInfo } from "std-env";
+
+// "" | "node" | "deno" | "bun" | "workerd" | "lagon" ...
+console.log(runtime);
+
+// { name: "node" }
+console.log(runtimeInfo);
+```
+
+You can also use `isNode`, `isDeno`, `isBun`, `isWorkerd`,... helper exports.
+
+## Platform agnostic env
 
 `std-env` provides a lightweight proxy to access environment variables in a platform agnostic way.
 
