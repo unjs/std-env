@@ -1,5 +1,4 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
-import { env } from "./env";
 import { process } from "./process";
 
 export type ProviderName =
