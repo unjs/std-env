@@ -24,9 +24,14 @@ describe("std-env", () => {
         "isColorSupported",
         "nodeVersion",
         "nodeMajorVersion",
+        "runtimeName",
+        "isNode",
+        "isDeno",
+        "isBun",
         "_process",
         "process",
         "detectProvider",
+        "detectRuntime",
       ]
     `);
   });
