@@ -44,15 +44,14 @@ const runtimeChecks: [boolean, RuntimeName][] = [
   [isFastly, "fastly"],
 ];
 
-export function detectRuntime(): RuntimeInfo | undefined {
+function _detectRuntime(): RuntimeInfo | undefined {
   const detectedRuntime = runtimeChecks.find((check) => check[0]);
-
   if (detectedRuntime) {
     const name = detectedRuntime[1];
     return { name };
   }
 }
 
-export const runtimeInfo = detectRuntime();
+export const runtimeInfo = _detectRuntime();
 
 export const runtime = runtimeInfo?.name || "";
