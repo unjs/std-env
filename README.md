@@ -45,9 +45,14 @@ const { env, isDevelopment, isProduction } = require("std-env");
 - `isColorSupported`
 - `nodeVersion`
 - `nodeMajorVersion`
-- `isNode`
+- `isNetlify`
+- `isEdgeLight`
+- `isWorkerd`
 - `isDeno`
+- `isLagon`
+- `isNode`
 - `isBun`
+- `isFastly`
 
 You can read more about how each flag works from [./src/flags.ts](./src/flags.ts).
 
@@ -92,7 +97,7 @@ console.log(runtimeName);
 console.log(detectRuntime());
 ```
 
-You can also use `isNode`, `isDeno`, and `isBun` helper methods.
+You can also use `isNode`, `isDeno`, `isBun`, `isWorkerd`... helper methods.
 
 ## Platform agnostic env
 

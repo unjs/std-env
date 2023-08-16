@@ -21,40 +21,50 @@ export type RuntimeName =
 
 export type RuntimeInfo = { name: RuntimeName };
 
+export const isNetlify = !!globalThis.Netlify;
+export const isEdgeLight = !!globalThis.EdgeRuntime;
+// https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
+export const isWorkerd =
+  globalThis.navigator?.userAgent === "Cloudflare-Workers";
+export const isDeno = !!globalThis.Deno;
+// https://nodejs.org/api/process.html#processrelease
+export const isLagon = !!globalThis.__lagon__;
+export const isNode = globalThis.process?.release?.name === "node";
+export const isBun = globalThis.process?.release?.name === "bun";
+export const isFastly = !!globalThis.fastly;
+
 export function detectRuntime(): RuntimeInfo {
   let name: RuntimeName = "";
 
-  if (globalThis.Netlify) {
+  if (isNetlify) {
     name = "netlify";
   }
 
-  if (globalThis.EdgeRuntime) {
+  if (isEdgeLight) {
     name = "edge-light";
   }
 
-  // https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
-  if (globalThis.navigator?.userAgent === "Cloudflare-Workers") {
+  if (isWorkerd) {
     name = "workerd";
   }
 
-  if (globalThis.Deno) {
+  if (isDeno) {
     name = "deno";
   }
 
-  if (globalThis.__lagon__) {
+  if (isLagon) {
     name = "lagon";
   }
 
-  // https://nodejs.org/api/process.html#processrelease
-  if (globalThis.process?.release?.name === "node") {
+  if (isNode) {
     name = "node";
   }
 
-  if (globalThis.process?.release?.name === "bun") {
+  if (isBun) {
     name = "bun";
   }
 
-  if (globalThis.fastly) {
+  if (isFastly) {
     name = "fastly";
   }
 
