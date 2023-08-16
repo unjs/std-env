@@ -2,7 +2,6 @@ import { detectProvider, ProviderName } from "./providers";
 import { env, nodeENV } from "./env";
 import { toBoolean } from "./_utils";
 import { _process } from "./process";
-import { detectRuntime } from "./runtimes";
 
 /** Value of process.platform */
 export const platform = _process.platform || "";
