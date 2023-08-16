@@ -2,6 +2,7 @@ import { detectProvider, ProviderName } from "./providers";
 import { env, nodeENV } from "./env";
 import { toBoolean } from "./_utils";
 import { _process } from "./process";
+import { detectRuntime } from "./runtimes";
 
 /** Value of process.platform */
 export const platform = _process.platform || "";
@@ -55,3 +56,8 @@ export const isColorSupported =
 export const nodeVersion =
   (_process.versions?.node || "").replace(/^v/, "") || null;
 export const nodeMajorVersion = Number(nodeVersion?.split(".")[0]) || null;
+
+/** Detect the runtime type */
+export const isNode = detectRuntime() === "node";
+export const isDeno = detectRuntime() === "deno";
+export const isBun = detectRuntime() === "bun";
