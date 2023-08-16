@@ -45,14 +45,6 @@ const { env, isDevelopment, isProduction } = require("std-env");
 - `isColorSupported`
 - `nodeVersion`
 - `nodeMajorVersion`
-- `isNetlify`
-- `isEdgeLight`
-- `isWorkerd`
-- `isDeno`
-- `isLagon`
-- `isNode`
-- `isBun`
-- `isFastly`
 
 You can read more about how each flag works from [./src/flags.ts](./src/flags.ts).
 
@@ -88,9 +80,20 @@ console.log(runtime);
 console.log(runtimeInfo);
 ```
 
-You can also use `isNode`, `isDeno`, `isBun`, `isWorkerd`,... helper exports.
+You can also use individual named exports for each runtime detection:
 
-## Platform agnostic env
+- `isNetlify`
+- `isEdgeLight`
+- `isWorkerd`
+- `isDeno`
+- `isLagon`
+- `isNode`
+- `isBun`
+- `isFastly`
+
+List of well known providers can be found from [./src/runtimes.ts](./src/runtimes.ts).
+
+## Platform-Agnostic `env`
 
 `std-env` provides a lightweight proxy to access environment variables in a platform agnostic way.
 
@@ -98,7 +101,7 @@ You can also use `isNode`, `isDeno`, `isBun`, `isWorkerd`,... helper exports.
 import { env } from "std-env";
 ```
 
-## Platform agnostic process
+## Platform-Agnostic `process`
 
 `std-env` provides a lightweight proxy to access [`process`](https://nodejs.org/api/process.html) object in a platform agnostic way.
 
