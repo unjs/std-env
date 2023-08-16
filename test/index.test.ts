@@ -35,7 +35,6 @@ describe("std-env", () => {
         "isNode",
         "isBun",
         "isFastly",
-        "detectRuntime",
         "runtimeInfo",
         "runtime",
       ]
