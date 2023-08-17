@@ -1,5 +1,4 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
-import { process } from "./process";
 
 export type ProviderName =
   | ""
@@ -105,14 +104,12 @@ export type ProviderInfo = {
   [meta: string]: any;
 };
 
-function _detectProvider(
-  _process: Partial<typeof process> = process,
-): ProviderInfo {
+function _detectProvider(): ProviderInfo {
   // Based on env
-  if (_process.env) {
+  if (globalThis.process?.env) {
     for (const provider of providers) {
       const envName = provider[1] || provider[0];
-      if (_process.env[envName]) {
+      if (globalThis.process?.env[envName]) {
         return {
           name: provider[0].toLowerCase(),
           ...(provider[2] as any),
@@ -122,7 +119,10 @@ function _detectProvider(
   }
 
   // Stackblitz / Webcontainer
-  if (_process.env?.SHELL === "/bin/jsh" && _process.versions?.webcontainer) {
+  if (
+    globalThis.process?.env?.SHELL === "/bin/jsh" &&
+    globalThis.process?.versions?.webcontainer
+  ) {
     return {
       name: "stackblitz",
       ci: false,
