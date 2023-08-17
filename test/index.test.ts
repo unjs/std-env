@@ -22,7 +22,6 @@ describe("std-env", () => {
         "isColorSupported",
         "nodeVersion",
         "nodeMajorVersion",
-        "_process",
         "process",
         "providerInfo",
         "provider",
