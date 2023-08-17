@@ -5,6 +5,7 @@ declare global {
   var Deno: any;
   var __lagon__: any;
   var fastly: any;
+  var Bun: any;
 }
 
 // https://runtime-keys.proposal.wintercg.org/
@@ -30,7 +31,7 @@ export const isDeno = !!globalThis.Deno;
 // https://nodejs.org/api/process.html#processrelease
 export const isLagon = !!globalThis.__lagon__;
 export const isNode = globalThis.process?.release?.name === "node";
-export const isBun = !!(globalThis as any).bun || !!process.versions.bun;
+export const isBun = !!globalThis.Bun || !!process.versions.bun;
 export const isFastly = !!globalThis.fastly;
 
 const runtimeChecks: [boolean, RuntimeName][] = [
