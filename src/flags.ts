@@ -1,16 +1,17 @@
 import { providerInfo } from "./providers";
 import { env, nodeENV } from "./env";
 import { toBoolean } from "./_utils";
-import { _process } from "./process";
 
 /** Value of process.platform */
-export const platform = _process.platform || "";
+export const platform = globalThis.process?.platform || "";
 
 /** Detect if `CI` environment variable is set or a provider CI detected */
 export const isCI = toBoolean(env.CI) || providerInfo.ci !== false;
 
 /** Detect if stdout.TTY is available */
-export const hasTTY = toBoolean(_process.stdout && _process.stdout.isTTY);
+export const hasTTY = toBoolean(
+  globalThis.process?.stdout && globalThis.process?.stdout.isTTY,
+);
 
 /** Detect if global `window` object is available */
 export const hasWindow = typeof window !== "undefined";
@@ -49,5 +50,5 @@ export const isColorSupported =
 
 /** Node.js versions */
 export const nodeVersion =
-  (_process.versions?.node || "").replace(/^v/, "") || null;
+  (globalThis.process?.versions?.node || "").replace(/^v/, "") || null;
 export const nodeMajorVersion = Number(nodeVersion?.split(".")[0]) || null;
