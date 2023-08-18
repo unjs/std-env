@@ -2,6 +2,74 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.4.0
+
+[compare changes](https://undefined/undefined/compare/v3.3.3...v3.4.0)
+
+### 🚀 Enhancements
+
+- Universal `env` shim (#61)
+- **providers:** Detect `VERCEL` and `VERCEL_ENV` (#58)
+- `isColorSupported` flag (b80677b)
+- Expose providerInfo (3c547d8)
+- Platform agnostic process (48b4fc0)
+- **process:** Support `process.versions` (1ad71f6)
+- **env:** Support `import.meta.env` and `Deno.env` (ceb04d5)
+- Export `nodeVersion` and `nodeMajorVersion` (#60)
+- Detect stackblitz using `process.versions.webcontainer` (#63)
+- Detect the underlying runtime (#66)
+
+### 🔥 Performance
+
+- Reduce dependency on `process` proxy for flags (0d7b84f)
+- Decouple `nodeENV` from env proxy (89c0411)
+
+### 🩹 Fixes
+
+- Add default fallback for platform flag (d71ce85)
+- Update bun runtime detection (#67)
+- Use `globalThis.Bun` for check (ca852ac)
+
+### 💅 Refactors
+
+- Split flags (584e9f4)
+- Improve process and env types (581c674)
+- Cleanup provider detection (3091a5b)
+- **provider:** Remove dependency from `process` shim (c1c5a68)
+- Decouple flags from process shim (6b087e2)
+- Remove `_process` export (ce21499)
+
+### 📦 Build
+
+- Minify dist by default (4e67307)
+
+### 🏡 Chore
+
+- Update dev dependencies (c98a7ab)
+- Add autofix ci (d817123)
+- Fix prettierrc (b720e2b)
+- Improve docs (1d4ef96)
+- Add typecheck script (0694e19)
+- Fix internal types and expose `EnvObject` (058abc6)
+- Update title (25ebcfb)
+- Create playground (6d92124)
+- Add bun playground (0a576f2)
+- Update docs (19a7651)
+- Fix ci (4b0ae64)
+- Update unbuild to v2 (23cb666)
+- Update node playground to jiti (12efa68)
+- Split global types (ec4c8f7)
+
+### 🎨 Styles
+
+- Format with prettier v3 (d198921)
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Tom Lienard ([@QuiiBz](http://github.com/QuiiBz))
+- Nozomu Ikuta
+
 ## v3.3.3
 
 [compare changes](https://undefined/undefined/compare/v3.3.2...v3.3.3)
