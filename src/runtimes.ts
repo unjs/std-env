@@ -1,13 +1,3 @@
-/* eslint-disable no-var */
-declare global {
-  var EdgeRuntime: any;
-  var Netlify: any;
-  var Deno: any;
-  var __lagon__: any;
-  var fastly: any;
-  var Bun: any;
-}
-
 // https://runtime-keys.proposal.wintercg.org/
 export type RuntimeName =
   | "workerd"
