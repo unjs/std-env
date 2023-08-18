@@ -21,8 +21,8 @@ devDependencies:
     specifier: ^0.2.1
     version: 0.2.1(eslint@8.47.0)(typescript@5.1.6)
   jiti:
-    specifier: ^1.19.1
-    version: 1.19.1
+    specifier: ^1.19.2
+    version: 1.19.2
   prettier:
     specifier: ^3.0.2
     version: 3.0.2
@@ -1122,7 +1122,7 @@ packages:
       defu: 6.1.2
       dotenv: 16.3.1
       giget: 1.1.2
-      jiti: 1.19.1
+      jiti: 1.19.2
       mlly: 1.4.0
       ohash: 1.1.3
       pathe: 1.1.1
@@ -2552,8 +2552,8 @@ packages:
       istanbul-lib-report: 3.0.1
     dev: true
 
-  /jiti@1.19.1:
-    resolution: {integrity: sha512-oVhqoRDaBXf7sjkll95LHVS6Myyyb1zaunVwk4Z0+WPSW4gjS0pl01zYKHScTuyEhQsFxV5L4DR5r+YqSyqyyg==}
+  /jiti@1.19.2:
+    resolution: {integrity: sha512-UgPQy6IN/a/5DRAVkNRgoyVQBC4BqjN/ALFKnTlCR6mJIBtEj0/X52QCMckszSNbY7RbSNa1PzhhxQzROiGHcA==}
     hasBin: true
     dev: true
 
@@ -2794,7 +2794,7 @@ packages:
       esbuild: 0.18.20
       fs-extra: 11.1.1
       globby: 13.2.2
-      jiti: 1.19.1
+      jiti: 1.19.2
       mlly: 1.4.0
       mri: 1.2.0
       pathe: 1.1.1
@@ -3664,7 +3664,7 @@ packages:
       esbuild: 0.18.20
       globby: 13.2.2
       hookable: 5.5.3
-      jiti: 1.19.1
+      jiti: 1.19.2
       magic-string: 0.30.2
       mkdist: 1.3.0(typescript@5.1.6)
       mlly: 1.4.0
@@ -3699,7 +3699,7 @@ packages:
       '@babel/standalone': 7.22.10
       '@babel/types': 7.22.10
       defu: 6.1.2
-      jiti: 1.19.1
+      jiti: 1.19.2
       mri: 1.2.0
       scule: 1.0.0
     transitivePeerDependencies:

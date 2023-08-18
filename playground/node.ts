@@ -1,4 +1,4 @@
-import * as stdEnv from "../dist/index.mjs";
+import * as stdEnv from "../src";
 
 console.log({
   ...stdEnv,
