@@ -4,7 +4,7 @@ export type EnvObject = Record<string, string | undefined>;
 
 const _getEnv = (useShim?: boolean) =>
   globalThis.process?.env ||
-  import.meta.env ||
+  import.meta?.env ||
   globalThis.Deno?.env.toObject() ||
   globalThis.__env__ ||
   (useShim ? _envShim : globalThis);

@@ -6,6 +6,7 @@ export default defineBuildConfig({
     emitCJS: true,
     esbuild: {
       minify: true,
+      target: "es6",
     },
   },
   entries: ["src/index"],
