@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.4.1
+
+[compare changes](https://undefined/undefined/compare/v3.4.0...v3.4.1)
+
+### 🩹 Fixes
+
+- Access `process` from `globalThis` (#73)
+
+### ❤️  Contributors
+
+- Patrick Pircher
+
 ## v3.4.0
 
 [compare changes](https://undefined/undefined/compare/v3.3.3...v3.4.0)
