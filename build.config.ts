@@ -1,4 +1,6 @@
 import { defineBuildConfig } from "unbuild";
+import type { Plugin, OutputChunk } from "rollup";
+import { transform } from "esbuild";
 
 export default defineBuildConfig({
   declaration: true,
@@ -9,4 +11,21 @@ export default defineBuildConfig({
     },
   },
   entries: ["src/index"],
+  hooks: {
+    "rollup:options"(ctx, rollupConfig) {
+      (rollupConfig.plugins as Plugin[]).push({
+        name: "compat",
+        async generateBundle(_options, bundle) {
+          const cjsEntry = bundle["index.cjs"] as OutputChunk;
+          if (!cjsEntry) {
+            return;
+          }
+          cjsEntry.code = await transform(cjsEntry.code, {
+            target: "es6",
+            minify: true,
+          }).then((r) => r.code);
+        },
+      } satisfies Plugin);
+    },
+  },
 });
