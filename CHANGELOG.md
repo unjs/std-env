@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.4.3
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.4.2...v3.4.3)
+
+### 🩹 Fixes
+
+- Conditional check for `process.versions?.bun` ([#75](https://github.com/unjs/std-env/pull/75))
+
+### 🏡 Chore
+
+- Update build dependencies ([cd6cbf7](https://github.com/unjs/std-env/commit/cd6cbf7))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v3.4.2
 
 [compare changes](https://undefined/undefined/compare/v3.4.1...v3.4.2)
