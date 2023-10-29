@@ -2,6 +2,7 @@
 
 export type ProviderName =
   | ""
+  | "amplify"
   | "appveyor"
   | "azure_pipelines"
   | "azure_static"
@@ -51,6 +52,7 @@ type InternalProvider = [
 ];
 
 const providers: InternalProvider[] = [
+  ["AMPLIFY", "AWS_APP_ID", { ci: true }],
   ["APPVEYOR"],
   ["AZURE_PIPELINES", "SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"],
   ["AZURE_STATIC", "INPUT_AZURE_STATIC_WEB_APPS_API_TOKEN"],
