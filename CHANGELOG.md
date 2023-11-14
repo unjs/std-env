@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.5.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.4.3...v3.5.0)
+
+### 🚀 Enhancements
+
+- Add `aws_amplify` provider ([#91](https://github.com/unjs/std-env/pull/91))
+
+### 🏡 Chore
+
+- Update dependencies ([9addee3](https://github.com/unjs/std-env/commit/9addee3))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Kaushik Gnanaskandan <kaushik.subman@gmail.com>
+
 ## v3.4.3
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.4.2...v3.4.3)

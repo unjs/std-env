@@ -1,6 +1,6 @@
 {
   "name": "std-env",
-  "version": "3.4.3",
+  "version": "3.5.0",
   "description": "Runtime agnostic JS utils",
   "repository": "unjs/std-env",
   "license": "MIT",
