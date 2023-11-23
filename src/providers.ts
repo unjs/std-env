@@ -44,7 +44,8 @@ export type ProviderName =
   | "stackblitz"
   | "stormkit"
   | "cleavr"
-  | "zeabur";
+  | "zeabur"
+  | "codesphere";
 
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
@@ -100,6 +101,7 @@ const providers: InternalProvider[] = [
   ["STORMKIT"],
   ["CLEAVR"],
   ["ZEABUR"],
+  ["CODESPHERE", "CODESPHERE_APP_ID", { ci: true }],
 ];
 
 export type ProviderInfo = {
