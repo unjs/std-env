@@ -10,7 +10,7 @@ export const isCI = toBoolean(env.CI) || providerInfo.ci !== false;
 
 /** Detect if stdout.TTY is available */
 export const hasTTY = toBoolean(
-  globalThis.process?.stdout && globalThis.process?.stdout.isTTY,
+  globalThis.process?.stdout && (globalThis.process.stdout.isTTY || globalThis.process.stdout._type === 'tty'),
 );
 
 /** Detect if global `window` object is available */
