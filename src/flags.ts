@@ -44,8 +44,7 @@ export const isMacOS = /^darwin/i.test(platform);
 export const isColorSupported =
   !toBoolean(env.NO_COLOR) &&
   (toBoolean(env.FORCE_COLOR) ||
-    (isWindows && !(env.TERM === "dumb")) ||
-    (hasTTY && env.TERM && env.TERM !== "dumb") ||
+    ((hasTTY || isWindows) && env.TERM !== "dumb") ||
     isCI);
 
 /** Node.js versions */
