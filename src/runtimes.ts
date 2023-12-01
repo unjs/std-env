@@ -45,4 +45,4 @@ function _detectRuntime(): RuntimeInfo | undefined {
 
 export const runtimeInfo = _detectRuntime();
 
-export const runtime = runtimeInfo?.name || "";
+export const runtime: RuntimeName = runtimeInfo?.name || "";
