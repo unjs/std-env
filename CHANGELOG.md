@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.6.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.5.0...v3.6.0)
+
+### 🚀 Enhancements
+
+- Add zeabur provider ([#93](https://github.com/unjs/std-env/pull/93))
+- **providers:** Add codesphere detection ([#95](https://github.com/unjs/std-env/pull/95))
+
+### 🩹 Fixes
+
+- **isColorSupported:** Inverted condition for `TERM=dumb` ([#97](https://github.com/unjs/std-env/pull/97))
+
+### 🌊 Types
+
+- Type `runtime` export ([#92](https://github.com/unjs/std-env/pull/92))
+
+### 🏡 Chore
+
+- **release:** V3.5.0 ([e1bfb39](https://github.com/unjs/std-env/commit/e1bfb39))
+- Update lockfile ([2685bb6](https://github.com/unjs/std-env/commit/2685bb6))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Trung Dang ([@NamesMT](http://github.com/NamesMT))
+- Conner Bachmann ([@Intevel](http://github.com/Intevel))
+- Yuanlin Lin ([@yuaanlin](http://github.com/yuaanlin))
+
 ## v3.5.0
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.4.3...v3.5.0)
