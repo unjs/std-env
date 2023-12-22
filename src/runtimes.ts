@@ -20,8 +20,8 @@ export const isWorkerd =
 export const isDeno = !!globalThis.Deno;
 // https://nodejs.org/api/process.html#processrelease
 export const isLagon = !!globalThis.__lagon__;
-export const isNode = globalThis.process?.release?.name === "node";
 export const isBun = !!globalThis.Bun || !!globalThis.process?.versions?.bun;
+export const isNode = !isBun && globalThis.process?.release?.name === "node";
 export const isFastly = !!globalThis.fastly;
 
 const runtimeChecks: [boolean, RuntimeName][] = [
@@ -30,8 +30,8 @@ const runtimeChecks: [boolean, RuntimeName][] = [
   [isWorkerd, "workerd"],
   [isDeno, "deno"],
   [isLagon, "lagon"],
-  [isNode, "node"],
   [isBun, "bun"],
+  [isNode, "node"],
   [isFastly, "fastly"],
 ];
 
