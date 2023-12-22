@@ -30,8 +30,8 @@ const runtimeChecks: [boolean, RuntimeName][] = [
   [isWorkerd, "workerd"],
   [isDeno, "deno"],
   [isLagon, "lagon"],
-  [isNode, "node"],
   [isBun, "bun"],
+  [isNode, "node"],
   [isFastly, "fastly"],
 ];
 
