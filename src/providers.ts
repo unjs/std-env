@@ -45,7 +45,8 @@ export type ProviderName =
   | "stormkit"
   | "cleavr"
   | "zeabur"
-  | "codesphere";
+  | "codesphere"
+  | "railway";
 
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
@@ -102,6 +103,8 @@ const providers: InternalProvider[] = [
   ["CLEAVR"],
   ["ZEABUR"],
   ["CODESPHERE", "CODESPHERE_APP_ID", { ci: true }],
+  ["RAILWAY", "RAILWAY_PROJECT_ID"],
+  ["RAILWAY", "RAILWAY_SERVICE_ID"],
 ];
 
 export type ProviderInfo = {
