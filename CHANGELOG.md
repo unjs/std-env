@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.7.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.6.0...v3.7.0)
+
+### 🚀 Enhancements
+
+- **provider:** Add railway support ([#106](https://github.com/unjs/std-env/pull/106))
+
+### 🩹 Fixes
+
+- Check bun runtime before node ([#107](https://github.com/unjs/std-env/pull/107))
+
+### 💅 Refactors
+
+- Clarify runtimes and `isNode` behavior ([#108](https://github.com/unjs/std-env/pull/108))
+
+### 🏡 Chore
+
+- **release:** V3.6.0 ([33d70be](https://github.com/unjs/std-env/commit/33d70be))
+- Update dev dependencies ([d865b1b](https://github.com/unjs/std-env/commit/d865b1b))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Omar <omaraziz.dev@proton.me>
+
 ## v3.6.0
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.5.0...v3.6.0)
