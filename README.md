@@ -85,7 +85,7 @@ You can also use individual named exports for each runtime detection:
 > [!NOTE]
 > When running code in Bun and Deno with Node.js compatibility mode, `isNode` flag will be also `true`, indicating running in a Node.js compatible runtime.
 >
-> Use `runtime == "node"` if you need strict check for Node.js runtime.
+> Use `runtime === "node"` if you need strict check for Node.js runtime.
 
 - `isNode`
 - `isBun`

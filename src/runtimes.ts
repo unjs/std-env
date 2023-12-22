@@ -17,7 +17,7 @@ export type RuntimeInfo = { name: RuntimeName };
  *
  * **Note:** When running code in Bun and Deno with Node.js compatibility mode, `isNode` flag will be also `true`, indicating running in a Node.js compatible runtime.
  *
- * Use `runtime == "node"` if you need strict check for Node.js runtime.
+ * Use `runtime === "node"` if you need strict check for Node.js runtime.
  */
 export const isNode = globalThis.process?.release?.name === "node";
 
