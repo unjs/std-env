@@ -88,7 +88,6 @@ You can also use individual named exports for each runtime detection:
 - `isNode`
 - `isBun`
 - `isDeno`
-
 - `isNetlify`
 - `isEdgeLight`
 - `isWorkerd`
