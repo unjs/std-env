@@ -82,17 +82,18 @@ console.log(runtimeInfo);
 
 You can also use individual named exports for each runtime detection:
 
+> [!NOTE]
+> When Bun and Deno run in Node.js compatibility mode, `isNode` flag will be also `true`. Use `runtime == "node"` if you need explicit check.
+
+- `isNode`
+- `isBun`
+- `isDeno`
+
 - `isNetlify`
 - `isEdgeLight`
 - `isWorkerd`
-- `isDeno`
 - `isLagon`
-- `isNode`
-- `isBun`
 - `isFastly`
-
-> [!NOTE]
-> When Bun and Deno run in Node.js compatibility mode, `isNode` flag will be true. Use `runtime == "node"` if you need explicit check.
 
 List of well known providers can be found from [./src/runtimes.ts](./src/runtimes.ts).
 
