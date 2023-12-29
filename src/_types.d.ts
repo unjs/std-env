@@ -4,7 +4,6 @@ type EnvObject = Record<string, string | undefined>;
 declare global {
   var EdgeRuntime: undefined | unknown;
   var Netlify: undefined | unknown;
-  var __lagon__: undefined | unknown;
   var fastly: undefined | unknown;
   var Bun: undefined | unknown;
 

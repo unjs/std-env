@@ -32,7 +32,6 @@ describe("std-env", () => {
         "isNetlify",
         "isEdgeLight",
         "isWorkerd",
-        "isLagon",
         "runtimeInfo",
         "runtime",
       ]

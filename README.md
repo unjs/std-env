@@ -73,7 +73,7 @@ List of well known providers can be found from [./src/providers.ts](./src/provid
 ```ts
 import { runtime, runtimeInfo } from "std-env";
 
-// "" | "node" | "deno" | "bun" | "workerd" | "lagon" ...
+// "" | "node" | "deno" | "bun" | "workerd" ...
 console.log(runtime);
 
 // { name: "node" }
@@ -93,7 +93,6 @@ You can also use individual named exports for each runtime detection:
 - `isNetlify`
 - `isEdgeLight`
 - `isWorkerd`
-- `isLagon`
 - `isFastly`
 
 List of well known providers can be found from [./src/runtimes.ts](./src/runtimes.ts).
