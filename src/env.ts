@@ -1,41 +1,82 @@
-const _envShim = Object.create(null);
-
 export type EnvObject = Record<string, string | undefined>;
 
-const _getEnv = (useShim?: boolean) =>
+const _getEnv = (): Record<string, any> | undefined =>
   globalThis.process?.env ||
   import.meta.env ||
   globalThis.Deno?.env.toObject() ||
-  globalThis.__env__ ||
-  (useShim ? _envShim : globalThis);
+  globalThis.__env__;
 
-export const env = new Proxy<EnvObject>(_envShim, {
-  get(_, prop) {
-    const env = _getEnv();
-    return env[prop as any] ?? _envShim[prop];
+export const env = new Proxy<EnvObject>(
+  {},
+  {
+    get(target, prop) {
+      const env = _getEnv();
+      if (env && Reflect.has(env, prop)) {
+        return env[prop as any];
+      }
+
+      return target[prop as any];
+    },
+    has(target, prop) {
+      const env = _getEnv();
+      if (env && Reflect.has(env, prop)) {
+        return Reflect.has(env, prop);
+      }
+
+      return Reflect.has(target, prop);
+    },
+    set(target, prop, value) {
+      const env = _getEnv();
+      if (env) {
+        env[prop as any] = value;
+      } else {
+        target[prop as any] = value;
+      }
+
+      return true;
+    },
+    deleteProperty(target, prop) {
+      if (!prop) {
+        return false;
+      }
+
+      const env = _getEnv();
+      if (env && Reflect.has(env, prop)) {
+        delete env[prop as any];
+      }
+
+      delete target[prop as any];
+      return true;
+    },
+    ownKeys(target) {
+      const env = _getEnv();
+      return [
+        ...new Set([
+          ...Reflect.ownKeys(target),
+          ...(env ? Reflect.ownKeys(env) : []),
+        ]),
+      ];
+    },
+    getOwnPropertyDescriptor(
+      target: EnvObject,
+      p: string | symbol,
+    ): PropertyDescriptor | undefined {
+      if (Reflect.has(target, p)) {
+        return Reflect.getOwnPropertyDescriptor(target, p);
+      }
+
+      const env = _getEnv();
+      if (env && Reflect.has(env, p)) {
+        return {
+          ...Reflect.getOwnPropertyDescriptor(env, p),
+          enumerable: true,
+        };
+      }
+
+      return undefined;
+    },
   },
-  has(_, prop) {
-    const env = _getEnv();
-    return prop in env || prop in _envShim;
-  },
-  set(_, prop, value) {
-    const env = _getEnv(true);
-    env[prop as any] = value;
-    return true;
-  },
-  deleteProperty(_, prop) {
-    if (!prop) {
-      return false;
-    }
-    const env = _getEnv(true);
-    delete env[prop as any];
-    return true;
-  },
-  ownKeys() {
-    const env = _getEnv(true);
-    return Object.keys(env);
-  },
-});
+);
 
 export const nodeENV =
   (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || "";
