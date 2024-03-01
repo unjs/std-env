@@ -2,7 +2,6 @@
 export type RuntimeName =
   | "workerd"
   | "deno"
-  | "lagon"
   | "netlify"
   | "node"
   | "bun"
@@ -54,13 +53,6 @@ export const isEdgeLight = !!globalThis.EdgeRuntime;
 export const isWorkerd =
   globalThis.navigator?.userAgent === "Cloudflare-Workers";
 
-/**
- * Indicates if running in Lagon runtime.
- *
- * @deprecated https://github.com/unjs/std-env/issues/105
- */
-export const isLagon = !!globalThis.__lagon__;
-
 const runtimeChecks: [boolean, RuntimeName][] = [
   [isNetlify, "netlify"],
   [isEdgeLight, "edge-light"],
@@ -69,7 +61,6 @@ const runtimeChecks: [boolean, RuntimeName][] = [
   [isDeno, "deno"],
   [isBun, "bun"],
   [isNode, "node"],
-  [isLagon, "lagon"],
 ];
 
 function _detectRuntime(): RuntimeInfo | undefined {
