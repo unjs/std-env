@@ -22,11 +22,11 @@ export const isDebug = toBoolean(env.DEBUG);
 /** Detect if `NODE_ENV` environment variable is `test` */
 export const isTest = nodeENV === "test" || toBoolean(env.TEST);
 
-/** Detect if `NODE_ENV` environment variable is `production` */
-export const isProduction = nodeENV === "production";
+/** Detect if `NODE_ENV` or `MODE` environment variable is `production` */
+export const isProduction = nodeENV === "production" || env.MODE === "production";
 
-/** Detect if `NODE_ENV` environment variable is `dev` or `development` */
-export const isDevelopment = nodeENV === "dev" || nodeENV === "development";
+/** Detect if `NODE_ENV` environment variable is `dev` or `development`, or if `MODE` environment variable is `development` */
+export const isDevelopment = nodeENV === "dev" || nodeENV === "development" || env.MODE === "development";
 
 /** Detect if MINIMAL environment variable is set, running in CI or test or TTY is unavailable */
 export const isMinimal = toBoolean(env.MINIMAL) || isCI || isTest || !hasTTY;
