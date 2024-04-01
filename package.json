@@ -29,7 +29,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.2",
     "@vitest/coverage-v8": "^1.4.0",
     "changelogen": "^0.5.5",
     "esbuild": "^0.20.2",
@@ -42,5 +42,5 @@
     "unbuild": "^2.0.0",
     "vitest": "^1.4.0"
   },
-  "packageManager": "pnpm@8.15.5"
+  "packageManager": "pnpm@8.15.6"
 }
