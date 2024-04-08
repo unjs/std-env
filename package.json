@@ -29,7 +29,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.12.2",
+    "@types/node": "^20.12.5",
     "@vitest/coverage-v8": "^1.4.0",
     "changelogen": "^0.5.5",
     "esbuild": "^0.20.2",
@@ -37,8 +37,8 @@
     "eslint-config-unjs": "^0.2.1",
     "jiti": "^1.21.0",
     "prettier": "^3.2.5",
-    "rollup": "^4.13.2",
-    "typescript": "^5.4.3",
+    "rollup": "^4.14.1",
+    "typescript": "^5.4.4",
     "unbuild": "^2.0.0",
     "vitest": "^1.4.0"
   },
