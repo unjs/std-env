@@ -71,6 +71,6 @@ function _detectRuntime(): RuntimeInfo | undefined {
   }
 }
 
-export const runtimeInfo = _detectRuntime();
+export const runtimeInfo = /* @__PURE__ */ _detectRuntime();
 
 export const runtime: RuntimeName = runtimeInfo?.name || "";
