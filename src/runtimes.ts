@@ -1,4 +1,8 @@
 // https://runtime-keys.proposal.wintercg.org/
+
+/**
+ * Enumerates the names of supported runtimes.
+ */
 export type RuntimeName =
   | "workerd"
   | "deno"
@@ -9,7 +13,15 @@ export type RuntimeName =
   | "fastly"
   | "";
 
-export type RuntimeInfo = { name: RuntimeName };
+/**
+ * Returns the detected runtime information.
+ */
+export type RuntimeInfo = {
+  /**
+   * The name of the detected runtime. See {@link RuntimeName}.
+   */
+  name: RuntimeName
+ };
 
 /**
  * Indicates if running in Node.js or a Node.js compatible runtime.
@@ -53,6 +65,10 @@ export const isEdgeLight = !!globalThis.EdgeRuntime;
 export const isWorkerd =
   globalThis.navigator?.userAgent === "Cloudflare-Workers";
 
+/**
+ * An array of tuples used to determine the current runtime. Each tuple contains a boolean indicating
+ * the presence of a runtime and the corresponding {@link RuntimeName}.
+ */
 const runtimeChecks: [boolean, RuntimeName][] = [
   [isNetlify, "netlify"],
   [isEdgeLight, "edge-light"],
@@ -71,6 +87,13 @@ function _detectRuntime(): RuntimeInfo | undefined {
   }
 }
 
+/**
+ * Contains information about the detected runtime, if any.
+ */
 export const runtimeInfo = _detectRuntime();
 
+/**
+ * A convenience constant that returns the name of the detected runtime,
+ * defaults to an empty string if no runtime is detected.
+ */
 export const runtime: RuntimeName = runtimeInfo?.name || "";
