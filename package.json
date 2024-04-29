@@ -2,7 +2,10 @@
   "name": "std-env",
   "version": "3.7.0",
   "description": "Runtime agnostic JS utils",
-  "repository": "unjs/std-env",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unjs/std-env.git"
+  },
   "license": "MIT",
   "sideEffects": false,
   "exports": {
