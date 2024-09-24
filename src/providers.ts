@@ -46,7 +46,8 @@ export type ProviderName =
   | "cleavr"
   | "zeabur"
   | "codesphere"
-  | "railway";
+  | "railway"
+  | "deno-deploy";
 
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
@@ -105,6 +106,7 @@ const providers: InternalProvider[] = [
   ["CODESPHERE", "CODESPHERE_APP_ID", { ci: true }],
   ["RAILWAY", "RAILWAY_PROJECT_ID"],
   ["RAILWAY", "RAILWAY_SERVICE_ID"],
+  ["DENO-DEPLOY", "DENO_DEPLOYMENT_ID"],
 ];
 
 export type ProviderInfo = {
