@@ -3,10 +3,10 @@ const _envShim = Object.create(null);
 export type EnvObject = Record<string, string | undefined>;
 
 const _getEnv = (useShim?: boolean) =>
+  globalThis.__env__ /** might be injected by nitro or custom compatibility */ ||
   globalThis.process?.env ||
   import.meta.env ||
   globalThis.Deno?.env.toObject() ||
-  globalThis.__env__ ||
   (useShim ? _envShim : globalThis);
 
 export const env = new Proxy<EnvObject>(_envShim, {
