@@ -21,10 +21,10 @@ export const env = new Proxy<EnvObject>(_envShim, {
   defineProperty(_, prop, descriptor) {
     const value = descriptor.get?.() ?? descriptor.value;
     return Reflect.set(getEnvObj(), prop as string, `${value}`);
-  }
+  },
 });
 
-function getEnvObj (fallbackToGlobal?: boolean): EnvObject {
+function getEnvObj(fallbackToGlobal?: boolean): EnvObject {
   if (globalThis.__env__) {
     return globalThis.__env__;
   }
@@ -34,11 +34,11 @@ function getEnvObj (fallbackToGlobal?: boolean): EnvObject {
   if (import.meta.env) {
     return import.meta.env;
   }
-  return fallbackToGlobal ? globalThis as unknown as EnvObject : _envShim;
+  return fallbackToGlobal ? (globalThis as unknown as EnvObject) : _envShim;
 }
 
-function getEnvValue (key: string): string | undefined {
-  if (globalThis.__env__ && (key in globalThis.__env__)) {
+function getEnvValue(key: string): string | undefined {
+  if (globalThis.__env__ && key in globalThis.__env__) {
     return globalThis.__env__[key];
   }
   if (globalThis.process?.env && key in globalThis.process.env) {
