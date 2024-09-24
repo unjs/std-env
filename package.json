@@ -18,8 +18,8 @@
   "scripts": {
     "build": "unbuild",
     "dev": "vitest",
-    "lint": "eslint --ext .ts . && prettier -c src test",
-    "lint:fix": "eslint --fix --ext .ts . && prettier -w src test",
+    "lint": "eslint . && prettier -c src test",
+    "lint:fix": "eslint --fix . && prettier -w src test",
     "prepack": "unbuild",
     "play:bun": "bun playground/bun.ts",
     "play:deno": "pnpm build && deno run -A playground/deno.ts",
@@ -29,18 +29,18 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.12.5",
-    "@vitest/coverage-v8": "^1.4.0",
-    "changelogen": "^0.5.5",
-    "esbuild": "^0.20.2",
-    "eslint": "^8.57.0",
-    "eslint-config-unjs": "^0.2.1",
-    "jiti": "^1.21.0",
-    "prettier": "^3.2.5",
-    "rollup": "^4.14.1",
-    "typescript": "^5.4.4",
+    "@types/node": "^22.6.1",
+    "@vitest/coverage-v8": "^2.1.1",
+    "changelogen": "^0.5.7",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.11.1",
+    "eslint-config-unjs": "^0.3.2",
+    "jiti": "^1.21.6",
+    "prettier": "^3.3.3",
+    "rollup": "^4.22.4",
+    "typescript": "^5.6.2",
     "unbuild": "^2.0.0",
-    "vitest": "^1.4.0"
+    "vitest": "^2.1.1"
   },
   "packageManager": "pnpm@8.15.6"
 }
