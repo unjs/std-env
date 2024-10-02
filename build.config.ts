@@ -7,7 +7,8 @@ export default defineBuildConfig({
   rollup: {
     emitCJS: true,
     esbuild: {
-      minify: true,
+      minifySyntax: true,
+      minifyIdentifiers: true,
     },
   },
   entries: ["src/index"],
