@@ -1,5 +1,8 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
 
+/**
+ * Represents the name of a CI/CD provider.
+ */
 export type ProviderName =
   | ""
   | "appveyor"
@@ -56,6 +59,9 @@ type InternalProvider = [
   meta?: Record<string, any>,
 ];
 
+/**
+ * An array of InternalProvider tuples defining the detection parameters for different CI/CD providers. See {@link ProviderName}.
+ */
 const providers: InternalProvider[] = [
   ["APPVEYOR"],
   ["AWS_AMPLIFY", "AWS_APP_ID", { ci: true }],
@@ -111,9 +117,26 @@ const providers: InternalProvider[] = [
   ["FIREBASE_APP_HOSTING", "FIREBASE_APP_HOSTING", { ci: true }],
 ];
 
+/**
+ * Provides information about a CI/CD provider, including its name and possibly other metadata.
+ * It is primarily used to determine if the current environment is within a known CI/CD provider.
+ */
 export type ProviderInfo = {
+  /**
+   * The name of the CI/CD provider. See {@link ProviderName} for possible values.
+   */
   name: ProviderName;
+  
+  /**
+   * Indicates whether the environment is recognised as a CI/CD environment.
+   * optional
+   */
   ci?: boolean;
+
+  /**
+   * An index signature to include any additional metadata associated with the CI/CD provider.
+   * This allows for the inclusion of arbitrary key-value pairs that may provide further context or configuration specifics.
+   */
   [meta: string]: any;
 };
 
@@ -148,6 +171,13 @@ function _detectProvider(): ProviderInfo {
   };
 }
 
-/** Current provider info */
+/**
+ * The detected provider information for the current execution context.
+ * This value is evaluated once at module initialisation.
+ */
 export const providerInfo = _detectProvider();
+
+/**
+ * A convenience reference to the name of the detected provider.
+ */
 export const provider: ProviderName = providerInfo.name;
