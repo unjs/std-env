@@ -49,5 +49,8 @@ export const isColorSupported =
 
 /** Node.js versions */
 export const nodeVersion =
-  (globalThis.process?.versions?.node || "").replace(/^v/, "") || null;
+  /* @__PURE__ */ (globalThis.process?.versions?.node || "").replace(
+    /^v/,
+    "",
+  ) || null;
 export const nodeMajorVersion = Number(nodeVersion?.split(".")[0]) || null;
