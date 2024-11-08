@@ -47,7 +47,8 @@ export type ProviderName =
   | "zeabur"
   | "codesphere"
   | "railway"
-  | "deno-deploy";
+  | "deno-deploy"
+  | "firebase_app_hosting";
 
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
@@ -107,6 +108,7 @@ const providers: InternalProvider[] = [
   ["RAILWAY", "RAILWAY_PROJECT_ID"],
   ["RAILWAY", "RAILWAY_SERVICE_ID"],
   ["DENO-DEPLOY", "DENO_DEPLOYMENT_ID"],
+  ["FIREBASE_APP_HOSTING", "FIREBASE_APP_HOSTING", { ci: true }],
 ];
 
 export type ProviderInfo = {
