@@ -10,7 +10,7 @@ export default defineBuildConfig({
       minify: true,
     },
   },
-  entries: ["src/index"],
+  entries: ["src/index", "src/containers/index", "src/wsl/index"],
   hooks: {
     "rollup:options"(ctx, rollupConfig) {
       (rollupConfig.plugins as Plugin[]).push({
