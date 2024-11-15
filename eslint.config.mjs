@@ -4,7 +4,7 @@ import unjs from "eslint-config-unjs";
 export default unjs({
   ignores: [],
   rules: {
-  "unicorn/no-null": 0,
-  "unicorn/prevent-abbreviations": 0
-},
+    "unicorn/no-null": 0,
+    "unicorn/prevent-abbreviations": 0
+  },
 });
