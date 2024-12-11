@@ -29,18 +29,18 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "@vitest/coverage-v8": "^2.1.5",
+    "@types/node": "^22.10.2",
+    "@vitest/coverage-v8": "^2.1.8",
     "changelogen": "^0.5.7",
     "esbuild": "^0.24.0",
-    "eslint": "^9.14.0",
-    "eslint-config-unjs": "^0.4.1",
-    "jiti": "^2.4.0",
-    "prettier": "^3.3.3",
-    "rollup": "^4.26.0",
-    "typescript": "^5.6.3",
+    "eslint": "^9.16.0",
+    "eslint-config-unjs": "^0.4.2",
+    "jiti": "^2.4.1",
+    "prettier": "^3.4.2",
+    "rollup": "^4.28.1",
+    "typescript": "^5.7.2",
     "unbuild": "^2.0.0",
-    "vitest": "^2.1.5"
+    "vitest": "^2.1.8"
   },
-  "packageManager": "pnpm@9.13.1"
+  "packageManager": "pnpm@9.15.0"
 }
