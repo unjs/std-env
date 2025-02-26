@@ -39,7 +39,7 @@
     "prettier": "^3.3.3",
     "rollup": "^4.26.0",
     "typescript": "^5.6.3",
-    "unbuild": "^2.0.0",
+    "unbuild": "^3.5.0",
     "vitest": "^2.1.5"
   },
   "packageManager": "pnpm@9.13.1"
