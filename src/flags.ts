@@ -6,10 +6,11 @@ import { toBoolean } from "./_utils";
 export const platform = globalThis.process?.platform || "";
 
 /** Detect if `CI` environment variable is set or a provider CI detected */
-export const isCI = toBoolean(env.CI) || providerInfo.ci !== false;
+export const isCI =
+  /* @__PURE__ */ toBoolean(env.CI) || providerInfo.ci !== false;
 
 /** Detect if stdout.TTY is available */
-export const hasTTY = toBoolean(
+export const hasTTY = /* @__PURE__ */ toBoolean(
   globalThis.process?.stdout && globalThis.process?.stdout.isTTY,
 );
 
@@ -18,10 +19,10 @@ export const hasTTY = toBoolean(
 export const hasWindow = typeof window !== "undefined";
 
 /** Detect if `DEBUG` environment variable is set */
-export const isDebug = toBoolean(env.DEBUG);
+export const isDebug = /* @__PURE__ */ toBoolean(env.DEBUG);
 
 /** Detect if `NODE_ENV` environment variable is `test` */
-export const isTest = nodeENV === "test" || toBoolean(env.TEST);
+export const isTest = nodeENV === "test" || /* @__PURE__ */ toBoolean(env.TEST);
 
 /** Detect if `NODE_ENV` environment variable is `production` */
 export const isProduction = nodeENV === "production";
@@ -30,7 +31,8 @@ export const isProduction = nodeENV === "production";
 export const isDevelopment = nodeENV === "dev" || nodeENV === "development";
 
 /** Detect if MINIMAL environment variable is set, running in CI or test or TTY is unavailable */
-export const isMinimal = toBoolean(env.MINIMAL) || isCI || isTest || !hasTTY;
+export const isMinimal =
+  /* @__PURE__ */ toBoolean(env.MINIMAL) || isCI || isTest || !hasTTY;
 
 /** Detect if process.platform is Windows */
 export const isWindows = /^win/i.test(platform);
@@ -43,8 +45,8 @@ export const isMacOS = /^darwin/i.test(platform);
 
 /** Color Support */
 export const isColorSupported =
-  !toBoolean(env.NO_COLOR) &&
-  (toBoolean(env.FORCE_COLOR) ||
+  /* @__PURE__ */ !toBoolean(env.NO_COLOR) &&
+  /* @__PURE__ */ (toBoolean(env.FORCE_COLOR) ||
     ((hasTTY || isWindows) && env.TERM !== "dumb") ||
     isCI);
 
