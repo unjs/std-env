@@ -14,6 +14,7 @@ export const hasTTY = toBoolean(
 );
 
 /** Detect if global `window` object is available */
+// eslint-disable-next-line unicorn/prefer-global-this
 export const hasWindow = typeof window !== "undefined";
 
 /** Detect if `DEBUG` environment variable is set */

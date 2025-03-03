@@ -46,7 +46,9 @@ export type ProviderName =
   | "cleavr"
   | "zeabur"
   | "codesphere"
-  | "railway";
+  | "railway"
+  | "deno-deploy"
+  | "firebase_app_hosting";
 
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
@@ -98,6 +100,7 @@ const providers: InternalProvider[] = [
   ["VERCEL", "VERCEL_ENV", { ci: false }],
   ["APPCENTER", "APPCENTER_BUILD_ID"],
   ["CODESANDBOX", "CODESANDBOX_SSE", { ci: false }],
+  ["CODESANDBOX", "CODESANDBOX_HOST", { ci: false }],
   ["STACKBLITZ"],
   ["STORMKIT"],
   ["CLEAVR"],
@@ -105,6 +108,8 @@ const providers: InternalProvider[] = [
   ["CODESPHERE", "CODESPHERE_APP_ID", { ci: true }],
   ["RAILWAY", "RAILWAY_PROJECT_ID"],
   ["RAILWAY", "RAILWAY_SERVICE_ID"],
+  ["DENO-DEPLOY", "DENO_DEPLOYMENT_ID"],
+  ["FIREBASE_APP_HOSTING", "FIREBASE_APP_HOSTING", { ci: true }],
 ];
 
 export type ProviderInfo = {

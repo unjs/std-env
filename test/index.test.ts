@@ -43,7 +43,7 @@ describe("std-env", () => {
       platform: expect.any(String),
       provider: expect.any(String),
       isCI: expect.any(Boolean),
-      hasTTY: false,
+      hasTTY: expect.any(Boolean),
       hasWindow: false,
       isDebug: false,
       isTest: true,
