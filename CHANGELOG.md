@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.8.1
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.8.0...v3.8.1)
+
+### 🩹 Fixes
+
+- **providers:** Detect `CODESANDBOX_HOST` ([#154](https://github.com/unjs/std-env/pull/154))
+
+### 🏡 Chore
+
+- Update deps ([1124522](https://github.com/unjs/std-env/commit/1124522))
+- Lint ([31d957d](https://github.com/unjs/std-env/commit/31d957d))
+- Update ci ([9a787f3](https://github.com/unjs/std-env/commit/9a787f3))
+
+### ❤️ Contributors
+
+- Daniel Roe ([@danielroe](https://github.com/danielroe))
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v3.8.0
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.7.0...v3.8.0)
