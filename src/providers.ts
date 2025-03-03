@@ -100,6 +100,7 @@ const providers: InternalProvider[] = [
   ["VERCEL", "VERCEL_ENV", { ci: false }],
   ["APPCENTER", "APPCENTER_BUILD_ID"],
   ["CODESANDBOX", "CODESANDBOX_SSE", { ci: false }],
+  ["CODESANDBOX", "CODESANDBOX_HOST", { ci: false }],
   ["STACKBLITZ"],
   ["STORMKIT"],
   ["CLEAVR"],
