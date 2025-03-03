@@ -13,7 +13,7 @@ const processShims: Partial<Process> = {
   versions: {},
 };
 
-export const process = new Proxy<Process>(_process, {
+export const process = /* @__PURE__ */ new Proxy<Process>(_process, {
   get(target, prop: keyof Process) {
     if (prop === "env") {
       return env;

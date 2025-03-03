@@ -5,11 +5,11 @@ export type EnvObject = Record<string, string | undefined>;
 const _getEnv = (useShim?: boolean) =>
   globalThis.process?.env ||
   import.meta.env ||
-  globalThis.Deno?.env.toObject() ||
+  /* @__PURE__ */ globalThis.Deno?.env.toObject() ||
   globalThis.__env__ ||
   (useShim ? _envShim : globalThis);
 
-export const env = new Proxy<EnvObject>(_envShim, {
+export const env = /* @__PURE__ */ new Proxy<EnvObject>(_envShim, {
   get(_, prop) {
     const env = _getEnv();
     return env[prop as any] ?? _envShim[prop];
