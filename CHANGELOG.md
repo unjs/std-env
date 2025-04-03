@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.9.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.8.1...v3.9.0)
+
+### 🚀 Enhancements
+
+- Detect cloudflare workers build ci ([#156](https://github.com/unjs/std-env/pull/156))
+
+### 🏡 Chore
+
+- Update deps ([4e8f48d](https://github.com/unjs/std-env/commit/4e8f48d))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v3.8.1
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.8.0...v3.8.1)
