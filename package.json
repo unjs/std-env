@@ -6,9 +6,11 @@
   "license": "MIT",
   "sideEffects": false,
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.cjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
