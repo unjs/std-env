@@ -16,6 +16,8 @@ export type ProviderName =
   | "cirrus"
   | "cloudflare_pages"
   | "cloudflare_workers"
+  | "cloudrun"
+  | "cloudrun_job"
   | "codebuild"
   | "codefresh"
   | "drone"
@@ -72,6 +74,8 @@ const providers: InternalProvider[] = [
   ["CIRRUS", "CIRRUS_CI"],
   ["CLOUDFLARE_PAGES", "CF_PAGES", { ci: true }],
   ["CLOUDFLARE_WORKERS", "WORKERS_CI", { ci: true }],
+  ["CLOUDRUN", "K_SERVICE"],
+  ["CLOUDRUN_JOB", "CLOUD_RUN_JOB"],
   ["CODEBUILD", "CODEBUILD_BUILD_ARN"],
   ["CODEFRESH", "CF_BUILD_ID"],
   ["DRONE"],
