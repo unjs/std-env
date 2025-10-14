@@ -1,5 +1,5 @@
 import { expect, it, describe } from "vitest";
-import * as stdEnv from "../src";
+import * as stdEnv from "../src/index.ts";
 
 describe("std-env", () => {
   it("has expected exports", () => {

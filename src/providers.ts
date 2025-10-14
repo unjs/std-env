@@ -152,5 +152,5 @@ function _detectProvider(): ProviderInfo {
 }
 
 /** Current provider info */
-export const providerInfo = _detectProvider();
+export const providerInfo: ProviderInfo = _detectProvider();
 export const provider: ProviderName = providerInfo.name;
