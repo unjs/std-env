@@ -1,5 +1,9 @@
 const _envShim = Object.create(null);
 
+/**
+ * Represents an environment variable object, where each key is the name of the variable
+ * and its value is a string or undefined.
+ */
 export type EnvObject = Record<string, string | undefined>;
 
 const _getEnv = (useShim?: boolean) =>
@@ -10,6 +14,9 @@ const _getEnv = (useShim?: boolean) =>
   globalThis.__env__ ||
   (useShim ? _envShim : globalThis);
 
+/**
+ * A proxy handler for environment variables that supports reading, writing and deleting properties as well as listing all environment variable keys with a shim fallback.
+ */
 export const env: EnvObject = new Proxy<EnvObject>(_envShim, {
   get(_, prop) {
     const env = _getEnv();
@@ -38,5 +45,10 @@ export const env: EnvObject = new Proxy<EnvObject>(_envShim, {
   },
 });
 
+/**
+ * Current value of the `NODE_ENV` environment variable (or static value if replaced during build).
+ *
+ * If `NODE_ENV` is not set, this will be an empty `""` string.
+ */
 export const nodeENV: string =
   (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || "";

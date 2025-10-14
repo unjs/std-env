@@ -1,4 +1,5 @@
 // https://runtime-keys.proposal.wintercg.org/
+
 export type RuntimeName =
   | "workerd"
   | "deno"
@@ -9,7 +10,12 @@ export type RuntimeName =
   | "fastly"
   | "";
 
-export type RuntimeInfo = { name: RuntimeName };
+export type RuntimeInfo = {
+  /**
+   * The name of the detected runtime.
+   */
+  name: RuntimeName;
+};
 
 /**
  * Indicates if running in Node.js or a Node.js compatible runtime.
@@ -72,6 +78,13 @@ function _detectRuntime(): RuntimeInfo | undefined {
   }
 }
 
+/**
+ * Contains information about the detected runtime, if any.
+ */
 export const runtimeInfo: RuntimeInfo | undefined = _detectRuntime();
 
+/**
+ * A convenience constant that returns the name of the detected runtime,
+ * defaults to an empty string if no runtime is detected.
+ */
 export const runtime: RuntimeName = runtimeInfo?.name || "";
