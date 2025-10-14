@@ -29,7 +29,7 @@ const processShims: Partial<Process> = {
  * A proxy for managing access to properties of the process object.
  * It prioritises direct properties of `process`, then shims, and finally managed access to environment variables.
  */
-export const process = new Proxy<Process>(_process, {
+export const process: Process = new Proxy<Process>(_process, {
   /**
    * Retrieves a property from the `process` object.
    * Custom handling is implemented for the `env` property to ensure that it returns the managed environment variable object.
