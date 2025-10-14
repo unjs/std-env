@@ -113,6 +113,7 @@ const providers: InternalProvider[] = [
   ["CODESPHERE", "CODESPHERE_APP_ID", { ci: true }],
   ["RAILWAY", "RAILWAY_PROJECT_ID"],
   ["RAILWAY", "RAILWAY_SERVICE_ID"],
+  ["DENO-DEPLOY", "DENO_DEPLOY"],
   ["DENO-DEPLOY", "DENO_DEPLOYMENT_ID"],
   ["FIREBASE_APP_HOSTING", "FIREBASE_APP_HOSTING", { ci: true }],
 ];
