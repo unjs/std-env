@@ -1,8 +1,5 @@
 // https://runtime-keys.proposal.wintercg.org/
 
-/**
- * Enumerates the names of supported runtimes.
- */
 export type RuntimeName =
   | "workerd"
   | "deno"
@@ -13,12 +10,9 @@ export type RuntimeName =
   | "fastly"
   | "";
 
-/**
- * Returns the detected runtime information.
- */
 export type RuntimeInfo = {
   /**
-   * The name of the detected runtime. See {@link RuntimeName}.
+   * The name of the detected runtime.
    */
   name: RuntimeName;
 };
@@ -66,10 +60,6 @@ export const isEdgeLight: boolean = !!globalThis.EdgeRuntime;
 export const isWorkerd: boolean =
   globalThis.navigator?.userAgent === "Cloudflare-Workers";
 
-/**
- * An array of tuples used to determine the current runtime. Each tuple contains a boolean indicating
- * the presence of a runtime and the corresponding {@link RuntimeName}.
- */
 const runtimeChecks: [boolean, RuntimeName][] = [
   [isNetlify, "netlify"],
   [isEdgeLight, "edge-light"],
