@@ -26,9 +26,6 @@ importers:
       eslint-config-unjs:
         specifier: ^0.5.0
         version: 0.5.0(eslint@9.37.0(jiti@2.6.1))(typescript@5.9.3)
-      jiti:
-        specifier: ^2.6.1
-        version: 2.6.1
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
