@@ -60,9 +60,6 @@ type InternalProvider = [
   meta?: Record<string, any>,
 ];
 
-/**
- * An array of InternalProvider tuples defining the detection parameters for different CI/CD or Deployment providers. See {@link ProviderName}.
- */
 const providers: InternalProvider[] = [
   ["APPVEYOR"],
   ["AWS_AMPLIFY", "AWS_APP_ID", { ci: true }],
