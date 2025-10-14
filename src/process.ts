@@ -1,4 +1,4 @@
-import { EnvObject, env } from "./env";
+import { type EnvObject, env } from "./env.ts";
 
 export interface Process
   extends Partial<Omit<typeof globalThis.process, "versions">> {
@@ -13,7 +13,7 @@ const processShims: Partial<Process> = {
   versions: {},
 };
 
-export const process = new Proxy<Process>(_process, {
+export const process: Process = new Proxy<Process>(_process, {
   get(target, prop: keyof Process) {
     if (prop === "env") {
       return env;
