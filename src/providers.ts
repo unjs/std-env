@@ -122,19 +122,17 @@ const providers: InternalProvider[] = [
  */
 export type ProviderInfo = {
   /**
-   * The name of the CI/CD provider. See {@link ProviderName} for possible values.
+   * The name of the CI/CD or Deployment provider. See {@link ProviderName} for possible values.
    */
   name: ProviderName;
 
   /**
-   * Indicates whether the environment is recognised as a CI/CD environment.
-   * optional
+   * If is set to `true`, the environment is recognised as a CI/CD provider.
    */
   ci?: boolean;
 
   /**
-   * An index signature to include any additional metadata associated with the CI/CD provider.
-   * This allows for the inclusion of arbitrary key-value pairs that may provide further context or configuration specifics.
+   * Arbitrary metadata associated with the provider.
    */
   [meta: string]: any;
 };
