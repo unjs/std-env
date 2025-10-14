@@ -18,6 +18,7 @@ export type ProviderName =
   | "circle"
   | "cirrus"
   | "cloudflare_pages"
+  | "cloudflare_workers"
   | "codebuild"
   | "codefresh"
   | "drone"
@@ -49,7 +50,9 @@ export type ProviderName =
   | "cleavr"
   | "zeabur"
   | "codesphere"
-  | "railway";
+  | "railway"
+  | "deno-deploy"
+  | "firebase_app_hosting";
 
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
@@ -74,6 +77,7 @@ const providers: InternalProvider[] = [
   ["CIRCLE", "CIRCLECI"],
   ["CIRRUS", "CIRRUS_CI"],
   ["CLOUDFLARE_PAGES", "CF_PAGES", { ci: true }],
+  ["CLOUDFLARE_WORKERS", "WORKERS_CI", { ci: true }],
   ["CODEBUILD", "CODEBUILD_BUILD_ARN"],
   ["CODEFRESH", "CF_BUILD_ID"],
   ["DRONE"],
@@ -104,6 +108,7 @@ const providers: InternalProvider[] = [
   ["VERCEL", "VERCEL_ENV", { ci: false }],
   ["APPCENTER", "APPCENTER_BUILD_ID"],
   ["CODESANDBOX", "CODESANDBOX_SSE", { ci: false }],
+  ["CODESANDBOX", "CODESANDBOX_HOST", { ci: false }],
   ["STACKBLITZ"],
   ["STORMKIT"],
   ["CLEAVR"],
@@ -111,6 +116,8 @@ const providers: InternalProvider[] = [
   ["CODESPHERE", "CODESPHERE_APP_ID", { ci: true }],
   ["RAILWAY", "RAILWAY_PROJECT_ID"],
   ["RAILWAY", "RAILWAY_SERVICE_ID"],
+  ["DENO-DEPLOY", "DENO_DEPLOYMENT_ID"],
+  ["FIREBASE_APP_HOSTING", "FIREBASE_APP_HOSTING", { ci: true }],
 ];
 
 /**
@@ -122,7 +129,7 @@ export type ProviderInfo = {
    * The name of the CI/CD provider. See {@link ProviderName} for possible values.
    */
   name: ProviderName;
-  
+
   /**
    * Indicates whether the environment is recognised as a CI/CD environment.
    * optional
@@ -168,12 +175,8 @@ function _detectProvider(): ProviderInfo {
 }
 
 /**
- * The detected provider information for the current execution context.
- * This value is evaluated once at module initialisation.
- */
-export const providerInfo = _detectProvider();
-
-/**
  * A convenience reference to the name of the detected provider.
  */
+export const providerInfo: ProviderInfo = _detectProvider();
+
 export const provider: ProviderName = providerInfo.name;

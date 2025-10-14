@@ -2,6 +2,67 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.9.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.8.1...v3.9.0)
+
+### 🚀 Enhancements
+
+- Detect cloudflare workers build ci ([#156](https://github.com/unjs/std-env/pull/156))
+
+### 🏡 Chore
+
+- Update deps ([4e8f48d](https://github.com/unjs/std-env/commit/4e8f48d))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
+## v3.8.1
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.8.0...v3.8.1)
+
+### 🩹 Fixes
+
+- **providers:** Detect `CODESANDBOX_HOST` ([#154](https://github.com/unjs/std-env/pull/154))
+
+### 🏡 Chore
+
+- Update deps ([1124522](https://github.com/unjs/std-env/commit/1124522))
+- Lint ([31d957d](https://github.com/unjs/std-env/commit/31d957d))
+- Update ci ([9a787f3](https://github.com/unjs/std-env/commit/9a787f3))
+
+### ❤️ Contributors
+
+- Daniel Roe ([@danielroe](https://github.com/danielroe))
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
+## v3.8.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.7.0...v3.8.0)
+
+### 🚀 Enhancements
+
+- **provider:** Add deno-deploy ([#117](https://github.com/unjs/std-env/pull/117))
+- **providers:** Detect `FIREBASE_APP_HOSTING` ci ([#146](https://github.com/unjs/std-env/pull/146))
+
+### 📦 Build
+
+- Update unbuild ([41e7a6a](https://github.com/unjs/std-env/commit/41e7a6a))
+
+### 🏡 Chore
+
+- Update lockfile ([7528b13](https://github.com/unjs/std-env/commit/7528b13))
+- Remove lagon ([#109](https://github.com/unjs/std-env/pull/109))
+- Update repo ([f97a04b](https://github.com/unjs/std-env/commit/f97a04b))
+- Update deps ([6cbedab](https://github.com/unjs/std-env/commit/6cbedab))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Markthree ([@markthree](http://github.com/markthree))
+- Maxime Pauvert ([@maximepvrt](http://github.com/maximepvrt))
+
 ## v3.7.0
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.6.0...v3.7.0)

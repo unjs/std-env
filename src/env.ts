@@ -8,6 +8,7 @@ export type EnvObject = Record<string, string | undefined>;
 
 const _getEnv = (useShim?: boolean) =>
   globalThis.process?.env ||
+  // @ts-ignore
   import.meta.env ||
   globalThis.Deno?.env.toObject() ||
   globalThis.__env__ ||
@@ -18,7 +19,7 @@ const _getEnv = (useShim?: boolean) =>
  * and deleting properties, as well as listing all environment variable keys.
  * It uses `_getEnv` to determine the correct environment source or uses the `_envShim` if specified.
  */
-export const env = new Proxy<EnvObject>(_envShim, {
+export const env: EnvObject = new Proxy<EnvObject>(_envShim, {
   get(_, prop) {
     const env = _getEnv();
     return env[prop as any] ?? _envShim[prop];
@@ -51,5 +52,5 @@ export const env = new Proxy<EnvObject>(_envShim, {
  *
  * @default ""
  */
-export const nodeENV =
+export const nodeENV: string =
   (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || "";
