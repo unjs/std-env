@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.10.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.9.0...v3.10.0)
+
+### 🚀 Enhancements
+
+- Detect `DENO_DEPLOY` for deno deploy EA ([#167](https://github.com/unjs/std-env/pull/167))
+- Detect google cloud run / job ([#161](https://github.com/unjs/std-env/pull/161))
+
+### 💅 Refactors
+
+- Stricter type checks ([995d525](https://github.com/unjs/std-env/commit/995d525))
+- Improve jsdocs ([#166](https://github.com/unjs/std-env/pull/166))
+
+### 📦 Build
+
+- Add `type: "module"` to package.json ([cb104d3](https://github.com/unjs/std-env/commit/cb104d3))
+
+### 🏡 Chore
+
+- Update dependencies ([0a81775](https://github.com/unjs/std-env/commit/0a81775))
+- Lint ([bd107d6](https://github.com/unjs/std-env/commit/bd107d6))
+- Remove jiti dependency ([f99e26a](https://github.com/unjs/std-env/commit/f99e26a))
+
+### ❤️ Contributors
+
+- Álvaro <alvaro@nxtfwd.com>
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v3.9.0
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.8.1...v3.9.0)
