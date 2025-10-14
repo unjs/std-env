@@ -1,7 +1,7 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
 
 /**
- * Represents the name of a CI/CD provider.
+ * Represents the name of a CI/CD or Deployment provider.
  */
 export type ProviderName =
   | ""
@@ -61,7 +61,7 @@ type InternalProvider = [
 ];
 
 /**
- * An array of InternalProvider tuples defining the detection parameters for different CI/CD providers. See {@link ProviderName}.
+ * An array of InternalProvider tuples defining the detection parameters for different CI/CD or Deployment providers. See {@link ProviderName}.
  */
 const providers: InternalProvider[] = [
   ["APPVEYOR"],
@@ -121,8 +121,7 @@ const providers: InternalProvider[] = [
 ];
 
 /**
- * Provides information about a CI/CD provider, including its name and possibly other metadata.
- * It is primarily used to determine if the current environment is within a known CI/CD provider.
+ * Provides information about a CI/CD or Deployment provider, including its name and possibly other metadata.
  */
 export type ProviderInfo = {
   /**

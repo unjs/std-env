@@ -15,9 +15,7 @@ const _getEnv = (useShim?: boolean) =>
   (useShim ? _envShim : globalThis);
 
 /**
- * A proxy handler for environment variables that supports reading, writing and deleting properties,
- * and deleting properties, as well as listing all environment variable keys.
- * It uses `_getEnv` to determine the correct environment source or uses the `_envShim` if specified.
+ * A proxy handler for environment variables that supports reading, writing and deleting properties as well as listing all environment variable keys with a shim fallback.
  */
 export const env: EnvObject = new Proxy<EnvObject>(_envShim, {
   get(_, prop) {
@@ -48,9 +46,9 @@ export const env: EnvObject = new Proxy<EnvObject>(_envShim, {
 });
 
 /**
- * Retrieves the current value of the `NODE_ENV` environment variable from the Node.js context.
+ * Current value of the `NODE_ENV` environment variable (or static value if replaced during build).
  *
- * @default ""
+ * If `NODE_ENV` is not set, this will be an empty `""` string.
  */
 export const nodeENV: string =
   (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || "";
