@@ -1,5 +1,8 @@
 import { type EnvObject, env } from "./env.ts";
 
+/**
+ * An interface that partially shims the Node.js `global.process`.
+ */
 export interface Process
   extends Partial<Omit<typeof globalThis.process, "versions">> {
   env: EnvObject;
@@ -13,6 +16,9 @@ const processShims: Partial<Process> = {
   versions: {},
 };
 
+/**
+ * A proxy for managing access to properties of the process with a shim fallback.
+ */
 export const process: Process = new Proxy<Process>(_process, {
   get(target, prop: keyof Process) {
     if (prop === "env") {
