@@ -5,6 +5,7 @@
   "repository": "unjs/std-env",
   "license": "MIT",
   "sideEffects": false,
+  "type": "module",
   "exports": {
     "types": "./dist/index.d.ts",
     "import": "./dist/index.mjs",
