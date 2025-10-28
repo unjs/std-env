@@ -89,8 +89,9 @@ const providers: InternalProvider[] = [
   ["GITLAB", "CI_MERGE_REQUEST_ID"],
   ["GOCD", "GO_PIPELINE_LABEL"],
   ["LAYERCI"],
-  ["HUDSON", "HUDSON_URL"],
+  // Jenkins must be validated before Hudson
   ["JENKINS", "JENKINS_URL"],
+  ["HUDSON", "HUDSON_URL"],
   ["MAGNUM"],
   ["NETLIFY"],
   ["NETLIFY", "NETLIFY_LOCAL", { ci: false }],
