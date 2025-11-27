@@ -3,8 +3,9 @@ import { type EnvObject, env } from "./env.ts";
 /**
  * An interface that partially shims the Node.js `global.process`.
  */
-export interface Process
-  extends Partial<Omit<typeof globalThis.process, "versions">> {
+export interface Process extends Partial<
+  Omit<typeof globalThis.process, "versions">
+> {
   env: EnvObject;
   versions: Record<string, string>;
 }
