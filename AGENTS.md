@@ -56,9 +56,12 @@ All detection modules follow the same pattern:
 ### Agent Detection (`src/agents.ts`)
 
 - **Priority**: `AI_AGENT` env var (generic override) → ordered tuple scan
-- Agents list: `cursor`, `claude`, `replit`, `gemini`, `codex`, `augment_cli`, `opencode`, `kiro`, `goose`, `devin`
-- Tuple format: `[AGENT_NAME, ENV_VAR, { match?: RegExp }]`
-- When `match` is provided, the env var value is tested against the regex (e.g., `TERM_PROGRAM` matching `/kiro/`)
+- Internal types:
+  - `EnvCheck = string | [envName: string, match: RegExp]`
+  - `InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]]`
+- Each agent maps to an array of `EnvCheck` items; the first matching env var wins
+- When `EnvCheck` is a `[envName, RegExp]` tuple, the env var value must also match the regex (e.g., `["TERM_PROGRAM", /kiro/]`)
+- Exports: `detectAgent()`, `agentInfo` (singleton), `agent` (name shorthand), `isAgent` (boolean)
 
 ### Provider Detection (`src/providers.ts`)
 
@@ -73,41 +76,27 @@ All detection modules follow the same pattern:
 
 ## Agent Detection
 
-### Adding a New Agent
+### Self-Test (Required)
 
-1. Add the agent name to the `AgentName` type union in `src/agents.ts`
-2. Add one or more `[NAME, ENV_VAR, opts?]` tuples to the `agents` array
-3. If the env var value needs partial matching, add `{ match: /pattern/ }`
-
-Example — agent detected by a dedicated env var:
-
-```ts
-["MYAGENT", "MYAGENT_SESSION"],
-```
-
-Example — agent detected by matching a generic env var's value:
-
-```ts
-["MYAGENT", "TERM_PROGRAM", { match: /myagent/ }],
-```
-
-### Self-Test
-
-As an coding agent, you can very it works:
+**Every agent that modifies this file MUST run the self-test and update the verification comment.**
 
 ```bash
 pnpm run build
-node -e "console.log(require('std-env').agentInfo)"
+node -e "console.log(require('./dist/index.cjs').agentInfo)"
 ```
 
-if output is like `{ name: "..." }`, it works, If output is `{}`, agent is NOT DETECTED.
+If output is like `{ name: "..." }`, it works. If output is `{}`, agent is NOT DETECTED.
 
-Always run this command to debug current env variables:
+Debug current env variables:
 
 ```bash
 node -e "console.log(process.env)"
 ```
 
-if agent was detected, add a comment in @src/agents.ts `agents` array like `// ✅ Verified by {agentName}` right above the env variable
+**After running the self-test:**
 
-if agent was not detected, Search for environment variables that match the agent name or contain a value to match against and add it.
+- If agent **was detected**: add/update a comment above the agent's entry in the `agents` record in `src/agents.ts`:
+  `// ✅ Verified by {agentName} (can be detected using ENV1, ENV2, ...)`
+  listing the env vars that were found in the environment. When updating an existing comment, **append** newly discovered env vars to the list — do not remove previously listed ones.
+
+- If agent **was not detected**: search `process.env` output for environment variables that match the agent name or contain a recognizable value, then add the appropriate detection entry.

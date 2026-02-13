@@ -6,7 +6,6 @@
 export type AgentName =
   | (string & {})
   | "cursor"
-  | "cursor_cli"
   | "claude"
   | "devin"
   | "replit"
@@ -17,32 +16,23 @@ export type AgentName =
   | "kiro"
   | "goose";
 
-type InternalAgent = [
-  agentName: Uppercase<AgentName>,
-  envName?: string,
-  opts?: { match?: RegExp },
-];
+type EnvCheck = string | [envName: string, match: RegExp];
+
+type InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]];
 
 const agents: InternalAgent[] = [
-  ["CURSOR", "CURSOR_TRACE_ID"],
-  ["CURSOR", "CURSOR_AGENT"],
-  // ✅ Verified by claude
-  ["CLAUDE", "CLAUDECODE"],
-  ["CLAUDE", "CLAUDE_CODE"],
-  ["REPLIT", "REPL_ID"],
-  ["GEMINI", "GEMINI_CLI"],
-  // ✅ Verified by codex
-  // CODEX_INTERNAL_ORIGINATOR_OVERRIDE or PATH matching .codex could be used too
-  ["CODEX", "CODEX_SANDBOX"],
-  ["CODEX", "CODEX_THREAD_ID"],
-  ["AUGMENT_CLI", "AUGMENT_AGENT"],
-  // ✅ Verified by opencode
-  ["OPENCODE", "OPENCODE"],
-  ["OPENCODE", "OPENCODE_CALLER"],
-  ["OPENCODE", "OPENCODE_CLIENT"],
-  ["GOOSE", "GOOSE_PROVIDER"],
-  ["KIRO", "TERM_PROGRAM", { match: /kiro/ }],
-  ["DEVIN", "EDITOR", { match: /devin/ }], // BROWSER or PATH could be used too
+  ["cursor", ["CURSOR_TRACE_ID", "CURSOR_AGENT"]],
+  // ✅ Verified by claude (can be detected using CLAUDECODE, CLAUDE_CODE, CLAUDE_AGENT_SDK_VERSION)
+  ["claude", ["CLAUDECODE", "CLAUDE_CODE"]],
+  ["replit", ["REPL_ID"]],
+  ["gemini", ["GEMINI_CLI"]],
+  // ✅ Verified by codex (can be detected using CODEX_THREAD_ID)
+  ["codex", ["CODEX_SANDBOX", "CODEX_THREAD_ID"]],
+  ["augment_cli", ["AUGMENT_AGENT"]],
+  ["opencode", ["OPENCODE", "OPENCODE_CALLER", "OPENCODE_CLIENT"]],
+  ["goose", ["GOOSE_PROVIDER"]],
+  ["kiro", [["TERM_PROGRAM", /kiro/]]],
+  ["devin", [["EDITOR", /devin/]]], // BROWSER or PATH could be used too
 ];
 
 /**
@@ -63,18 +53,19 @@ export function detectAgent(): AgentInfo {
   if (env) {
     const aiAgent = env.AI_AGENT;
     if (aiAgent) {
-      return { name: aiAgent.toLowerCase() as AgentName };
+      return { name: aiAgent };
     }
-    for (const agent of agents) {
-      const envValue = env[agent[1]!];
-      if (envValue) {
-        const match = (agent[2])?.match;
-        if (match && !match.test(envValue)) {
-          continue;
+    for (const [name, checks] of agents) {
+      for (const check of checks) {
+        const envName = typeof check === "string" ? check : check[0];
+        const envValue = env[envName];
+        if (envValue) {
+          const match = typeof check === "string" ? undefined : check[1];
+          if (match && !match.test(envValue)) {
+            continue;
+          }
+          return { name };
         }
-        return {
-          name: agent[0].toLowerCase() as AgentName,
-        };
       }
     }
   }
