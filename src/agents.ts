@@ -36,6 +36,7 @@ const agents: InternalAgent[] = [
 
   // -- IDEs (checked last — agents running inside these should be detected first) --
 
+  // ✅ Verified by cursor (can be detected using CURSOR_AGENT, CURSOR_TRACE_ID, CURSOR_SANDBOX)
   ["cursor", ["CURSOR_TRACE_ID", "CURSOR_AGENT"]],
 ];
 
