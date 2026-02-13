@@ -11,43 +11,46 @@
 
 When adding new features or changing behavior, update both files accordingly.
 
+**After finishing any code updates, always run `pnpm lint:fix` then `pnpm test` to auto-fix lint/formatting issues and verify everything passes.**
+
 - ESM-first (`"type": "module"`), dual CJS/ESM output
 - Linted with `oxlint` + `oxfmt`, typechecked with `tsgo`
 - Tested with `vitest`
 
 ## Scripts
 
-| Script | Description |
-|---|---|
-| `pnpm run build` | Build with unbuild (`dist/index.mjs`, `dist/index.cjs`, `dist/index.d.ts`) |
-| `pnpm run dev` | Start vitest in watch mode |
-| `pnpm run test` | Lint + typecheck + vitest with coverage |
-| `pnpm run lint` | Run oxlint and oxfmt |
-| `pnpm run lint:fix` | Auto-fix lint/format issues |
-| `pnpm run typecheck` | Run tsgo --noEmit |
-| `pnpm play:node` | Build then run `playground/node.mjs` |
-| `pnpm play:bun` | Run `playground/bun.ts` directly with bun |
-| `pnpm play:deno` | Build then run `playground/deno.ts` with deno |
+| Script               | Description                                                                |
+| -------------------- | -------------------------------------------------------------------------- |
+| `pnpm run build`     | Build with unbuild (`dist/index.mjs`, `dist/index.cjs`, `dist/index.d.ts`) |
+| `pnpm run dev`       | Start vitest in watch mode                                                 |
+| `pnpm run test`      | Lint + typecheck + vitest with coverage                                    |
+| `pnpm run lint`      | Run oxlint and oxfmt                                                       |
+| `pnpm run lint:fix`  | Auto-fix lint/format issues                                                |
+| `pnpm run typecheck` | Run tsgo --noEmit                                                          |
+| `pnpm play:node`     | Build then run `playground/node.mjs`                                       |
+| `pnpm play:bun`      | Run `playground/bun.ts` directly with bun                                  |
+| `pnpm play:deno`     | Build then run `playground/deno.ts` with deno                              |
 
 ## Source Structure
 
 All source lives in `src/`, single entry point at `src/index.ts` which re-exports everything.
 
-| File | Purpose |
-|---|---|
-| `src/index.ts` | Barrel re-export of all modules |
-| `src/agents.ts` | AI coding agent detection (`detectAgent`, `agentInfo`, `agent`, `isAgent`) |
-| `src/providers.ts` | CI/CD provider detection (`detectProvider`, `providerInfo`, `provider`) |
-| `src/runtimes.ts` | JS runtime detection (`runtime`, `runtimeInfo`, `isNode`, `isBun`, `isDeno`, etc.) |
-| `src/flags.ts` | Environment flags (`isCI`, `isDebug`, `isTest`, `isProduction`, `isDevelopment`, `isMinimal`, `platform`, etc.) |
-| `src/env.ts` | Universal `env` proxy + `nodeENV` constant |
-| `src/process.ts` | Universal `process` proxy shim |
-| `src/_utils.ts` | Internal helper (`toBoolean`) |
-| `src/_types.d.ts` | Global type augmentations (`EdgeRuntime`, `Netlify`, `Deno`, etc.) |
+| File               | Purpose                                                                                                         |
+| ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `src/index.ts`     | Barrel re-export of all modules                                                                                 |
+| `src/agents.ts`    | AI coding agent detection (`detectAgent`, `agentInfo`, `agent`, `isAgent`)                                      |
+| `src/providers.ts` | CI/CD provider detection (`detectProvider`, `providerInfo`, `provider`)                                         |
+| `src/runtimes.ts`  | JS runtime detection (`runtime`, `runtimeInfo`, `isNode`, `isBun`, `isDeno`, etc.)                              |
+| `src/flags.ts`     | Environment flags (`isCI`, `isDebug`, `isTest`, `isProduction`, `isDevelopment`, `isMinimal`, `platform`, etc.) |
+| `src/env.ts`       | Universal `env` proxy + `nodeENV` constant                                                                      |
+| `src/process.ts`   | Universal `process` proxy shim                                                                                  |
+| `src/_utils.ts`    | Internal helper (`toBoolean`)                                                                                   |
+| `src/_types.d.ts`  | Global type augmentations (`EdgeRuntime`, `Netlify`, `Deno`, etc.)                                              |
 
 ## Detection Patterns
 
 All detection modules follow the same pattern:
+
 1. Define a `Name` type union of known values
 2. Define an internal tuple array mapping names to env vars (with optional metadata)
 3. Implement a `detect*()` function that iterates tuples checking `process.env`
