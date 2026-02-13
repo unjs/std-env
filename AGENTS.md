@@ -20,14 +20,14 @@ When adding new features or changing behavior, update both files accordingly.
 
 ## Scripts
 
-| Script               | Description                                     |
-| -------------------- | ----------------------------------------------- |
+| Script               | Description                                              |
+| -------------------- | -------------------------------------------------------- |
 | `pnpm run build`     | Build with obuild (`dist/index.mjs`, `dist/index.d.mts`) |
-| `pnpm run dev`       | Start vitest in watch mode                      |
-| `pnpm run test`      | Lint + typecheck + vitest with coverage         |
-| `pnpm run lint`      | Run oxlint and oxfmt                            |
-| `pnpm run lint:fix`  | Auto-fix lint/format issues                     |
-| `pnpm run typecheck` | Run tsgo --noEmit                               |
+| `pnpm run dev`       | Start vitest in watch mode                               |
+| `pnpm run test`      | Lint + typecheck + vitest with coverage                  |
+| `pnpm run lint`      | Run oxlint and oxfmt                                     |
+| `pnpm run lint:fix`  | Auto-fix lint/format issues                              |
+| `pnpm run typecheck` | Run tsgo --noEmit                                        |
 
 ## Source Structure
 
@@ -49,6 +49,10 @@ Micro-benchmarks live in `test/bench/` and use [mitata](https://github.com/evanw
 ```bash
 node test/bench/agents.ts
 ```
+
+## Essential Rules
+
+- **No global `process` usage.** Never use `globalThis.process` or bare `process` directly. Always import `env` from `src/env.ts` and use it to access environment variables. This ensures runtime-agnostic behavior across all environments.
 
 ## Detection Patterns
 
@@ -87,7 +91,7 @@ All detection modules follow the same pattern:
 ### Flags (`src/flags.ts`)
 
 - `toBoolean()` helper is defined locally (not extracted to a util)
-- `process` is resolved once via `globalThis.process || {}`
+- Uses `env` imported from `src/env.ts` (no direct `process` access)
 - `versions` is exported (used by `runtimes.ts`) but not re-exported from `index.ts`
 - `isCI` combines the `CI` env var with `providerInfo.ci !== false`
 

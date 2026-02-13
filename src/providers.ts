@@ -1,7 +1,6 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
 
-import { env } from "./env.ts";
-import { versions } from "./flags.ts";
+import { env, process } from "./env.ts";
 
 /**
  * Represents the name of a CI/CD or Deployment provider.
@@ -161,7 +160,7 @@ export function detectProvider(): ProviderInfo {
   }
 
   // Stackblitz / Webcontainer
-  if (env.SHELL === "/bin/jsh" && versions.webcontainer) {
+  if (env.SHELL === "/bin/jsh" && process.versions?.webcontainer) {
     return {
       name: "stackblitz",
       ci: false,
