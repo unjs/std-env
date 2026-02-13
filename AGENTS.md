@@ -1,0 +1,113 @@
+# Agents
+
+## Project Overview
+
+`std-env` — runtime-agnostic JS utility library for detecting environments, runtimes, CI providers, and AI coding agents. Published as `std-env` on npm under `unjs/std-env`.
+
+## Maintenance
+
+- **`AGENTS.md`** — Keep updated with technical details, architecture, and conventions for AI agents working on this project
+- **`README.md`** — Keep updated with user-facing documentation (usage, installation, exported APIs, examples)
+
+When adding new features or changing behavior, update both files accordingly.
+
+- ESM-first (`"type": "module"`), dual CJS/ESM output
+- Linted with `oxlint` + `oxfmt`, typechecked with `tsgo`
+- Tested with `vitest`
+
+## Scripts
+
+| Script | Description |
+|---|---|
+| `pnpm run build` | Build with unbuild (`dist/index.mjs`, `dist/index.cjs`, `dist/index.d.ts`) |
+| `pnpm run dev` | Start vitest in watch mode |
+| `pnpm run test` | Lint + typecheck + vitest with coverage |
+| `pnpm run lint` | Run oxlint and oxfmt |
+| `pnpm run lint:fix` | Auto-fix lint/format issues |
+| `pnpm run typecheck` | Run tsgo --noEmit |
+| `pnpm play:node` | Build then run `playground/node.mjs` |
+| `pnpm play:bun` | Run `playground/bun.ts` directly with bun |
+| `pnpm play:deno` | Build then run `playground/deno.ts` with deno |
+
+## Source Structure
+
+All source lives in `src/`, single entry point at `src/index.ts` which re-exports everything.
+
+| File | Purpose |
+|---|---|
+| `src/index.ts` | Barrel re-export of all modules |
+| `src/agents.ts` | AI coding agent detection (`detectAgent`, `agentInfo`, `agent`, `isAgent`) |
+| `src/providers.ts` | CI/CD provider detection (`detectProvider`, `providerInfo`, `provider`) |
+| `src/runtimes.ts` | JS runtime detection (`runtime`, `runtimeInfo`, `isNode`, `isBun`, `isDeno`, etc.) |
+| `src/flags.ts` | Environment flags (`isCI`, `isDebug`, `isTest`, `isProduction`, `isDevelopment`, `isMinimal`, `platform`, etc.) |
+| `src/env.ts` | Universal `env` proxy + `nodeENV` constant |
+| `src/process.ts` | Universal `process` proxy shim |
+| `src/_utils.ts` | Internal helper (`toBoolean`) |
+| `src/_types.d.ts` | Global type augmentations (`EdgeRuntime`, `Netlify`, `Deno`, etc.) |
+
+## Detection Patterns
+
+All detection modules follow the same pattern:
+1. Define a `Name` type union of known values
+2. Define an internal tuple array mapping names to env vars (with optional metadata)
+3. Implement a `detect*()` function that iterates tuples checking `process.env`
+4. Export a lazy-evaluated singleton (`*Info`) and convenience accessors
+
+### Agent Detection (`src/agents.ts`)
+
+- **Priority**: `AI_AGENT` env var (generic override) → ordered tuple scan
+- Agents list: `cursor`, `claude`, `replit`, `gemini`, `codex`, `augment_cli`, `opencode`, `kiro`, `goose`, `devin`
+- Tuple format: `[AGENT_NAME, ENV_VAR, { match?: RegExp }]`
+- When `match` is provided, the env var value is tested against the regex (e.g., `TERM_PROGRAM` matching `/kiro/`)
+
+### Provider Detection (`src/providers.ts`)
+
+- 50+ CI/CD providers detected via env vars
+- Some providers have `{ ci: false }` metadata (e.g., Vercel, CodeSandbox — deployment platforms, not CI)
+- Special case: StackBlitz/WebContainer detected via `process.versions.webcontainer`
+
+### Runtime Detection (`src/runtimes.ts`)
+
+- Priority order: netlify → edge-light → workerd → fastly → deno → bun → node
+- Uses global objects (e.g., `globalThis.Bun`, `globalThis.Deno`, `navigator.userAgent`)
+
+## Agent Detection
+
+### Adding a New Agent
+
+1. Add the agent name to the `AgentName` type union in `src/agents.ts`
+2. Add one or more `[NAME, ENV_VAR, opts?]` tuples to the `agents` array
+3. If the env var value needs partial matching, add `{ match: /pattern/ }`
+
+Example — agent detected by a dedicated env var:
+
+```ts
+["MYAGENT", "MYAGENT_SESSION"],
+```
+
+Example — agent detected by matching a generic env var's value:
+
+```ts
+["MYAGENT", "TERM_PROGRAM", { match: /myagent/ }],
+```
+
+### Self-Test
+
+As an coding agent, you can very it works:
+
+```bash
+pnpm run build
+node -e "console.log(require('std-env').agentInfo)"
+```
+
+if output is like `{ name: "..." }`, it works, If output is `{}`, agent is NOT DETECTED.
+
+Always run this command to debug current env variables:
+
+```bash
+node -e "console.log(process.env)"
+```
+
+if agent was detected, add a comment in @src/agents.ts `agents` array like `// ✅ Verified by {agentName}` right above the env variable
+
+if agent was not detected, Search for environment variables that match the agent name or contain a value to match against and add it.
