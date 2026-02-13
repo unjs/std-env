@@ -28,8 +28,8 @@ const agents: InternalAgent[] = [
   // ✅ Verified by codex (can be detected using CODEX_THREAD_ID)
   ["codex", ["CODEX_SANDBOX", "CODEX_THREAD_ID"]],
   ["augment_cli", ["AUGMENT_AGENT"]],
-  // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER)
-  ["opencode", ["OPENCODE", "OPENCODE_CALLER", "OPENCODE_CLIENT"]],
+  // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER or OPENCODE_CLIENT?)
+  ["opencode", ["OPENCODE"]],
   ["goose", ["GOOSE_PROVIDER"]],
   ["devin", [(env) => /devin/.test(env.EDITOR || env.BROWSER || env.PATH!)]],
   ["kiro", [(env) => /kiro/.test(env.TERM_PROGRAM!)]],
@@ -37,7 +37,7 @@ const agents: InternalAgent[] = [
   // -- IDEs (checked last — agents running inside these should be detected first) --
 
   // ✅ Verified by cursor (can be detected using CURSOR_AGENT, CURSOR_TRACE_ID, CURSOR_SANDBOX)
-  ["cursor", ["CURSOR_TRACE_ID", "CURSOR_AGENT"]],
+  ["cursor", ["CURSOR_AGENT"]],
 ];
 
 /**
