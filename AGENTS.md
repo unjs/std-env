@@ -68,10 +68,10 @@ All detection modules follow the same pattern:
 
 - **Priority**: `AI_AGENT` env var (generic override) → ordered tuple scan
 - Internal types:
-  - `EnvCheck = string | [envName: string, match: RegExp]`
+  - `EnvCheck = string | ((env: Record<string, string | undefined>) => boolean)`
   - `InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]]`
-- Each agent maps to an array of `EnvCheck` items; the first matching env var wins
-- When `EnvCheck` is a `[envName, RegExp]` tuple, the env var value must also match the regex (e.g., `["TERM_PROGRAM", /kiro/]`)
+- Each agent maps to an array of `EnvCheck` items; the first matching check wins
+- When `EnvCheck` is a string, the env var must be truthy; when it's a function, it receives the full env object and returns a boolean (e.g., `(env) => /kiro/.test(env.TERM_PROGRAM || "")`)
 - Exports: `detectAgent()`, `agentInfo` (singleton), `agent` (name shorthand), `isAgent` (boolean)
 
 ### Provider Detection (`src/providers.ts`)

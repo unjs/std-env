@@ -16,12 +16,11 @@ export type AgentName =
   | "kiro"
   | "goose";
 
-type EnvCheck = string | [envName: string, match: RegExp];
+type EnvCheck = string | ((env: Record<string, string | undefined>) => boolean);
 
 type InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]];
 
 const agents: InternalAgent[] = [
-  // Agents (checked first — an agent can run within an agentic IDE)
   // ✅ Verified by claude (can be detected using CLAUDECODE, CLAUDE_CODE, CLAUDE_AGENT_SDK_VERSION)
   ["claude", ["CLAUDECODE", "CLAUDE_CODE"]],
   ["replit", ["REPL_ID"]],
@@ -32,10 +31,11 @@ const agents: InternalAgent[] = [
   // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER)
   ["opencode", ["OPENCODE", "OPENCODE_CALLER", "OPENCODE_CLIENT"]],
   ["goose", ["GOOSE_PROVIDER"]],
-  // BROWSER or PATH could be used too
-  ["devin", [["EDITOR", /devin/]]],
-  ["kiro", [["TERM_PROGRAM", /kiro/]]],
-  // IDEs (checked last — agents running inside these should be detected first)
+  ["devin", [(env) => /devin/.test(env.EDITOR || env.BROWSER || env.PATH!)]],
+  ["kiro", [(env) => /kiro/.test(env.TERM_PROGRAM!)]],
+
+  // -- IDEs (checked last — agents running inside these should be detected first) --
+
   ["cursor", ["CURSOR_TRACE_ID", "CURSOR_AGENT"]],
 ];
 
@@ -61,21 +61,9 @@ export function detectAgent(): AgentInfo {
     }
     for (const [name, checks] of agents) {
       for (const check of checks) {
-        let envName: string;
-        let match: RegExp | undefined;
-        if (typeof check === "string") {
-          envName = check;
-        } else {
-          [envName, match] = check;
+        if (typeof check === "string" ? env[check] : check(env)) {
+          return { name };
         }
-        const envValue = env[envName];
-        if (!envValue) {
-          continue;
-        }
-        if (match && !match.test(envValue)) {
-          continue;
-        }
-        return { name };
       }
     }
   }
@@ -89,11 +77,11 @@ export function detectAgent(): AgentInfo {
 export const agentInfo: AgentInfo = /* #__PURE__ */ detectAgent();
 
 /**
- * A convenience reference to the name of the detected agent.
+ * Name of the detected agent.
  */
 export const agent: AgentName | undefined = agentInfo.name;
 
 /**
  * A boolean flag indicating whether the current environment is running inside an AI coding agent.
  */
-export const isAgent: boolean = agentInfo.name !== "";
+export const isAgent: boolean = !!agentInfo.name;
