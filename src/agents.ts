@@ -1,5 +1,3 @@
-// Reference: https://github.com/vercel/vercel/blob/main/packages/detect-agent/src/index.ts
-
 // Note to AI Agents: Check @AGENTS.md for instructions on how to self-verify.
 
 /**
