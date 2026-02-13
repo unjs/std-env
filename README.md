@@ -6,45 +6,34 @@
 
 > Runtime agnostic JS utils
 
-## Installation
-
-```sh
-# Using npm
-npm i std-env
-
-# Using pnpm
-pnpm i std-env
-
-# Using yarn
-yarn add std-env
-```
-
 ## Usage
 
 ```js
-// ESM
 import { env, isDevelopment, isProduction } from "std-env";
-
-// CommonJS
-const { env, isDevelopment, isProduction } = require("std-env");
 ```
+
+## Environment
+
+- `env` — Universal `process.env` object (works across all runtimes)
+- `nodeENV` — Current value of `NODE_ENV` (empty string if not set)
 
 ## Flags
 
-- `hasTTY`
-- `hasWindow`
-- `isDebug`
-- `isDevelopment`
-- `isLinux`
-- `isMacOS`
-- `isMinimal`
-- `isProduction`
-- `isTest`
-- `isWindows`
-- `platform`
-- `isColorSupported`
-- `nodeVersion`
-- `nodeMajorVersion`
+- `hasTTY` — Detect if stdout TTY is available
+- `hasWindow` — Detect if global `window` object is available
+- `isCI` — Detect if running in a CI environment
+- `isColorSupported` — Detect if terminal color output is supported
+- `isDebug` — Detect if `DEBUG` environment variable is set
+- `isDevelopment` — Detect if `NODE_ENV` is `dev` or `development`
+- `isLinux` — Detect if platform is Linux
+- `isMacOS` — Detect if platform is macOS (darwin)
+- `isMinimal` — Detect if running in a minimal environment (CI, test, or no TTY)
+- `isProduction` — Detect if `NODE_ENV` is `production`
+- `isTest` — Detect if `NODE_ENV` is `test`
+- `isWindows` — Detect if platform is Windows
+- `platform` — Value of `process.platform`
+- `nodeVersion` — Node.js version string (e.g. `"22.0.0"`)
+- `nodeMajorVersion` — Node.js major version number (e.g. `22`)
 
 You can read more about how each flag works from [./src/flags.ts](./src/flags.ts).
 
@@ -52,7 +41,7 @@ You can read more about how each flag works from [./src/flags.ts](./src/flags.ts
 
 `std-env` can automatically detect the current runtime provider based on environment variables.
 
-You can use `isCI` and `platform` exports to detect it:
+You can use `isCI` and `provider` exports to detect it:
 
 ```ts
 import { isCI, provider, providerInfo } from "std-env";
@@ -63,6 +52,8 @@ console.log({
   providerInfo, // { name: "github_actions", isCI: true }
 });
 ```
+
+You can also use `detectProvider()` to re-run detection at any time.
 
 List of well known providers can be found from [./src/providers.ts](./src/providers.ts).
 
@@ -81,6 +72,8 @@ console.log({
 ```
 
 You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
+
+You can also use `detectAgent()` to re-run detection at any time.
 
 Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
 
@@ -113,23 +106,7 @@ You can also use individual named exports for each runtime detection:
 - `isWorkerd`
 - `isFastly`
 
-List of well known providers can be found from [./src/runtimes.ts](./src/runtimes.ts).
-
-## Platform-Agnostic `env`
-
-`std-env` provides a lightweight proxy to access environment variables in a platform agnostic way.
-
-```ts
-import { env } from "std-env";
-```
-
-## Platform-Agnostic `process`
-
-`std-env` provides a lightweight proxy to access [`process`](https://nodejs.org/api/process.html) object in a platform agnostic way.
-
-```ts
-import { process } from "std-env";
-```
+List of well known runtimes can be found from [./src/runtimes.ts](./src/runtimes.ts).
 
 ## License
 

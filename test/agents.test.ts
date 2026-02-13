@@ -1,16 +1,34 @@
-import { expect, it, describe, beforeEach, afterEach } from "vitest";
+import { expect, it, describe, vi, beforeEach, afterEach } from "vitest";
 import { detectAgent } from "../src/agents.ts";
 
-describe("detectAgent", () => {
-  let originalEnv: NodeJS.ProcessEnv;
+// All env vars that agent detection may check
+const agentEnvKeys = [
+  "AI_AGENT",
+  "CLAUDECODE",
+  "CLAUDE_CODE",
+  "REPL_ID",
+  "GEMINI_CLI",
+  "CODEX_SANDBOX",
+  "CODEX_THREAD_ID",
+  "AUGMENT_AGENT",
+  "OPENCODE",
+  "GOOSE_PROVIDER",
+  "CURSOR_AGENT",
+  "TERM_PROGRAM",
+  "EDITOR",
+  "PATH",
+];
 
+describe("detectAgent", () => {
   beforeEach(() => {
-    originalEnv = process.env;
-    process.env = {};
+    // Clear all agent-related env vars to ensure a clean slate
+    for (const key of agentEnvKeys) {
+      vi.stubEnv(key, "");
+    }
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    vi.unstubAllEnvs();
   });
 
   it("returns empty object when no agent env is set", () => {
@@ -18,8 +36,8 @@ describe("detectAgent", () => {
   });
 
   it("AI_AGENT takes priority over specific agents", () => {
-    process.env.AI_AGENT = "custom-agent";
-    process.env.CLAUDECODE = "1";
+    vi.stubEnv("AI_AGENT", "custom-agent");
+    vi.stubEnv("CLAUDECODE", "1");
     expect(detectAgent()).toEqual({ name: "custom-agent" });
   });
 
@@ -39,7 +57,7 @@ describe("detectAgent", () => {
 
     for (const [expectedName, envKey, envValue] of cases) {
       it(`detects ${expectedName} via ${envKey}`, () => {
-        process.env[envKey] = envValue;
+        vi.stubEnv(envKey, envValue);
         expect(detectAgent()).toEqual({ name: expectedName });
       });
     }
@@ -47,46 +65,46 @@ describe("detectAgent", () => {
 
   describe("regex env var checks", () => {
     it("detects kiro via TERM_PROGRAM matching /kiro/", () => {
-      process.env.TERM_PROGRAM = "kiro-terminal";
+      vi.stubEnv("TERM_PROGRAM", "kiro-terminal");
       expect(detectAgent()).toEqual({ name: "kiro" });
     });
 
     it("does not detect kiro when TERM_PROGRAM does not match", () => {
-      process.env.TERM_PROGRAM = "vscode";
+      vi.stubEnv("TERM_PROGRAM", "vscode");
       expect(detectAgent()).toEqual({});
     });
 
     it("detects devin via EDITOR matching /devin/", () => {
-      process.env.EDITOR = "/usr/bin/devin-editor";
+      vi.stubEnv("EDITOR", "/usr/bin/devin-editor");
       expect(detectAgent()).toEqual({ name: "devin" });
     });
 
     it("does not detect devin when EDITOR does not match", () => {
-      process.env.EDITOR = "vim";
+      vi.stubEnv("EDITOR", "vim");
       expect(detectAgent()).toEqual({});
     });
 
     it("detects pi via PATH containing .pi/agent/bin", () => {
-      process.env.PATH = "/home/user/.pi/agent/bin:/usr/bin";
+      vi.stubEnv("PATH", "/home/user/.pi/agent/bin:/usr/bin");
       expect(detectAgent()).toEqual({ name: "pi" });
     });
 
     it("does not detect pi when PATH does not contain .pi/agent/bin", () => {
-      process.env.PATH = "/usr/bin:/usr/local/bin";
+      vi.stubEnv("PATH", "/usr/bin:/usr/local/bin");
       expect(detectAgent()).toEqual({});
     });
   });
 
   describe("priority order", () => {
     it("claude is detected before cursor", () => {
-      process.env.CURSOR_AGENT = "1";
-      process.env.CLAUDECODE = "1";
+      vi.stubEnv("CURSOR_AGENT", "1");
+      vi.stubEnv("CLAUDECODE", "1");
       expect(detectAgent()).toEqual({ name: "claude" });
     });
 
     it("claude is detected before replit", () => {
-      process.env.CLAUDECODE = "1";
-      process.env.REPL_ID = "1";
+      vi.stubEnv("CLAUDECODE", "1");
+      vi.stubEnv("REPL_ID", "1");
       expect(detectAgent()).toEqual({ name: "claude" });
     });
   });

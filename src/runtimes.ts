@@ -1,14 +1,15 @@
-// https://runtime-keys.proposal.wintercg.org/
+import { process } from "./env.ts";
 
+// https://runtime-keys.proposal.wintercg.org/
 export type RuntimeName =
+  | (string & {})
   | "workerd"
   | "deno"
   | "netlify"
   | "node"
   | "bun"
   | "edge-light"
-  | "fastly"
-  | "";
+  | "fastly";
 
 export type RuntimeInfo = {
   /**
@@ -24,37 +25,38 @@ export type RuntimeInfo = {
  *
  * Use `runtime === "node"` if you need strict check for Node.js runtime.
  */
-export const isNode: boolean = globalThis.process?.release?.name === "node";
+export const isNode: boolean = !!process?.versions?.node;
 
 /**
  * Indicates if running in Bun runtime.
  */
-export const isBun: boolean = !!globalThis.Bun || !!globalThis.process?.versions?.bun;
+export const isBun: boolean = "Bun" in globalThis;
 
 /**
  * Indicates if running in Deno runtime.
  */
-export const isDeno: boolean = !!globalThis.Deno;
+export const isDeno: boolean = "Deno" in globalThis;
 
 /**
  * Indicates if running in Fastly runtime.
  */
-export const isFastly: boolean = !!globalThis.fastly;
+export const isFastly: boolean = "fastly" in globalThis;
 
 /**
  * Indicates if running in Netlify runtime.
  */
-export const isNetlify: boolean = !!globalThis.Netlify;
+export const isNetlify: boolean = "Netlify" in globalThis;
 
 /**
  *
  * Indicates if running in EdgeLight (Vercel Edge) runtime.
  */
-export const isEdgeLight: boolean = !!globalThis.EdgeRuntime;
-// https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
+export const isEdgeLight: boolean = "EdgeRuntime" in globalThis;
 
 /**
  * Indicates if running in Cloudflare Workers runtime.
+ *
+ * https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
  */
 export const isWorkerd: boolean = globalThis.navigator?.userAgent === "Cloudflare-Workers";
 
@@ -71,8 +73,7 @@ const runtimeChecks: [boolean, RuntimeName][] = [
 function _detectRuntime(): RuntimeInfo | undefined {
   const detectedRuntime = runtimeChecks.find((check) => check[0]);
   if (detectedRuntime) {
-    const name = detectedRuntime[1];
-    return { name };
+    return { name: detectedRuntime[1] };
   }
 }
 

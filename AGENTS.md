@@ -13,23 +13,21 @@ When adding new features or changing behavior, update both files accordingly.
 
 **After finishing any code updates, always run `pnpm lint:fix` then `pnpm test` to auto-fix lint/formatting issues and verify everything passes.**
 
-- ESM-first (`"type": "module"`), dual CJS/ESM output
+- ESM-only (`"type": "module"`, single `.mjs` output)
 - Linted with `oxlint` + `oxfmt`, typechecked with `tsgo`
 - Tested with `vitest`
+- Built with `obuild`
 
 ## Scripts
 
-| Script               | Description                                                                |
-| -------------------- | -------------------------------------------------------------------------- |
-| `pnpm run build`     | Build with unbuild (`dist/index.mjs`, `dist/index.cjs`, `dist/index.d.ts`) |
-| `pnpm run dev`       | Start vitest in watch mode                                                 |
-| `pnpm run test`      | Lint + typecheck + vitest with coverage                                    |
-| `pnpm run lint`      | Run oxlint and oxfmt                                                       |
-| `pnpm run lint:fix`  | Auto-fix lint/format issues                                                |
-| `pnpm run typecheck` | Run tsgo --noEmit                                                          |
-| `pnpm play:node`     | Build then run `playground/node.mjs`                                       |
-| `pnpm play:bun`      | Run `playground/bun.ts` directly with bun                                  |
-| `pnpm play:deno`     | Build then run `playground/deno.ts` with deno                              |
+| Script               | Description                                     |
+| -------------------- | ----------------------------------------------- |
+| `pnpm run build`     | Build with obuild (`dist/index.mjs`, `dist/index.d.mts`) |
+| `pnpm run dev`       | Start vitest in watch mode                      |
+| `pnpm run test`      | Lint + typecheck + vitest with coverage         |
+| `pnpm run lint`      | Run oxlint and oxfmt                            |
+| `pnpm run lint:fix`  | Auto-fix lint/format issues                     |
+| `pnpm run typecheck` | Run tsgo --noEmit                               |
 
 ## Source Structure
 
@@ -43,9 +41,6 @@ All source lives in `src/`, single entry point at `src/index.ts` which re-export
 | `src/runtimes.ts`  | JS runtime detection (`runtime`, `runtimeInfo`, `isNode`, `isBun`, `isDeno`, etc.)                              |
 | `src/flags.ts`     | Environment flags (`isCI`, `isDebug`, `isTest`, `isProduction`, `isDevelopment`, `isMinimal`, `platform`, etc.) |
 | `src/env.ts`       | Universal `env` proxy + `nodeENV` constant                                                                      |
-| `src/process.ts`   | Universal `process` proxy shim                                                                                  |
-| `src/_utils.ts`    | Internal helper (`toBoolean`)                                                                                   |
-| `src/_types.d.ts`  | Global type augmentations (`EdgeRuntime`, `Netlify`, `Deno`, etc.)                                              |
 
 ## Benchmarks
 
@@ -59,9 +54,9 @@ node test/bench/agents.ts
 
 All detection modules follow the same pattern:
 
-1. Define a `Name` type union of known values
+1. Define a `Name` type union of known values (extensible via `string & {}`)
 2. Define an internal tuple array mapping names to env vars (with optional metadata)
-3. Implement a `detect*()` function that iterates tuples checking `process.env`
+3. Implement a `detect*()` function that iterates tuples checking env
 4. Export a lazy-evaluated singleton (`*Info`) and convenience accessors
 
 ### Agent Detection (`src/agents.ts`)
@@ -71,19 +66,35 @@ All detection modules follow the same pattern:
   - `EnvCheck = string | ((env: Record<string, string | undefined>) => boolean)`
   - `InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]]`
 - Each agent maps to an array of `EnvCheck` items; the first matching check wins
-- When `EnvCheck` is a string, the env var must be truthy; when it's a function, it receives the full env object and returns a boolean (e.g., `(env) => /kiro/.test(env.TERM_PROGRAM || "")`)
+- When `EnvCheck` is a string, the env var must be truthy; when it's a function, it receives the full env object and returns a boolean
+- `envMatcher(envKey, regex)` helper creates regex-based env var matchers (e.g., `envMatcher("TERM_PROGRAM", /kiro/)`)
+- IDEs (cursor, devin, kiro) are checked last so agents running inside them are detected first
 - Exports: `detectAgent()`, `agentInfo` (singleton), `agent` (name shorthand), `isAgent` (boolean)
 
 ### Provider Detection (`src/providers.ts`)
 
 - 50+ CI/CD providers detected via env vars
 - Some providers have `{ ci: false }` metadata (e.g., Vercel, CodeSandbox — deployment platforms, not CI)
-- Special case: StackBlitz/WebContainer detected via `process.versions.webcontainer`
+- Some providers have `{ ci: true }` explicitly (e.g., AWS Amplify, Cloudflare Pages/Workers)
+- Special case: StackBlitz/WebContainer detected via `SHELL === "/bin/jsh"` + `process.versions.webcontainer`
 
 ### Runtime Detection (`src/runtimes.ts`)
 
 - Priority order: netlify → edge-light → workerd → fastly → deno → bun → node
 - Uses global objects (e.g., `globalThis.Bun`, `globalThis.Deno`, `navigator.userAgent`)
+- `isNode` is true for Node-compatible runtimes (Bun, Deno with compat); use `runtime === "node"` for strict check
+
+### Flags (`src/flags.ts`)
+
+- `toBoolean()` helper is defined locally (not extracted to a util)
+- `process` is resolved once via `globalThis.process || {}`
+- `versions` is exported (used by `runtimes.ts`) but not re-exported from `index.ts`
+- `isCI` combines the `CI` env var with `providerInfo.ci !== false`
+
+### Environment (`src/env.ts`)
+
+- `env`: proxy to `globalThis.process?.env` or empty object
+- `nodeENV`: current `NODE_ENV` value (empty string if unset)
 
 ## Agent Detection
 

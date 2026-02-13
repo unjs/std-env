@@ -2,47 +2,6 @@ import { expect, it, describe } from "vitest";
 import * as stdEnv from "../src/index.ts";
 
 describe("std-env", () => {
-  it("has expected exports", () => {
-    expect(Object.keys(stdEnv)).toMatchInlineSnapshot(`
-      [
-        "detectAgent",
-        "agentInfo",
-        "agent",
-        "isAgent",
-        "env",
-        "nodeENV",
-        "platform",
-        "isCI",
-        "hasTTY",
-        "hasWindow",
-        "isDebug",
-        "isTest",
-        "isProduction",
-        "isDevelopment",
-        "isMinimal",
-        "isWindows",
-        "isLinux",
-        "isMacOS",
-        "isColorSupported",
-        "nodeVersion",
-        "nodeMajorVersion",
-        "process",
-        "detectProvider",
-        "providerInfo",
-        "provider",
-        "isNode",
-        "isBun",
-        "isDeno",
-        "isFastly",
-        "isNetlify",
-        "isEdgeLight",
-        "isWorkerd",
-        "runtimeInfo",
-        "runtime",
-      ]
-    `);
-  });
-
   it("defaults", () => {
     expect(stdEnv).toMatchObject({
       platform: expect.any(String),

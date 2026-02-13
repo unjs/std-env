@@ -1,10 +1,7 @@
 // Note to AI Agents: Check @AGENTS.md for instructions on how to self-verify.
 
-/**
- * Represents the name of an AI coding agent.
- *
- * Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
- */
+import { env } from "./env.ts";
+
 export type AgentName =
   | (string & {})
   | "cursor"
@@ -75,17 +72,14 @@ export type AgentInfo = {
  * You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
  */
 export function detectAgent(): AgentInfo {
-  const env = globalThis.process?.env;
-  if (env) {
-    const aiAgent = env.AI_AGENT;
-    if (aiAgent) {
-      return { name: aiAgent.toLowerCase() };
-    }
-    for (const [name, checks] of agents) {
-      for (const check of checks) {
-        if (typeof check === "string" ? env[check] : check(env)) {
-          return { name };
-        }
+  const aiAgent = env.AI_AGENT;
+  if (aiAgent) {
+    return { name: aiAgent.toLowerCase() };
+  }
+  for (const [name, checks] of agents) {
+    for (const check of checks) {
+      if (typeof check === "string" ? env[check] : check(env)) {
+        return { name };
       }
     }
   }

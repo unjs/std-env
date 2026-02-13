@@ -1,10 +1,13 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
 
+import { env } from "./env.ts";
+import { versions } from "./flags.ts";
+
 /**
  * Represents the name of a CI/CD or Deployment provider.
  */
 export type ProviderName =
-  | ""
+  | (string & {})
   | "appveyor"
   | "aws_amplify"
   | "azure_pipelines"
@@ -147,20 +150,18 @@ export type ProviderInfo = {
  */
 export function detectProvider(): ProviderInfo {
   // Based on env
-  if (globalThis.process?.env) {
-    for (const provider of providers) {
-      const envName = provider[1] || provider[0];
-      if (globalThis.process?.env[envName]) {
-        return {
-          name: provider[0].toLowerCase(),
-          ...(provider[2] as any),
-        };
-      }
+  for (const provider of providers) {
+    const envName = provider[1] || provider[0];
+    if (env[envName]) {
+      return {
+        name: provider[0].toLowerCase(),
+        ...(provider[2] as any),
+      };
     }
   }
 
   // Stackblitz / Webcontainer
-  if (globalThis.process?.env?.SHELL === "/bin/jsh" && globalThis.process?.versions?.webcontainer) {
+  if (env.SHELL === "/bin/jsh" && versions.webcontainer) {
     return {
       name: "stackblitz",
       ci: false,
@@ -180,6 +181,6 @@ export function detectProvider(): ProviderInfo {
 export const providerInfo: ProviderInfo = /* #__PURE__ */ detectProvider();
 
 /**
- * A convenience reference to the name of the detected provider.
+ * Name of the detected provider, defaults to an empty string if no provider is detected.
  */
 export const provider: ProviderName = providerInfo.name;

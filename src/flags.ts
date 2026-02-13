@@ -1,17 +1,18 @@
 import { providerInfo } from "./providers.ts";
-import { env, nodeENV } from "./env.ts";
-import { toBoolean } from "./_utils.ts";
+import { env, nodeENV, process } from "./env.ts";
+
+function toBoolean(val: boolean | string | undefined): boolean {
+  return val ? val !== "false" : false;
+}
 
 /** Value of process.platform */
-export const platform: string = globalThis.process?.platform || "";
+export const platform: string = process.platform || "";
 
 /** Detect if `CI` environment variable is set or a provider CI detected */
 export const isCI: boolean = toBoolean(env.CI) || providerInfo.ci !== false;
 
 /** Detect if stdout.TTY is available */
-export const hasTTY: boolean = toBoolean(
-  globalThis.process?.stdout && globalThis.process?.stdout.isTTY,
-);
+export const hasTTY: boolean = toBoolean(process.stdout?.isTTY);
 
 /** Detect if global `window` object is available */
 // eslint-disable-next-line unicorn/prefer-global-this
@@ -47,7 +48,6 @@ export const isColorSupported: boolean =
   (toBoolean(env.FORCE_COLOR) || ((hasTTY || isWindows) && env.TERM !== "dumb") || isCI);
 
 /** Node.js versions */
-export const nodeVersion: string | null =
-  (globalThis.process?.versions?.node || "").replace(/^v/, "") || null;
+export const nodeVersion: string | null = (process.versions?.node || "").replace(/^v/, "") || null;
 
 export const nodeMajorVersion: number | null = Number(nodeVersion?.split(".")[0]) || null;
