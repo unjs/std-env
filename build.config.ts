@@ -1,31 +1,10 @@
-import { defineBuildConfig } from "unbuild";
-import type { Plugin, OutputChunk } from "rollup";
-import { transform } from "esbuild";
+import { defineBuildConfig } from "obuild/config";
 
 export default defineBuildConfig({
-  declaration: true,
-  rollup: {
-    emitCJS: true,
-    esbuild: {
-      minify: true,
-    },
-  },
-  entries: ["src/index"],
+  entries: [{ type: "bundle", input: "src/index.ts" }],
   hooks: {
-    "rollup:options"(ctx, rollupConfig) {
-      (rollupConfig.plugins as Plugin[]).push({
-        name: "compat",
-        async generateBundle(_options, bundle) {
-          const cjsEntry = bundle["index.cjs"] as OutputChunk;
-          if (!cjsEntry) {
-            return;
-          }
-          cjsEntry.code = await transform(cjsEntry.code, {
-            target: "es6",
-            minify: true,
-          }).then((r) => r.code);
-        },
-      } satisfies Plugin);
+    rolldownOutput(cfg) {
+      cfg.minify = true;
     },
   },
 });
