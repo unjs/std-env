@@ -188,7 +188,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 - `es6` compatibiliy for commonjs bundle (#74)
 
-### ❤️  Contributors
+### ❤️ Contributors
 
 - Pooya Parsa ([@pi0](http://github.com/pi0))
 
@@ -200,7 +200,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 - Access `process` from `globalThis` (#73)
 
-### ❤️  Contributors
+### ❤️ Contributors
 
 - Patrick Pircher
 
@@ -266,7 +266,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 - Format with prettier v3 (d198921)
 
-### ❤️  Contributors
+### ❤️ Contributors
 
 - Pooya Parsa ([@pi0](http://github.com/pi0))
 - Tom Lienard ([@QuiiBz](http://github.com/QuiiBz))

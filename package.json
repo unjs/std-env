@@ -2,45 +2,45 @@
   "name": "std-env",
   "version": "3.10.0",
   "description": "Runtime agnostic JS utils",
-  "repository": "unjs/std-env",
   "license": "MIT",
-  "sideEffects": false,
+  "repository": "unjs/std-env",
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
     "import": "./dist/index.mjs",
     "require": "./dist/index.cjs"
   },
-  "main": "./dist/index.cjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "unbuild",
     "dev": "vitest",
-    "lint": "eslint . && prettier -c src test",
-    "lint:fix": "eslint --fix . && prettier -w src test",
+    "lint": "oxlint . && oxfmt",
+    "lint:fix": "oxlint --fix . && oxfmt",
     "prepack": "unbuild",
     "play:bun": "bun playground/bun.ts",
     "play:deno": "pnpm build && deno run -A playground/deno.ts",
     "play:node": "pnpm build && node playground/node.mjs",
     "release": "pnpm test && changelogen --release && npm publish && git push --follow-tags",
     "test": "pnpm lint && pnpm typecheck && vitest run --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsgo --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@types/node": "^25.2.3",
+    "@typescript/native-preview": "7.0.0-dev.20260213.1",
+    "@vitest/coverage-v8": "^4.0.18",
     "changelogen": "^0.6.2",
-    "esbuild": "^0.27.0",
-    "eslint": "^9.39.1",
-    "eslint-config-unjs": "^0.5.0",
-    "prettier": "^3.6.2",
-    "rollup": "^4.53.2",
+    "esbuild": "^0.27.3",
+    "oxfmt": "^0.32.0",
+    "oxlint": "^1.47.0",
+    "rollup": "^4.57.1",
     "typescript": "^5.9.3",
     "unbuild": "^3.6.1",
-    "vitest": "^3.2.4"
+    "vitest": "^4.0.18"
   },
-  "packageManager": "pnpm@10.22.0"
+  "packageManager": "pnpm@10.29.3"
 }

@@ -27,12 +27,10 @@ export const isTest: boolean = nodeENV === "test" || toBoolean(env.TEST);
 export const isProduction: boolean = nodeENV === "production";
 
 /** Detect if `NODE_ENV` environment variable is `dev` or `development` */
-export const isDevelopment: boolean =
-  nodeENV === "dev" || nodeENV === "development";
+export const isDevelopment: boolean = nodeENV === "dev" || nodeENV === "development";
 
 /** Detect if MINIMAL environment variable is set, running in CI or test or TTY is unavailable */
-export const isMinimal: boolean =
-  toBoolean(env.MINIMAL) || isCI || isTest || !hasTTY;
+export const isMinimal: boolean = toBoolean(env.MINIMAL) || isCI || isTest || !hasTTY;
 
 /** Detect if process.platform is Windows */
 export const isWindows: boolean = /^win/i.test(platform);
@@ -46,13 +44,10 @@ export const isMacOS: boolean = /^darwin/i.test(platform);
 /** Color Support */
 export const isColorSupported: boolean =
   !toBoolean(env.NO_COLOR) &&
-  (toBoolean(env.FORCE_COLOR) ||
-    ((hasTTY || isWindows) && env.TERM !== "dumb") ||
-    isCI);
+  (toBoolean(env.FORCE_COLOR) || ((hasTTY || isWindows) && env.TERM !== "dumb") || isCI);
 
 /** Node.js versions */
 export const nodeVersion: string | null =
   (globalThis.process?.versions?.node || "").replace(/^v/, "") || null;
 
-export const nodeMajorVersion: number | null =
-  Number(nodeVersion?.split(".")[0]) || null;
+export const nodeMajorVersion: number | null = Number(nodeVersion?.split(".")[0]) || null;

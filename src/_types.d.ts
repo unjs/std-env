@@ -8,9 +8,7 @@ declare global {
 
   var __env__: undefined | EnvObject;
 
-  var Deno:
-    | undefined
-    | { env: { toObject(): EnvObject; [key: string]: unknown } };
+  var Deno: undefined | { env: { toObject(): EnvObject; [key: string]: unknown } };
 
   interface ImportMeta {
     env: EnvObject;

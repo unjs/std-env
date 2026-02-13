@@ -29,8 +29,7 @@ export const isNode: boolean = globalThis.process?.release?.name === "node";
 /**
  * Indicates if running in Bun runtime.
  */
-export const isBun: boolean =
-  !!globalThis.Bun || !!globalThis.process?.versions?.bun;
+export const isBun: boolean = !!globalThis.Bun || !!globalThis.process?.versions?.bun;
 
 /**
  * Indicates if running in Deno runtime.
@@ -57,8 +56,7 @@ export const isEdgeLight: boolean = !!globalThis.EdgeRuntime;
 /**
  * Indicates if running in Cloudflare Workers runtime.
  */
-export const isWorkerd: boolean =
-  globalThis.navigator?.userAgent === "Cloudflare-Workers";
+export const isWorkerd: boolean = globalThis.navigator?.userAgent === "Cloudflare-Workers";
 
 const runtimeChecks: [boolean, RuntimeName][] = [
   [isNetlify, "netlify"],

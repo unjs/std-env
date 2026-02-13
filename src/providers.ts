@@ -157,10 +157,7 @@ function _detectProvider(): ProviderInfo {
   }
 
   // Stackblitz / Webcontainer
-  if (
-    globalThis.process?.env?.SHELL === "/bin/jsh" &&
-    globalThis.process?.versions?.webcontainer
-  ) {
+  if (globalThis.process?.env?.SHELL === "/bin/jsh" && globalThis.process?.versions?.webcontainer) {
     return {
       name: "stackblitz",
       ci: false,
