@@ -13,7 +13,9 @@ export type AgentName =
   | "gemini"
   | "codex"
   | "augment_cli"
-  | "opencode";
+  | "opencode"
+  | "kiro"
+  | "goose";
 
 type InternalAgent = [
   agentName: Uppercase<AgentName>,
@@ -31,6 +33,8 @@ const agents: InternalAgent[] = [
   ["CODEX", "CODEX_SANDBOX"],
   ["AUGMENT_CLI", "AUGMENT_AGENT"],
   ["OPENCODE", "OPENCODE_CLIENT"],
+  ["KIRO", "TERM_PROGRAM", { match: "kiro" }],
+  ["GOOSE", "GOOSE_PROVIDER"],
   ["DEVIN", "EDITOR", { match: "devin" }], // BROWSER or PATH could be used too
 ];
 
