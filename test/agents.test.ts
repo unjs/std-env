@@ -1,45 +1,16 @@
 import { expect, it, describe, beforeEach, afterEach } from "vitest";
 import { detectAgent } from "../src/agents.ts";
 
-// All env vars that can trigger agent detection
-const agentEnvKeys = [
-  "AI_AGENT",
-  "CURSOR_TRACE_ID",
-  "CURSOR_AGENT",
-  "CLAUDECODE",
-  "CLAUDE_CODE",
-  "REPL_ID",
-  "GEMINI_CLI",
-  "CODEX_SANDBOX",
-  "CODEX_THREAD_ID",
-  "AUGMENT_AGENT",
-  "OPENCODE",
-  "OPENCODE_CALLER",
-  "OPENCODE_CLIENT",
-  "GOOSE_PROVIDER",
-  "TERM_PROGRAM",
-  "EDITOR",
-];
-
 describe("detectAgent", () => {
-  let savedEnv: Record<string, string | undefined>;
+  let originalEnv: NodeJS.ProcessEnv;
 
   beforeEach(() => {
-    savedEnv = {};
-    for (const key of agentEnvKeys) {
-      savedEnv[key] = process.env[key];
-      delete process.env[key];
-    }
+    originalEnv = process.env;
+    process.env = {};
   });
 
   afterEach(() => {
-    for (const key of agentEnvKeys) {
-      if (savedEnv[key] === undefined) {
-        delete process.env[key];
-      } else {
-        process.env[key] = savedEnv[key];
-      }
-    }
+    process.env = originalEnv;
   });
 
   it("returns empty object when no agent env is set", () => {
@@ -54,19 +25,16 @@ describe("detectAgent", () => {
 
   describe("simple env var checks", () => {
     const cases: [string, string, string][] = [
-      ["cursor", "CURSOR_TRACE_ID", "trace-123"],
-      ["cursor", "CURSOR_AGENT", "1"],
       ["claude", "CLAUDECODE", "1"],
       ["claude", "CLAUDE_CODE", "1"],
       ["replit", "REPL_ID", "abc"],
       ["gemini", "GEMINI_CLI", "1"],
       ["codex", "CODEX_SANDBOX", "1"],
       ["codex", "CODEX_THREAD_ID", "thread-1"],
-      ["augment_cli", "AUGMENT_AGENT", "1"],
+      ["auggie", "AUGMENT_AGENT", "1"],
       ["opencode", "OPENCODE", "1"],
-      ["opencode", "OPENCODE_CALLER", "cli"],
-      ["opencode", "OPENCODE_CLIENT", "vscode"],
       ["goose", "GOOSE_PROVIDER", "openai"],
+      ["cursor", "CURSOR_AGENT", "1"],
     ];
 
     for (const [expectedName, envKey, envValue] of cases) {
@@ -97,11 +65,21 @@ describe("detectAgent", () => {
       process.env.EDITOR = "vim";
       expect(detectAgent()).toEqual({});
     });
+
+    it("detects pi via PATH containing .pi/agent/bin", () => {
+      process.env.PATH = "/home/user/.pi/agent/bin:/usr/bin";
+      expect(detectAgent()).toEqual({ name: "pi" });
+    });
+
+    it("does not detect pi when PATH does not contain .pi/agent/bin", () => {
+      process.env.PATH = "/usr/bin:/usr/local/bin";
+      expect(detectAgent()).toEqual({});
+    });
   });
 
   describe("priority order", () => {
-    it("agents are detected before IDE-level entries", () => {
-      process.env.CURSOR_TRACE_ID = "1";
+    it("claude is detected before cursor", () => {
+      process.env.CURSOR_AGENT = "1";
       process.env.CLAUDECODE = "1";
       expect(detectAgent()).toEqual({ name: "claude" });
     });
