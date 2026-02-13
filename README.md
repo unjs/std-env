@@ -82,7 +82,6 @@ console.log({
 
 You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
 
-
 Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
 
 ## Runtime Detection
