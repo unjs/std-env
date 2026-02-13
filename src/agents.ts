@@ -4,6 +4,8 @@
 
 /**
  * Represents the name of an AI coding agent.
+ *
+ * Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
  */
 export type AgentName =
   | (string & {})
@@ -69,13 +71,17 @@ export type AgentInfo = {
 
 /**
  * Detects the current AI coding agent from environment variables.
+ *
+ * Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
+ *
+ * You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
  */
 export function detectAgent(): AgentInfo {
   const env = globalThis.process?.env;
   if (env) {
     const aiAgent = env.AI_AGENT;
     if (aiAgent) {
-      return { name: aiAgent.toLowerCase()  };
+      return { name: aiAgent.toLowerCase() };
     }
     for (const [name, checks] of agents) {
       for (const check of checks) {

@@ -82,7 +82,8 @@ console.log({
 
 You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
 
-List of well known agents can be found from [./src/agents.ts](./src/agents.ts).
+
+Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
 
 ## Runtime Detection
 

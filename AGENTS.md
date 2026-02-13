@@ -111,3 +111,11 @@ node -e "console.log(process.env)"
   listing the env vars that were found in the environment. When updating an existing comment, **append** newly discovered env vars to the list — do not remove previously listed ones.
 
 - If agent **was not detected**: search `process.env` output for environment variables that match the agent name or contain a recognizable value, then add the appropriate detection entry.
+
+### Keeping Agent Lists in Sync
+
+When adding or removing an agent from the `agents` array in `src/agents.ts`, you **must** update all of the following locations to keep them in sync:
+
+1. **`src/agents.ts`** — `AgentName` type union and JSDoc comments on `AgentName` and `detectAgent()`
+2. **`README.md`** — Supported agents list in the "Agent Detection" section (inside `<!-- automd:agents -->` markers)
+3. **`AGENTS.md`** — If the detection pattern or conventions change, update this file accordingly
