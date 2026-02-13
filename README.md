@@ -66,6 +66,24 @@ console.log({
 
 List of well known providers can be found from [./src/providers.ts](./src/providers.ts).
 
+## Agent Detection
+
+`std-env` can automatically detect if the current environment is running inside an AI coding agent.
+
+```ts
+import { isAgent, agent, agentInfo } from "std-env";
+
+console.log({
+  isAgent, // true
+  agent, // "claude"
+  agentInfo, // { name: "claude" }
+});
+```
+
+You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
+
+List of well known agents can be found from [./src/agents.ts](./src/agents.ts).
+
 ## Runtime Detection
 
 `std-env` can automatically detect the current JavaScript runtime based on global variables, following the [WinterCG Runtime Keys proposal](https://runtime-keys.proposal.wintercg.org/):
