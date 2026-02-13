@@ -58,7 +58,6 @@ Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `aug
 import { env, isDevelopment, isProduction } from "std-env";
 ```
 
-
 | Export             | Description                               |
 | ------------------ | ----------------------------------------- |
 | `hasTTY`           | stdout TTY is available                   |
