@@ -24,6 +24,7 @@ const agents: InternalAgent[] = [
   // ✅ Verified by claude (can be detected using CLAUDECODE, CLAUDE_CODE, CLAUDE_AGENT_SDK_VERSION)
   ["claude", ["CLAUDECODE", "CLAUDE_CODE"]],
   ["replit", ["REPL_ID"]],
+  // ✅ Verified by gemini (can be detected using GEMINI_CLI, GEMINI_CLI_NO_RELAUNCH)
   ["gemini", ["GEMINI_CLI"]],
   // ✅ Verified by codex (can be detected using CODEX_THREAD_ID)
   ["codex", ["CODEX_SANDBOX", "CODEX_THREAD_ID"]],
