@@ -31,6 +31,7 @@ const agents: InternalAgent[] = [
   // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER or OPENCODE_CLIENT?)
   ["opencode", ["OPENCODE"]],
   ["goose", ["GOOSE_PROVIDER"]],
+  // ✅ Verified by devin (can be detected using EDITOR, BROWSER, PATH)
   ["devin", [(env) => /devin/.test(env.EDITOR || env.BROWSER || env.PATH!)]],
   ["kiro", [(env) => /kiro/.test(env.TERM_PROGRAM!)]],
 
