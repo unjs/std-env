@@ -47,6 +47,14 @@ All source lives in `src/`, single entry point at `src/index.ts` which re-export
 | `src/_utils.ts`    | Internal helper (`toBoolean`)                                                                                   |
 | `src/_types.d.ts`  | Global type augmentations (`EdgeRuntime`, `Netlify`, `Deno`, etc.)                                              |
 
+## Benchmarks
+
+Micro-benchmarks live in `test/bench/` and use [mitata](https://github.com/evanwashere/mitata). Run with:
+
+```bash
+node test/bench/agents.ts
+```
+
 ## Detection Patterns
 
 All detection modules follow the same pattern:

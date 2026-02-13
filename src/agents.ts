@@ -21,7 +21,7 @@ type EnvCheck = string | [envName: string, match: RegExp];
 type InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]];
 
 const agents: InternalAgent[] = [
-  ["cursor", ["CURSOR_TRACE_ID", "CURSOR_AGENT"]],
+  // Agents (checked first — an agent can run within an agentic IDE)
   // ✅ Verified by claude (can be detected using CLAUDECODE, CLAUDE_CODE, CLAUDE_AGENT_SDK_VERSION)
   ["claude", ["CLAUDECODE", "CLAUDE_CODE"]],
   ["replit", ["REPL_ID"]],
@@ -29,10 +29,14 @@ const agents: InternalAgent[] = [
   // ✅ Verified by codex (can be detected using CODEX_THREAD_ID)
   ["codex", ["CODEX_SANDBOX", "CODEX_THREAD_ID"]],
   ["augment_cli", ["AUGMENT_AGENT"]],
+  // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER)
   ["opencode", ["OPENCODE", "OPENCODE_CALLER", "OPENCODE_CLIENT"]],
   ["goose", ["GOOSE_PROVIDER"]],
+  // BROWSER or PATH could be used too
+  ["devin", [["EDITOR", /devin/]]],
   ["kiro", [["TERM_PROGRAM", /kiro/]]],
-  ["devin", [["EDITOR", /devin/]]], // BROWSER or PATH could be used too
+  // IDEs (checked last — agents running inside these should be detected first)
+  ["cursor", ["CURSOR_TRACE_ID", "CURSOR_AGENT"]],
 ];
 
 /**
@@ -57,15 +61,21 @@ export function detectAgent(): AgentInfo {
     }
     for (const [name, checks] of agents) {
       for (const check of checks) {
-        const envName = typeof check === "string" ? check : check[0];
-        const envValue = env[envName];
-        if (envValue) {
-          const match = typeof check === "string" ? undefined : check[1];
-          if (match && !match.test(envValue)) {
-            continue;
-          }
-          return { name };
+        let envName: string;
+        let match: RegExp | undefined;
+        if (typeof check === "string") {
+          envName = check;
+        } else {
+          [envName, match] = check;
         }
+        const envValue = env[envName];
+        if (!envValue) {
+          continue;
+        }
+        if (match && !match.test(envValue)) {
+          continue;
+        }
+        return { name };
       }
     }
   }
