@@ -5,6 +5,10 @@ describe("std-env", () => {
   it("has expected exports", () => {
     expect(Object.keys(stdEnv)).toMatchInlineSnapshot(`
       [
+        "detectAgent",
+        "agentInfo",
+        "agent",
+        "isAgent",
         "env",
         "nodeENV",
         "platform",
@@ -23,6 +27,7 @@ describe("std-env", () => {
         "nodeVersion",
         "nodeMajorVersion",
         "process",
+        "detectProvider",
         "providerInfo",
         "provider",
         "isNode",

@@ -23,6 +23,9 @@ importers:
       esbuild:
         specifier: ^0.27.3
         version: 0.27.3
+      mitata:
+        specifier: ^1.0.34
+        version: 1.0.34
       oxfmt:
         specifier: ^0.32.0
         version: 0.32.0
@@ -1255,6 +1258,9 @@ packages:
 
   mdn-data@2.12.2:
     resolution: {integrity: sha512-IEn+pegP1aManZuckezWCO+XZQDplx1366JoVhTpMpBB1sPey/SbveZQUosKiKiGYjg1wH4pMlNgXbCiYgihQA==}
+
+  mitata@1.0.34:
+    resolution: {integrity: sha512-Mc3zrtNBKIMeHSCQ0XqRLo1vbdIx1wvFV9c8NJAiyho6AjNfMY8bVhbS12bwciUdd1t4rj8099CH3N3NFahaUA==}
 
   mkdist@2.4.1:
     resolution: {integrity: sha512-Ezk0gi04GJBkqMfsksICU5Rjoemc4biIekwgrONWVPor2EO/N9nBgN6MZXAf7Yw4mDDhrNyKbdETaHNevfumKg==}
@@ -2662,6 +2668,8 @@ snapshots:
   mdn-data@2.0.28: {}
 
   mdn-data@2.12.2: {}
+
+  mitata@1.0.34: {}
 
   mkdist@2.4.1(typescript@5.9.3):
     dependencies:

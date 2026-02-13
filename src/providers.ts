@@ -142,7 +142,10 @@ export type ProviderInfo = {
   [meta: string]: any;
 };
 
-function _detectProvider(): ProviderInfo {
+/**
+ * Detects the current CI/CD or Deployment provider from environment variables.
+ */
+export function detectProvider(): ProviderInfo {
   // Based on env
   if (globalThis.process?.env) {
     for (const provider of providers) {
@@ -174,7 +177,7 @@ function _detectProvider(): ProviderInfo {
  * The detected provider information for the current execution context.
  * This value is evaluated once at module initialisation.
  */
-export const providerInfo: ProviderInfo = _detectProvider();
+export const providerInfo: ProviderInfo = /* #__PURE__ */ detectProvider();
 
 /**
  * A convenience reference to the name of the detected provider.
