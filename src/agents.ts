@@ -16,7 +16,7 @@ export type AgentName =
   | "goose"
   | "pi";
 
-type EnvCheck = string | ((env: Record<string, string | undefined>) => boolean);
+type EnvCheck = string | (() => boolean);
 
 type InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]];
 
@@ -48,7 +48,7 @@ const agents: InternalAgent[] = [
 ];
 
 function envMatcher(envKey: string, regex: RegExp) {
-  return (env: Record<string, string | undefined>) => {
+  return () => {
     const value = env[envKey];
     return value ? regex.test(value) : false;
   };
@@ -78,7 +78,7 @@ export function detectAgent(): AgentInfo {
   }
   for (const [name, checks] of agents) {
     for (const check of checks) {
-      if (typeof check === "string" ? env[check] : check(env)) {
+      if (typeof check === "string" ? env[check] : check()) {
         return { name };
       }
     }
