@@ -1,16 +1,22 @@
+import { process } from "./env.ts";
+
 // https://runtime-keys.proposal.wintercg.org/
 export type RuntimeName =
+  | (string & {})
   | "workerd"
   | "deno"
-  | "lagon"
   | "netlify"
   | "node"
   | "bun"
   | "edge-light"
-  | "fastly"
-  | "";
+  | "fastly";
 
-export type RuntimeInfo = { name: RuntimeName };
+export type RuntimeInfo = {
+  /**
+   * The name of the detected runtime.
+   */
+  name: RuntimeName;
+};
 
 /**
  * Indicates if running in Node.js or a Node.js compatible runtime.
@@ -19,47 +25,40 @@ export type RuntimeInfo = { name: RuntimeName };
  *
  * Use `runtime === "node"` if you need strict check for Node.js runtime.
  */
-export const isNode = globalThis.process?.release?.name === "node";
+export const isNode: boolean = !!process?.versions?.node;
 
 /**
  * Indicates if running in Bun runtime.
  */
-export const isBun = !!globalThis.Bun || !!globalThis.process?.versions?.bun;
+export const isBun: boolean = "Bun" in globalThis;
 
 /**
  * Indicates if running in Deno runtime.
  */
-export const isDeno = !!globalThis.Deno;
+export const isDeno: boolean = "Deno" in globalThis;
 
 /**
  * Indicates if running in Fastly runtime.
  */
-export const isFastly = !!globalThis.fastly;
+export const isFastly: boolean = "fastly" in globalThis;
 
 /**
  * Indicates if running in Netlify runtime.
  */
-export const isNetlify = !!globalThis.Netlify;
+export const isNetlify: boolean = "Netlify" in globalThis;
 
 /**
  *
  * Indicates if running in EdgeLight (Vercel Edge) runtime.
  */
-export const isEdgeLight = !!globalThis.EdgeRuntime;
-// https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
+export const isEdgeLight: boolean = "EdgeRuntime" in globalThis;
 
 /**
  * Indicates if running in Cloudflare Workers runtime.
- */
-export const isWorkerd =
-  globalThis.navigator?.userAgent === "Cloudflare-Workers";
-
-/**
- * Indicates if running in Lagon runtime.
  *
- * @deprecated https://github.com/unjs/std-env/issues/105
+ * https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
  */
-export const isLagon = !!globalThis.__lagon__;
+export const isWorkerd: boolean = globalThis.navigator?.userAgent === "Cloudflare-Workers";
 
 const runtimeChecks: [boolean, RuntimeName][] = [
   [isNetlify, "netlify"],
@@ -69,17 +68,22 @@ const runtimeChecks: [boolean, RuntimeName][] = [
   [isDeno, "deno"],
   [isBun, "bun"],
   [isNode, "node"],
-  [isLagon, "lagon"],
 ];
 
 function _detectRuntime(): RuntimeInfo | undefined {
   const detectedRuntime = runtimeChecks.find((check) => check[0]);
   if (detectedRuntime) {
-    const name = detectedRuntime[1];
-    return { name };
+    return { name: detectedRuntime[1] };
   }
 }
 
-export const runtimeInfo = _detectRuntime();
+/**
+ * Contains information about the detected runtime, if any.
+ */
+export const runtimeInfo: RuntimeInfo | undefined = _detectRuntime();
 
+/**
+ * A convenience constant that returns the name of the detected runtime,
+ * defaults to an empty string if no runtime is detected.
+ */
 export const runtime: RuntimeName = runtimeInfo?.name || "";

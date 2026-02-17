@@ -1,118 +1,89 @@
 # std-env
 
-[![npm](https://img.shields.io/npm/dm/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
-[![npm](https://img.shields.io/npm/v/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
-[![bundlephobia](https://img.shields.io/bundlephobia/min/std-env/latest.svg?style=flat-square)](https://bundlephobia.com/result?p=std-env)
+[![npm version](https://img.shields.io/npm/v/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
+[![npm downloads](https://img.shields.io/npm/dm/std-env.svg?style=flat-square)](http://npmjs.com/package/std-env)
+[![bundle size](https://img.shields.io/bundlephobia/min/std-env/latest.svg?style=flat-square)](https://bundlephobia.com/result?p=std-env)
 
-> Runtime agnostic JS utils
-
-## Installation
-
-```sh
-# Using npm
-npm i std-env
-
-# Using pnpm
-pnpm i std-env
-
-# Using yarn
-yarn add std-env
-```
-
-## Usage
-
-```js
-// ESM
-import { env, isDevelopment, isProduction } from "std-env";
-
-// CommonJS
-const { env, isDevelopment, isProduction } = require("std-env");
-```
-
-## Flags
-
-- `hasTTY`
-- `hasWindow`
-- `isDebug`
-- `isDevelopment`
-- `isLinux`
-- `isMacOS`
-- `isMinimal`
-- `isProduction`
-- `isTest`
-- `isWindows`
-- `platform`
-- `isColorSupported`
-- `nodeVersion`
-- `nodeMajorVersion`
-
-You can read more about how each flag works from [./src/flags.ts](./src/flags.ts).
-
-## Provider Detection
-
-`std-env` can automatically detect the current runtime provider based on environment variables.
-
-You can use `isCI` and `platform` exports to detect it:
-
-```ts
-import { isCI, provider, providerInfo } from "std-env";
-
-console.log({
-  isCI, // true
-  provider, // "github_actions"
-  providerInfo, // { name: "github_actions", isCI: true }
-});
-```
-
-List of well known providers can be found from [./src/providers.ts](./src/providers.ts).
+Runtime-agnostic JS utils for detecting environments, runtimes, CI providers, and AI coding agents.
 
 ## Runtime Detection
 
-`std-env` can automatically detect the current JavaScript runtime based on global variables, following the [WinterCG Runtime Keys proposal](https://runtime-keys.proposal.wintercg.org/):
+Detects the current JavaScript runtime based on global variables, following the [WinterCG Runtime Keys proposal](https://runtime-keys.proposal.wintercg.org/).
 
 ```ts
 import { runtime, runtimeInfo } from "std-env";
 
-// "" | "node" | "deno" | "bun" | "workerd" | "lagon" ...
-console.log(runtime);
-
-// { name: "node" }
-console.log(runtimeInfo);
+console.log(runtime); // "" | "node" | "deno" | "bun" | "workerd" ...
+console.log(runtimeInfo); // { name: "node" }
 ```
 
-You can also use individual named exports for each runtime detection:
+Individual named exports: `isNode`, `isBun`, `isDeno`, `isNetlify`, `isEdgeLight`, `isWorkerd`, `isFastly`
 
 > [!NOTE]
-> When running code in Bun and Deno with Node.js compatibility mode, `isNode` flag will be also `true`, indicating running in a Node.js compatible runtime.
->
-> Use `runtime === "node"` if you need strict check for Node.js runtime.
+> `isNode` is also `true` in Bun/Deno with Node.js compatibility mode. Use `runtime === "node"` for strict checks.
 
-- `isNode`
-- `isBun`
-- `isDeno`
-- `isNetlify`
-- `isEdgeLight`
-- `isWorkerd`
-- `isLagon`
-- `isFastly`
+See [./src/runtimes.ts](./src/runtimes.ts) for the full list.
 
-List of well known providers can be found from [./src/runtimes.ts](./src/runtimes.ts).
+## Provider Detection
 
-## Platform-Agnostic `env`
-
-`std-env` provides a lightweight proxy to access environment variables in a platform agnostic way.
+Detects the current CI/CD provider based on environment variables.
 
 ```ts
-import { env } from "std-env";
+import { isCI, provider, providerInfo } from "std-env";
+
+console.log({ isCI, provider, providerInfo });
+// { isCI: true, provider: "github_actions", providerInfo: { name: "github_actions", isCI: true } }
 ```
 
-## Platform-Agnostic `process`
+Use `detectProvider()` to re-run detection. See [./src/providers.ts](./src/providers.ts) for the full list.
 
-`std-env` provides a lightweight proxy to access [`process`](https://nodejs.org/api/process.html) object in a platform agnostic way.
+## Agent Detection
+
+Detects if the environment is running inside an AI coding agent.
 
 ```ts
-import { process } from "std-env";
+import { isAgent, agent, agentInfo } from "std-env";
+
+console.log({ isAgent, agent, agentInfo });
+// { isAgent: true, agent: "claude", agentInfo: { name: "claude" } }
 ```
+
+Set the `AI_AGENT` env var to explicitly specify the agent name. Use `detectAgent()` to re-run detection.
+
+Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
+
+## Flags
+
+```js
+import { env, isDevelopment, isProduction } from "std-env";
+```
+
+| Export             | Description                               |
+| ------------------ | ----------------------------------------- |
+| `hasTTY`           | stdout TTY is available                   |
+| `hasWindow`        | Global `window` is available              |
+| `isCI`             | Running in CI                             |
+| `isColorSupported` | Terminal color output supported           |
+| `isDebug`          | `DEBUG` env var is set                    |
+| `isDevelopment`    | `NODE_ENV` is `dev` or `development`      |
+| `isLinux`          | Linux platform                            |
+| `isMacOS`          | macOS (darwin) platform                   |
+| `isMinimal`        | Minimal environment (CI, test, or no TTY) |
+| `isProduction`     | `NODE_ENV` is `production`                |
+| `isTest`           | `NODE_ENV` is `test`                      |
+| `isWindows`        | Windows platform                          |
+| `platform`         | Value of `process.platform`               |
+| `nodeVersion`      | Node.js version string (e.g. `"22.0.0"`)  |
+| `nodeMajorVersion` | Node.js major version number (e.g. `22`)  |
+
+See [./src/flags.ts](./src/flags.ts) for details.
+
+## Environment
+
+| Export    | Description                                         |
+| --------- | --------------------------------------------------- |
+| `env`     | Universal `process.env` (works across all runtimes) |
+| `nodeENV` | Current `NODE_ENV` value (undefined if unset)       |
 
 ## License
 

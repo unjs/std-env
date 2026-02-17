@@ -1,7 +1,12 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
 
+import { env, process } from "./env.ts";
+
+/**
+ * Represents the name of a CI/CD or Deployment provider.
+ */
 export type ProviderName =
-  | ""
+  | (string & {})
   | "appveyor"
   | "aws_amplify"
   | "azure_pipelines"
@@ -15,6 +20,9 @@ export type ProviderName =
   | "circle"
   | "cirrus"
   | "cloudflare_pages"
+  | "cloudflare_workers"
+  | "google_cloudrun"
+  | "google_cloudrun_job"
   | "codebuild"
   | "codefresh"
   | "drone"
@@ -46,7 +54,9 @@ export type ProviderName =
   | "cleavr"
   | "zeabur"
   | "codesphere"
-  | "railway";
+  | "railway"
+  | "deno-deploy"
+  | "firebase_app_hosting";
 
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
@@ -68,6 +78,9 @@ const providers: InternalProvider[] = [
   ["CIRCLE", "CIRCLECI"],
   ["CIRRUS", "CIRRUS_CI"],
   ["CLOUDFLARE_PAGES", "CF_PAGES", { ci: true }],
+  ["CLOUDFLARE_WORKERS", "WORKERS_CI", { ci: true }],
+  ["GOOGLE_CLOUDRUN", "K_SERVICE"],
+  ["GOOGLE_CLOUDRUN_JOB", "CLOUD_RUN_JOB"],
   ["CODEBUILD", "CODEBUILD_BUILD_ARN"],
   ["CODEFRESH", "CF_BUILD_ID"],
   ["DRONE"],
@@ -78,8 +91,9 @@ const providers: InternalProvider[] = [
   ["GITLAB", "CI_MERGE_REQUEST_ID"],
   ["GOCD", "GO_PIPELINE_LABEL"],
   ["LAYERCI"],
-  ["HUDSON", "HUDSON_URL"],
+  // Jenkins must be validated before Hudson
   ["JENKINS", "JENKINS_URL"],
+  ["HUDSON", "HUDSON_URL"],
   ["MAGNUM"],
   ["NETLIFY"],
   ["NETLIFY", "NETLIFY_LOCAL", { ci: false }],
@@ -98,6 +112,7 @@ const providers: InternalProvider[] = [
   ["VERCEL", "VERCEL_ENV", { ci: false }],
   ["APPCENTER", "APPCENTER_BUILD_ID"],
   ["CODESANDBOX", "CODESANDBOX_SSE", { ci: false }],
+  ["CODESANDBOX", "CODESANDBOX_HOST", { ci: false }],
   ["STACKBLITZ"],
   ["STORMKIT"],
   ["CLEAVR"],
@@ -105,33 +120,48 @@ const providers: InternalProvider[] = [
   ["CODESPHERE", "CODESPHERE_APP_ID", { ci: true }],
   ["RAILWAY", "RAILWAY_PROJECT_ID"],
   ["RAILWAY", "RAILWAY_SERVICE_ID"],
+  ["DENO-DEPLOY", "DENO_DEPLOY"],
+  ["DENO-DEPLOY", "DENO_DEPLOYMENT_ID"],
+  ["FIREBASE_APP_HOSTING", "FIREBASE_APP_HOSTING", { ci: true }],
 ];
 
+/**
+ * Provides information about a CI/CD or Deployment provider, including its name and possibly other metadata.
+ */
 export type ProviderInfo = {
+  /**
+   * The name of the CI/CD or Deployment provider. See {@link ProviderName} for possible values.
+   */
   name: ProviderName;
+
+  /**
+   * If is set to `true`, the environment is recognised as a CI/CD provider.
+   */
   ci?: boolean;
+
+  /**
+   * Arbitrary metadata associated with the provider.
+   */
   [meta: string]: any;
 };
 
-function _detectProvider(): ProviderInfo {
+/**
+ * Detects the current CI/CD or Deployment provider from environment variables.
+ */
+export function detectProvider(): ProviderInfo {
   // Based on env
-  if (globalThis.process?.env) {
-    for (const provider of providers) {
-      const envName = provider[1] || provider[0];
-      if (globalThis.process?.env[envName]) {
-        return {
-          name: provider[0].toLowerCase(),
-          ...(provider[2] as any),
-        };
-      }
+  for (const provider of providers) {
+    const envName = provider[1] || provider[0];
+    if (env[envName]) {
+      return {
+        name: provider[0].toLowerCase(),
+        ...(provider[2] as any),
+      };
     }
   }
 
   // Stackblitz / Webcontainer
-  if (
-    globalThis.process?.env?.SHELL === "/bin/jsh" &&
-    globalThis.process?.versions?.webcontainer
-  ) {
+  if (env.SHELL === "/bin/jsh" && process.versions?.webcontainer) {
     return {
       name: "stackblitz",
       ci: false,
@@ -144,6 +174,13 @@ function _detectProvider(): ProviderInfo {
   };
 }
 
-/** Current provider info */
-export const providerInfo = _detectProvider();
+/**
+ * The detected provider information for the current execution context.
+ * This value is evaluated once at module initialisation.
+ */
+export const providerInfo: ProviderInfo = /* #__PURE__ */ detectProvider();
+
+/**
+ * Name of the detected provider, defaults to an empty string if no provider is detected.
+ */
 export const provider: ProviderName = providerInfo.name;
