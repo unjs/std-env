@@ -32,7 +32,7 @@ Detects the current CI/CD provider based on environment variables.
 import { isCI, provider, providerInfo } from "std-env";
 
 console.log({ isCI, provider, providerInfo });
-// { isCI: true, provider: "github_actions", providerInfo: { name: "github_actions", isCI: true } }
+// { isCI: true, provider: "github_actions", providerInfo: { name: "github_actions", ci: true } }
 ```
 
 Use `detectProvider()` to re-run detection. See [./src/providers.ts](./src/providers.ts) for the full list.
@@ -58,32 +58,33 @@ Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `aug
 import { env, isDevelopment, isProduction } from "std-env";
 ```
 
-| Export             | Description                               |
-| ------------------ | ----------------------------------------- |
-| `hasTTY`           | stdout TTY is available                   |
-| `hasWindow`        | Global `window` is available              |
-| `isCI`             | Running in CI                             |
-| `isColorSupported` | Terminal color output supported           |
-| `isDebug`          | `DEBUG` env var is set                    |
-| `isDevelopment`    | `NODE_ENV` is `dev` or `development`      |
-| `isLinux`          | Linux platform                            |
-| `isMacOS`          | macOS (darwin) platform                   |
-| `isMinimal`        | Minimal environment (CI, test, or no TTY) |
-| `isProduction`     | `NODE_ENV` is `production`                |
-| `isTest`           | `NODE_ENV` is `test`                      |
-| `isWindows`        | Windows platform                          |
-| `platform`         | Value of `process.platform`               |
-| `nodeVersion`      | Node.js version string (e.g. `"22.0.0"`)  |
-| `nodeMajorVersion` | Node.js major version number (e.g. `22`)  |
+| Export             | Description                                                  |
+| ------------------ | ------------------------------------------------------------ |
+| `hasTTY`           | stdout TTY is available                                      |
+| `hasWindow`        | Global `window` is available                                 |
+| `isCI`             | Running in CI                                                |
+| `isColorSupported` | Terminal color output supported                              |
+| `isDebug`          | `DEBUG` env var is set                                       |
+| `isDevelopment`    | `NODE_ENV` is `dev`/`development` or `MODE` is `development` |
+| `isLinux`          | Linux platform                                               |
+| `isMacOS`          | macOS (darwin) platform                                      |
+| `isMinimal`        | `MINIMAL` env is set, CI, test, or no TTY                    |
+| `isProduction`     | `NODE_ENV` or `MODE` is `production`                         |
+| `isTest`           | `NODE_ENV` is `test` or `TEST` env is set                    |
+| `isWindows`        | Windows platform                                             |
+| `platform`         | Value of `process.platform`                                  |
+| `nodeVersion`      | Node.js version string (e.g. `"22.0.0"`)                     |
+| `nodeMajorVersion` | Node.js major version number (e.g. `22`)                     |
 
 See [./src/flags.ts](./src/flags.ts) for details.
 
 ## Environment
 
-| Export    | Description                                         |
-| --------- | --------------------------------------------------- |
-| `env`     | Universal `process.env` (works across all runtimes) |
-| `nodeENV` | Current `NODE_ENV` value (undefined if unset)       |
+| Export    | Description                                          |
+| --------- | ---------------------------------------------------- |
+| `env`     | Universal `process.env` (works across all runtimes)  |
+| `process` | Universal `process` shim (works across all runtimes) |
+| `nodeENV` | Current `NODE_ENV` value (undefined if unset)        |
 
 ## License
 

@@ -1,6 +1,10 @@
 import { process } from "./env.ts";
 
-// https://runtime-keys.proposal.wintercg.org/
+/**
+ * Represents the name of a JavaScript runtime.
+ *
+ * @see https://runtime-keys.proposal.wintercg.org/
+ */
 export type RuntimeName =
   | (string & {})
   | "workerd"
@@ -48,7 +52,6 @@ export const isFastly: boolean = "fastly" in globalThis;
 export const isNetlify: boolean = "Netlify" in globalThis;
 
 /**
- *
  * Indicates if running in EdgeLight (Vercel Edge) runtime.
  */
 export const isEdgeLight: boolean = "EdgeRuntime" in globalThis;

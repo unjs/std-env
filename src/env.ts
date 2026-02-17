@@ -1,6 +1,16 @@
+/**
+ * Runtime-agnostic reference to environment variables.
+ *
+ * Resolves to `globalThis.process.env` when available, otherwise an empty object.
+ */
 export const env: Record<string, string | undefined> =
   globalThis.process?.env || Object.create(null);
 
+/**
+ * Runtime-agnostic reference to the `process` global.
+ *
+ * Resolves to `globalThis.process` when available, otherwise a minimal shim containing only `env`.
+ */
 export const process: Partial<typeof globalThis.process> = globalThis.process || { env };
 
 /**

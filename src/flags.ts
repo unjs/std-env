@@ -39,11 +39,12 @@ export const isLinux: boolean = /^linux/i.test(platform);
 /** Detect if process.platform is macOS (darwin kernel) */
 export const isMacOS: boolean = /^darwin/i.test(platform);
 
-/** Color Support */
+/** Detect if terminal color output is supported based on `NO_COLOR`, `FORCE_COLOR`, TTY, and CI environment */
 export const isColorSupported: boolean =
   !env.NO_COLOR && (!!env.FORCE_COLOR || ((hasTTY || isWindows) && env.TERM !== "dumb") || isCI);
 
-/** Node.js versions */
+/** Node.js version string (e.g. `"20.11.0"`), or `null` if not running in Node.js */
 export const nodeVersion: string | null = (process.versions?.node || "").replace(/^v/, "") || null;
 
+/** Node.js major version number (e.g. `20`), or `null` if not running in Node.js */
 export const nodeMajorVersion: number | null = Number(nodeVersion?.split(".")[0]) || null;

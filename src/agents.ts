@@ -2,6 +2,9 @@
 
 import { env } from "./env.ts";
 
+/**
+ * Represents the name of an AI coding agent.
+ */
 export type AgentName =
   | (string & {})
   | "cursor"
