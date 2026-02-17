@@ -1,53 +1,49 @@
-import { providerInfo } from "./providers";
-import { env, nodeENV } from "./env";
-import { toBoolean } from "./_utils";
+import { providerInfo } from "./providers.ts";
+import { env, nodeENV, process } from "./env.ts";
 
 /** Value of process.platform */
-export const platform = globalThis.process?.platform || "";
+export const platform: string = process.platform || "";
 
 /** Detect if `CI` environment variable is set or a provider CI detected */
-export const isCI = toBoolean(env.CI) || providerInfo.ci !== false;
+export const isCI: boolean = !!env.CI || providerInfo.ci !== false;
 
 /** Detect if stdout.TTY is available */
-export const hasTTY = toBoolean(
-  globalThis.process?.stdout && globalThis.process?.stdout.isTTY,
-);
+export const hasTTY: boolean = !!process.stdout?.isTTY;
 
 /** Detect if global `window` object is available */
-export const hasWindow = typeof window !== "undefined";
+// eslint-disable-next-line unicorn/prefer-global-this
+export const hasWindow: boolean = typeof window !== "undefined";
 
 /** Detect if `DEBUG` environment variable is set */
-export const isDebug = toBoolean(env.DEBUG);
+export const isDebug: boolean = !!env.DEBUG;
 
-/** Detect if `NODE_ENV` environment variable is `test` */
-export const isTest = nodeENV === "test" || toBoolean(env.TEST);
+/** Detect if `NODE_ENV` environment variable is `test` or `TEST` environment variable is set */
+export const isTest: boolean = nodeENV === "test" || !!env.TEST;
 
-/** Detect if `NODE_ENV` environment variable is `production` */
-export const isProduction = nodeENV === "production";
+/** Detect if `NODE_ENV` or `MODE` environment variable is `production` */
+export const isProduction = nodeENV === "production" || env.MODE === "production";
 
-/** Detect if `NODE_ENV` environment variable is `dev` or `development` */
-export const isDevelopment = nodeENV === "dev" || nodeENV === "development";
+/** Detect if `NODE_ENV` environment variable is `dev` or `development`, or if `MODE` environment variable is `development` */
+export const isDevelopment =
+  nodeENV === "dev" || nodeENV === "development" || env.MODE === "development";
 
 /** Detect if MINIMAL environment variable is set, running in CI or test or TTY is unavailable */
-export const isMinimal = toBoolean(env.MINIMAL) || isCI || isTest || !hasTTY;
+export const isMinimal: boolean = !!env.MINIMAL || isCI || isTest || !hasTTY;
 
 /** Detect if process.platform is Windows */
-export const isWindows = /^win/i.test(platform);
+export const isWindows: boolean = /^win/i.test(platform);
 
 /** Detect if process.platform is Linux */
-export const isLinux = /^linux/i.test(platform);
+export const isLinux: boolean = /^linux/i.test(platform);
 
 /** Detect if process.platform is macOS (darwin kernel) */
-export const isMacOS = /^darwin/i.test(platform);
+export const isMacOS: boolean = /^darwin/i.test(platform);
 
 /** Color Support */
-export const isColorSupported =
-  !toBoolean(env.NO_COLOR) &&
-  (toBoolean(env.FORCE_COLOR) ||
-    ((hasTTY || isWindows) && env.TERM !== "dumb") ||
-    isCI);
+export const isColorSupported: boolean =
+  !env.NO_COLOR && (!!env.FORCE_COLOR || ((hasTTY || isWindows) && env.TERM !== "dumb") || isCI);
 
 /** Node.js versions */
-export const nodeVersion =
-  (globalThis.process?.versions?.node || "").replace(/^v/, "") || null;
-export const nodeMajorVersion = Number(nodeVersion?.split(".")[0]) || null;
+export const nodeVersion: string | null = (process.versions?.node || "").replace(/^v/, "") || null;
+
+export const nodeMajorVersion: number | null = Number(nodeVersion?.split(".")[0]) || null;

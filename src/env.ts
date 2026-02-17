@@ -1,41 +1,12 @@
-const _envShim = Object.create(null);
+export const env: Record<string, string | undefined> =
+  globalThis.process?.env || Object.create(null);
 
-export type EnvObject = Record<string, string | undefined>;
+export const process: Partial<typeof globalThis.process> = globalThis.process || { env };
 
-const _getEnv = (useShim?: boolean) =>
-  globalThis.process?.env ||
-  import.meta.env ||
-  globalThis.Deno?.env.toObject() ||
-  globalThis.__env__ ||
-  (useShim ? _envShim : globalThis);
-
-export const env = new Proxy<EnvObject>(_envShim, {
-  get(_, prop) {
-    const env = _getEnv();
-    return env[prop as any] ?? _envShim[prop];
-  },
-  has(_, prop) {
-    const env = _getEnv();
-    return prop in env || prop in _envShim;
-  },
-  set(_, prop, value) {
-    const env = _getEnv(true);
-    env[prop as any] = value;
-    return true;
-  },
-  deleteProperty(_, prop) {
-    if (!prop) {
-      return false;
-    }
-    const env = _getEnv(true);
-    delete env[prop as any];
-    return true;
-  },
-  ownKeys() {
-    const env = _getEnv(true);
-    return Object.keys(env);
-  },
-});
-
-export const nodeENV =
-  (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || "";
+/**
+ * Current value of the `NODE_ENV` environment variable (or static value if replaced during build).
+ *
+ * If `NODE_ENV` is not set, this will be undefined.
+ */
+export const nodeENV: string | undefined =
+  (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || undefined;
