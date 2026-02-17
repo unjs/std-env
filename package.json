@@ -26,17 +26,17 @@
   },
   "devDependencies": {
     "@types/node": "^25.2.3",
-    "@typescript/native-preview": "7.0.0-dev.20260213.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260217.1",
     "@vitest/coverage-v8": "^4.0.18",
     "changelogen": "^0.6.2",
     "esbuild": "^0.27.3",
     "mitata": "^1.0.34",
-    "obuild": "^0.4.27",
-    "oxfmt": "^0.32.0",
-    "oxlint": "^1.47.0",
+    "obuild": "^0.4.28",
+    "oxfmt": "^0.33.0",
+    "oxlint": "^1.48.0",
     "rollup": "^4.57.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
-  "packageManager": "pnpm@10.29.3"
+  "packageManager": "pnpm@10.30.0"
 }
