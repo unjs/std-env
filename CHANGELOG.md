@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v4.0.0-rc.1
+
+[compare changes](https://github.com/unjs/std-env/compare/v3.10.0...v4.0.0-rc.1)
+
+### 🚀 Enhancements
+
+- Agent detection ([#179](https://github.com/unjs/std-env/pull/179))
+- Check `MODE` variable for `isDevelopment` and `isProduction` flags ([#114](https://github.com/unjs/std-env/pull/114))
+
+### 🔥 Performance
+
+- No need to pass env ref ([44bab37](https://github.com/unjs/std-env/commit/44bab37))
+
+### 🩹 Fixes
+
+- Jenkins detection ([#171](https://github.com/unjs/std-env/pull/171))
+
+### 💅 Refactors
+
+- ⚠️  Remove env and process shims ([d4de8a4](https://github.com/unjs/std-env/commit/d4de8a4))
+- ⚠️  Improve codebase ([653b127](https://github.com/unjs/std-env/commit/653b127))
+- Default `nodeEnv` to `undefined` ([c78098a](https://github.com/unjs/std-env/commit/c78098a))
+- Remove `toBoolean` util ([23bfb8f](https://github.com/unjs/std-env/commit/23bfb8f))
+
+### 📦 Build
+
+- ⚠️  Esm-only dist ([d31cca3](https://github.com/unjs/std-env/commit/d31cca3))
+
+### 🏡 Chore
+
+- Migrate to oxlint, oxfmt and tsgo ([3de70cf](https://github.com/unjs/std-env/commit/3de70cf))
+- Update lockfile ([c6e909c](https://github.com/unjs/std-env/commit/c6e909c))
+- Update ([06201cc](https://github.com/unjs/std-env/commit/06201cc))
+- Apply automated updates ([8f0d79f](https://github.com/unjs/std-env/commit/8f0d79f))
+- Update deps ([8168254](https://github.com/unjs/std-env/commit/8168254))
+- Prepare for v4 rc ([58118f5](https://github.com/unjs/std-env/commit/58118f5))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Remove env and process shims ([d4de8a4](https://github.com/unjs/std-env/commit/d4de8a4))
+- ⚠️  Improve codebase ([653b127](https://github.com/unjs/std-env/commit/653b127))
+- ⚠️  Esm-only dist ([d31cca3](https://github.com/unjs/std-env/commit/d31cca3))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Mark R. Florkowski ([@markflorkowski](https://github.com/markflorkowski))
+- Gustavo Perdomo <gperdomor@gmail.com>
+
 ## v3.10.0
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.9.0...v3.10.0)
