@@ -1,6 +1,6 @@
 {
   "name": "std-env",
-  "version": "3.10.0",
+  "version": "4.0.0-rc.0",
   "description": "Runtime agnostic JS utils",
   "license": "MIT",
   "repository": "unjs/std-env",
@@ -20,7 +20,7 @@
     "lint": "oxlint . && oxfmt",
     "lint:fix": "oxlint --fix . && oxfmt",
     "prepack": "obuild",
-    "release": "pnpm test && obuild && changelogen --release && npm publish && git push --follow-tags",
+    "release": "pnpm test && pnpm build && changelogen --release --prerelease --publish && git push --follow-tags",
     "test": "pnpm lint && pnpm typecheck && vitest run --coverage",
     "typecheck": "tsgo --noEmit"
   },
