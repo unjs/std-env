@@ -21,14 +21,14 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 💅 Refactors
 
-- ⚠️  Remove env and process shims ([d4de8a4](https://github.com/unjs/std-env/commit/d4de8a4))
-- ⚠️  Improve codebase ([653b127](https://github.com/unjs/std-env/commit/653b127))
+- ⚠️ Remove env and process shims ([d4de8a4](https://github.com/unjs/std-env/commit/d4de8a4))
+- ⚠️ Improve codebase ([653b127](https://github.com/unjs/std-env/commit/653b127))
 - Default `nodeEnv` to `undefined` ([c78098a](https://github.com/unjs/std-env/commit/c78098a))
 - Remove `toBoolean` util ([23bfb8f](https://github.com/unjs/std-env/commit/23bfb8f))
 
 ### 📦 Build
 
-- ⚠️  Esm-only dist ([d31cca3](https://github.com/unjs/std-env/commit/d31cca3))
+- ⚠️ Esm-only dist ([d31cca3](https://github.com/unjs/std-env/commit/d31cca3))
 
 ### 🏡 Chore
 
@@ -41,9 +41,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 #### ⚠️ Breaking Changes
 
-- ⚠️  Remove env and process shims ([d4de8a4](https://github.com/unjs/std-env/commit/d4de8a4))
-- ⚠️  Improve codebase ([653b127](https://github.com/unjs/std-env/commit/653b127))
-- ⚠️  Esm-only dist ([d31cca3](https://github.com/unjs/std-env/commit/d31cca3))
+- ⚠️ Remove env and process shims ([d4de8a4](https://github.com/unjs/std-env/commit/d4de8a4))
+- ⚠️ Improve codebase ([653b127](https://github.com/unjs/std-env/commit/653b127))
+- ⚠️ Esm-only dist ([d31cca3](https://github.com/unjs/std-env/commit/d31cca3))
 
 ### ❤️ Contributors
 
