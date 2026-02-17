@@ -1,28 +1,24 @@
 import { providerInfo } from "./providers.ts";
 import { env, nodeENV, process } from "./env.ts";
 
-function toBoolean(val: boolean | string | undefined): boolean {
-  return val ? val !== "false" : false;
-}
-
 /** Value of process.platform */
 export const platform: string = process.platform || "";
 
 /** Detect if `CI` environment variable is set or a provider CI detected */
-export const isCI: boolean = toBoolean(env.CI) || providerInfo.ci !== false;
+export const isCI: boolean = !!env.CI || providerInfo.ci !== false;
 
 /** Detect if stdout.TTY is available */
-export const hasTTY: boolean = toBoolean(process.stdout?.isTTY);
+export const hasTTY: boolean = !!process.stdout?.isTTY;
 
 /** Detect if global `window` object is available */
 // eslint-disable-next-line unicorn/prefer-global-this
 export const hasWindow: boolean = typeof window !== "undefined";
 
 /** Detect if `DEBUG` environment variable is set */
-export const isDebug: boolean = toBoolean(env.DEBUG);
+export const isDebug: boolean = !!env.DEBUG;
 
-/** Detect if `NODE_ENV` environment variable is `test` */
-export const isTest: boolean = nodeENV === "test" || toBoolean(env.TEST);
+/** Detect if `NODE_ENV` environment variable is `test` or `TEST` environment variable is set */
+export const isTest: boolean = nodeENV === "test" || !!env.TEST;
 
 /** Detect if `NODE_ENV` environment variable is `production` */
 export const isProduction: boolean = nodeENV === "production";
@@ -31,7 +27,7 @@ export const isProduction: boolean = nodeENV === "production";
 export const isDevelopment: boolean = nodeENV === "dev" || nodeENV === "development";
 
 /** Detect if MINIMAL environment variable is set, running in CI or test or TTY is unavailable */
-export const isMinimal: boolean = toBoolean(env.MINIMAL) || isCI || isTest || !hasTTY;
+export const isMinimal: boolean = !!env.MINIMAL || isCI || isTest || !hasTTY;
 
 /** Detect if process.platform is Windows */
 export const isWindows: boolean = /^win/i.test(platform);
@@ -44,8 +40,7 @@ export const isMacOS: boolean = /^darwin/i.test(platform);
 
 /** Color Support */
 export const isColorSupported: boolean =
-  !toBoolean(env.NO_COLOR) &&
-  (toBoolean(env.FORCE_COLOR) || ((hasTTY || isWindows) && env.TERM !== "dumb") || isCI);
+  !env.NO_COLOR && (!!env.FORCE_COLOR || ((hasTTY || isWindows) && env.TERM !== "dumb") || isCI);
 
 /** Node.js versions */
 export const nodeVersion: string | null = (process.versions?.node || "").replace(/^v/, "") || null;
