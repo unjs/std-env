@@ -21,10 +21,10 @@ export const isDebug: boolean = !!env.DEBUG;
 export const isTest: boolean = nodeENV === "test" || !!env.TEST;
 
 /** Detect if `NODE_ENV` or `MODE` environment variable is `production` */
-export const isProduction = nodeENV === "production" || env.MODE === "production";
+export const isProduction: boolean = nodeENV === "production" || env.MODE === "production";
 
 /** Detect if `NODE_ENV` environment variable is `dev` or `development`, or if `MODE` environment variable is `development` */
-export const isDevelopment =
+export const isDevelopment: boolean =
   nodeENV === "dev" || nodeENV === "development" || env.MODE === "development";
 
 /** Detect if MINIMAL environment variable is set, running in CI or test or TTY is unavailable */
