@@ -83,7 +83,7 @@ See [./src/flags.ts](./src/flags.ts) for details.
 | Export    | Description                                         |
 | --------- | --------------------------------------------------- |
 | `env`     | Universal `process.env` (works across all runtimes) |
-| `nodeENV` | Current `NODE_ENV` value (empty string if unset)    |
+| `nodeENV` | Current `NODE_ENV` value (undefined if unset)       |
 
 ## License
 

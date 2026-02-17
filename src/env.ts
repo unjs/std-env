@@ -6,7 +6,7 @@ export const process: Partial<typeof globalThis.process> = globalThis.process ||
 /**
  * Current value of the `NODE_ENV` environment variable (or static value if replaced during build).
  *
- * If `NODE_ENV` is not set, this will be an empty `""` string.
+ * If `NODE_ENV` is not set, this will be undefined.
  */
-export const nodeENV: string =
-  (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || "";
+export const nodeENV: string | undefined =
+  (typeof process !== "undefined" && process.env && process.env.NODE_ENV) || undefined;
