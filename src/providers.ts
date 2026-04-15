@@ -56,7 +56,8 @@ export type ProviderName =
   | "codesphere"
   | "railway"
   | "deno-deploy"
-  | "firebase_app_hosting";
+  | "firebase_app_hosting"
+  | "edgeone_pages";
 
 type InternalProvider = [
   providerName: Uppercase<ProviderName>,
@@ -123,6 +124,7 @@ const providers: InternalProvider[] = [
   ["DENO-DEPLOY", "DENO_DEPLOY"],
   ["DENO-DEPLOY", "DENO_DEPLOYMENT_ID"],
   ["FIREBASE_APP_HOSTING", "FIREBASE_APP_HOSTING", { ci: true }],
+  ["EDGEONE_PAGES", "EO_PAGES_CI", { ci: true }],
 ];
 
 /**
