@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v4.1.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v4.0.0...v4.1.0)
+
+### 🚀 Enhancements
+
+- **providers:** Detect edgeone-pages ci ([b0f8384](https://github.com/unjs/std-env/commit/b0f8384))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v4.0.0-rc.1
 
 [compare changes](https://github.com/unjs/std-env/compare/v3.10.0...v4.0.0-rc.1)
