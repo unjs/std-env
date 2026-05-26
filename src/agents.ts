@@ -1,6 +1,6 @@
 // Note to AI Agents: Check @AGENTS.md for instructions on how to self-verify.
 
-import { env } from "./env.ts";
+import { env, process } from "./env.ts";
 
 /**
  * Represents the name of an AI coding agent.
@@ -46,8 +46,8 @@ const agents: InternalAgent[] = [
   ["devin", [envMatcher("EDITOR", /devin/)]],
   // ✅ Verified by cursor (can be detected using CURSOR_AGENT, CURSOR_TRACE_ID, CURSOR_SANDBOX)
   ["cursor", ["CURSOR_AGENT"]],
-  // ✅ Verified by kiro (can be detected using TERM_PROGRAM)
-  ["kiro", [envMatcher("TERM_PROGRAM", /kiro/)]],
+  // ✅ Verified by kiro (TERM_PROGRAM + non-interactive stdout; IDE terminals have TTY)
+  ["kiro", [() => envMatcher("TERM_PROGRAM", /kiro/)() && !process.stdout?.isTTY]],
 ];
 
 function envMatcher(envKey: string, regex: RegExp) {

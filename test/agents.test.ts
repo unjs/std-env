@@ -1,5 +1,6 @@
 import { expect, it, describe, vi, beforeEach, afterEach } from "vitest";
 import { detectAgent } from "../src/agents.ts";
+import { process } from "../src/env.ts";
 
 // All env vars that agent detection may check
 const agentEnvKeys = [
@@ -64,9 +65,23 @@ describe("detectAgent", () => {
   });
 
   describe("regex env var checks", () => {
-    it("detects kiro via TERM_PROGRAM matching /kiro/", () => {
+    it("detects kiro via TERM_PROGRAM matching /kiro/ without TTY", () => {
       vi.stubEnv("TERM_PROGRAM", "kiro-terminal");
       expect(detectAgent()).toEqual({ name: "kiro" });
+    });
+
+    it("does not detect kiro IDE terminal when stdout is a TTY", () => {
+      vi.stubEnv("TERM_PROGRAM", "kiro-terminal");
+      const stdout = process.stdout ?? {};
+      Object.defineProperty(stdout, "isTTY", {
+        configurable: true,
+        get: () => true,
+      });
+      Object.defineProperty(process, "stdout", {
+        configurable: true,
+        value: stdout,
+      });
+      expect(detectAgent()).toEqual({});
     });
 
     it("does not detect kiro when TERM_PROGRAM does not match", () => {
