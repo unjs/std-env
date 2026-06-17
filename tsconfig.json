@@ -16,7 +16,8 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
     "noEmit": true,
-    "erasableSyntaxOnly": true
+    "erasableSyntaxOnly": true,
+    "types": ["node"]
   },
   "include": ["src", "test"]
 }

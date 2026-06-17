@@ -48,3 +48,5 @@ export {
   isNetlify,
   isWorkerd,
 } from "./runtimes.ts";
+
+export { isDocker, isContainer } from "./container.js";
