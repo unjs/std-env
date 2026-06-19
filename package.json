@@ -38,7 +38,7 @@
     "lint": "oxlint . && oxfmt",
     "lint:fix": "oxlint --fix . && oxfmt",
     "prepack": "obuild",
-    "release": "pnpm test && pnpm build && changelogen --release --publish && git push --follow-tags",
+    "release": "pnpm test && pnpm build && changelogen --release && pnpm publish --access public && git push --follow-tags",
     "test": "pnpm lint && pnpm typecheck && vitest run --coverage",
     "typecheck": "tsgo --noEmit"
   },
