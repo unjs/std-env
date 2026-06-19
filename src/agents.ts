@@ -1,6 +1,6 @@
 // Note to AI Agents: Check @AGENTS.md for instructions on how to self-verify.
 
-import { env } from "./env.ts";
+import { env } from "#env";
 
 /**
  * Represents the name of an AI coding agent.

@@ -11,8 +11,26 @@
   "sideEffects": false,
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
+  "imports": {
+    "#env": {
+      "workerd": "./src/env.workerd.ts",
+      "default": "./src/env.ts"
+    }
+  },
   "exports": {
     ".": "./dist/index.mjs"
+  },
+  "publishConfig": {
+    "imports": {
+      "#env": {
+        "workerd": {
+          "default": "./dist/env.workerd.mjs",
+          "types": "./dist/env.workerd.d.mts"
+        },
+        "default": "./dist/env.mjs",
+        "types": "./dist/env.d.mts"
+      }
+    }
   },
   "scripts": {
     "build": "obuild",
@@ -25,6 +43,7 @@
     "typecheck": "tsgo --noEmit"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260619.1",
     "@types/node": "^25.2.3",
     "@typescript/native-preview": "^7.0.0-dev.20260217.1",
     "@vitest/coverage-v8": "^4.0.18",

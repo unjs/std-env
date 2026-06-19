@@ -1,6 +1,6 @@
 // Reference: https://github.com/watson/ci-info/blob/v3.2.0/vendors.json
 
-import { env, process } from "./env.ts";
+import { env, process } from "#env";
 
 /**
  * Represents the name of a CI/CD or Deployment provider.

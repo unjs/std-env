@@ -7,7 +7,7 @@ export {
   detectAgent,
 } from "./agents.ts";
 
-export { env, process, nodeENV } from "./env.ts";
+export { env, process, nodeENV } from "#env";
 
 export {
   hasTTY,

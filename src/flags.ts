@@ -1,5 +1,5 @@
 import { providerInfo } from "./providers.ts";
-import { env, nodeENV, process } from "./env.ts";
+import { env, nodeENV, process } from "#env";
 
 /** Value of process.platform */
 export const platform: string = process.platform || "";

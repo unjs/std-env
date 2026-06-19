@@ -1,4 +1,4 @@
-import { process } from "./env.ts";
+import { process } from "#env";
 
 /**
  * Represents the name of a JavaScript runtime.
