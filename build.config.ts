@@ -1,10 +1,5 @@
 import { defineBuildConfig } from "obuild/config";
 
 export default defineBuildConfig({
-  entries: [{ type: "bundle", input: "src/index.ts" }],
-  hooks: {
-    rolldownOutput(cfg) {
-      cfg.minify = true;
-    },
-  },
+  entries: [{ type: "transform", input: "src", minify: true }],
 });
