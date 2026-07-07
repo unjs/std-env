@@ -1,5 +1,6 @@
 import { expect, it, describe, vi, beforeEach, afterEach } from "vitest";
 import { detectAgent } from "../src/agents.ts";
+import { process } from "../src/env.ts";
 
 // All env vars that agent detection may check
 const agentEnvKeys = [
@@ -22,15 +23,25 @@ const agentEnvKeys = [
 ];
 
 describe("detectAgent", () => {
+  const originalIsTTY = process.stdout?.isTTY;
+
   beforeEach(() => {
     // Clear all agent-related env vars to ensure a clean slate
     for (const key of agentEnvKeys) {
       vi.stubEnv(key, "");
     }
+    // Default to a non-interactive (agent-like) context so TTY-gated checks are
+    // deterministic regardless of how the test runner is invoked.
+    if (process.stdout) {
+      process.stdout.isTTY = false;
+    }
   });
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    if (process.stdout) {
+      process.stdout.isTTY = originalIsTTY!;
+    }
   });
 
   it("returns empty object when no agent env is set", () => {
@@ -75,6 +86,14 @@ describe("detectAgent", () => {
 
     it("does not detect kiro when TERM_PROGRAM does not match", () => {
       vi.stubEnv("TERM_PROGRAM", "vscode");
+      expect(detectAgent()).toEqual({});
+    });
+
+    it("does not detect kiro when a TTY is present (IDE integrated terminal, see #185)", () => {
+      vi.stubEnv("TERM_PROGRAM", "kiro-terminal");
+      if (process.stdout) {
+        process.stdout.isTTY = true;
+      }
       expect(detectAgent()).toEqual({});
     });
 
