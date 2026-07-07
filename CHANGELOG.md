@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v4.2.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v4.1.0...v4.2.0)
+
+### 🚀 Enhancements
+
+- Add Junie agent support ([#195](https://github.com/unjs/std-env/pull/195))
+
+### 🩹 Fixes
+
+- **agents:** Don't detect kiro IDE integrated terminal as an agent ([#196](https://github.com/unjs/std-env/pull/196))
+
+### 🏡 Chore
+
+- Update deps ([aaeddcd](https://github.com/unjs/std-env/commit/aaeddcd))
+- Update tsconfig ([9e44e17](https://github.com/unjs/std-env/commit/9e44e17))
+- Update tsconfig ([1b2503d](https://github.com/unjs/std-env/commit/1b2503d))
+
+### ❤️ Contributors
+
+- Pi0x <x@pi0.io>
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Gauthier POGAM--LE MONTAGNER ([@GauthierPLM](https://github.com/GauthierPLM))
+
 ## v4.1.0
 
 [compare changes](https://github.com/unjs/std-env/compare/v4.0.0...v4.1.0)
