@@ -50,7 +50,7 @@ console.log({ isAgent, agent, agentInfo });
 
 Set the `AI_AGENT` env var to explicitly specify the agent name. Use `detectAgent()` to re-run detection.
 
-Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
+Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
 
 ## Flags
 

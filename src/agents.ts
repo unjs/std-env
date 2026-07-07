@@ -17,7 +17,8 @@ export type AgentName =
   | "opencode"
   | "kiro"
   | "goose"
-  | "pi";
+  | "pi"
+  | "junie";
 
 type EnvCheck = string | (() => boolean);
 
@@ -40,6 +41,8 @@ const agents: InternalAgent[] = [
   ["auggie", ["AUGMENT_AGENT"]],
   // ❓ not tested
   ["goose", ["GOOSE_PROVIDER"]],
+  // ✅ Verified by junie (can be detected using JUNIE_DATA, JUNIE_SHIM_PATH)
+  ["junie", ["JUNIE_DATA", "JUNIE_SHIM_PATH"]],
 
   // -- IDEs (checked last — agents running inside these should be detected first) --
   // ✅ Verified by devin (can be detected using EDITOR, BROWSER, PATH)
@@ -70,7 +73,7 @@ export type AgentInfo = {
 /**
  * Detects the current AI coding agent from environment variables.
  *
- * Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`
+ * Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
  *
  * You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
  */
