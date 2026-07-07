@@ -13,6 +13,8 @@ const agentEnvKeys = [
   "AUGMENT_AGENT",
   "OPENCODE",
   "GOOSE_PROVIDER",
+  "JUNIE_DATA",
+  "JUNIE_SHIM_PATH",
   "CURSOR_AGENT",
   "TERM_PROGRAM",
   "EDITOR",
@@ -52,6 +54,8 @@ describe("detectAgent", () => {
       ["auggie", "AUGMENT_AGENT", "1"],
       ["opencode", "OPENCODE", "1"],
       ["goose", "GOOSE_PROVIDER", "openai"],
+      ["junie", "JUNIE_DATA", "/home/user/.local/share/junie"],
+      ["junie", "JUNIE_SHIM_PATH", "/home/user/.local/bin/junie"],
       ["cursor", "CURSOR_AGENT", "1"],
     ];
 
