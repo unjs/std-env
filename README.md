@@ -21,8 +21,7 @@ Individual named exports: `isNode`, `isBun`, `isDeno`, `isNetlify`, `isEdgeLight
 
 > [!NOTE]
 > `isNode` is also `true` in Bun/Deno with Node.js compatibility mode. Use `runtime === "node"` for strict checks.
-
-> [!NOTE]
+>
 > `isNub` detects [Nub](https://github.com/nubjs/nub), which augments Node.js rather than replacing it. It is additive: `isNode` is also `true` and `runtime` stays `"node"`.
 
 See [./src/runtimes.ts](./src/runtimes.ts) for the full list.
