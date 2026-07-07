@@ -41,6 +41,7 @@ export {
   isBun,
   isDeno,
   isNode,
+  isNub,
   runtime,
   runtimeInfo,
   isEdgeLight,
