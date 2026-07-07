@@ -1,6 +1,6 @@
 // Note to AI Agents: Check @AGENTS.md for instructions on how to self-verify.
 
-import { env } from "./env.ts";
+import { env, process } from "./env.ts";
 
 /**
  * Represents the name of an AI coding agent.
@@ -50,11 +50,19 @@ const agents: InternalAgent[] = [
   // ✅ Verified by cursor (can be detected using CURSOR_AGENT, CURSOR_TRACE_ID, CURSOR_SANDBOX)
   ["cursor", ["CURSOR_AGENT"]],
   // ✅ Verified by kiro (can be detected using TERM_PROGRAM)
-  ["kiro", [envMatcher("TERM_PROGRAM", /kiro/)]],
+  // `TERM_PROGRAM=kiro` is set by both the Kiro IDE integrated terminal (interactive,
+  // has a TTY) and the Kiro CLI agent (non-interactive, no TTY). Gate on `noTTY` so a
+  // human typing in the IDE terminal is not mis-detected as an agent. See #185.
+  ["kiro", [envMatcher("TERM_PROGRAM", /kiro/, { noTTY: true })]],
 ];
 
-function envMatcher(envKey: string, regex: RegExp) {
+function envMatcher(envKey: string, regex: RegExp, opts?: { noTTY?: boolean }) {
   return () => {
+    // When `noTTY` is set, only match in a non-interactive (agent) context. A TTY
+    // means a human is at an integrated terminal, not an agent-spawned subprocess.
+    if (opts?.noTTY && process.stdout?.isTTY) {
+      return false;
+    }
     const value = env[envKey];
     return value ? regex.test(value) : false;
   };

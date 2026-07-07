@@ -71,7 +71,8 @@ All detection modules follow the same pattern:
   - `InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]]`
 - Each agent maps to an array of `EnvCheck` items; the first matching check wins
 - When `EnvCheck` is a string, the env var must be truthy; when it's a function, it receives the full env object and returns a boolean
-- `envMatcher(envKey, regex)` helper creates regex-based env var matchers (e.g., `envMatcher("TERM_PROGRAM", /kiro/)`)
+- `envMatcher(envKey, regex, opts?)` helper creates regex-based env var matchers (e.g., `envMatcher("TERM_PROGRAM", /kiro/)`)
+  - `opts.noTTY: true` makes the matcher only match in a non-interactive context (when `process.stdout.isTTY` is falsy). Use for detections keyed off generic terminal env vars that an IDE sets in its integrated terminal too — e.g. `kiro` (`TERM_PROGRAM=kiro`), where a TTY means a human is at the IDE terminal, not the agent CLI (see #185)
 - IDEs (cursor, devin, kiro) are checked last so agents running inside them are detected first
 - Exports: `detectAgent()`, `agentInfo` (singleton), `agent` (name shorthand), `isAgent` (boolean)
 
