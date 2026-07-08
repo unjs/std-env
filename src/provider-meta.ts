@@ -54,9 +54,6 @@ export type ProviderMeta = {
   /** Repository owner/name, when derivable from the environment. */
   repo?: RepoInfo;
 
-  /** Convenience `owner/name` slug, when {@link ProviderMeta.repo} is set. */
-  repoSlug?: string;
-
   /** Branch name (refs like `refs/heads/foo` are normalized to `foo`). */
   branch?: string;
 
@@ -352,10 +349,7 @@ export function detectProviderMeta(): ProviderMeta {
   const [branch, commitSha, repo, isPR, prNumber, buildUrl, runId, environment, ...rest] = ext;
 
   const repoInfo = runExtractor(repo, parseRepoSlug);
-  if (repoInfo) {
-    meta.repo = repoInfo;
-    meta.repoSlug = `${repoInfo.owner}/${repoInfo.name}`;
-  }
+  if (repoInfo) meta.repo = repoInfo;
 
   const branchName = runExtractor(branch, (raw) => refToBranch(raw) ?? raw);
   if (branchName) meta.branch = branchName;

@@ -86,7 +86,7 @@ All detection modules follow the same pattern:
 
 ### Provider Metadata (`src/provider-meta.ts`)
 
-- Extracts normalized git/build metadata (`repo`, `repoSlug`, `branch`, `commitSha`, `isPR`, `prNumber`, `environment`, `buildUrl`, `runId`, `actor`, `eventName`, `workflowName`)
+- Extracts normalized git/build metadata (`repo`, `branch`, `commitSha`, `isPR`, `prNumber`, `environment`, `buildUrl`, `runId`, `actor`, `eventName`, `workflowName`)
 - **Deliberately separate from `providers.ts`**: detection (`provider`, `isCI`, `providerInfo`) stays free of per-provider extractor closures. Because the extractors live here, importing only `isCI`/`provider` tree-shakes the metadata engine out (verified: side-effect-free, `esbuild` drops it). Do **not** move extractors into `providers.ts`.
 - **Single source of truth for detection**: `detectProviderMeta()` calls `detectProvider()` for the provider name, then looks up extractors in a `Partial<Record<ProviderName, ProviderExtractors>>` map keyed by the same lowercase names. Providers without git/build metadata are simply omitted from the map.
 - Per-field extractor is `string | ((env) => T | undefined)`. A string is an env var name run through a field-specific parser (`repo` → `parseRepoSlug`, `branch` → `refToBranch`, `prNumber` → `parsePrNumber`); a function receives the full `env` and returns the value directly.

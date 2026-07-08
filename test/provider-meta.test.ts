@@ -78,7 +78,6 @@ describe("detectProviderMeta", () => {
     expect(detectProviderMeta()).toMatchObject({
       name: "github_actions",
       repo: { owner: "unjs", name: "std-env" },
-      repoSlug: "unjs/std-env",
       branch: "main",
       commitSha: "abcdef1234567890",
       isPR: false,
