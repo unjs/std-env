@@ -185,4 +185,7 @@ export const providerInfo: ProviderInfo = /* #__PURE__ */ detectProvider();
 /**
  * Name of the detected provider, defaults to an empty string if no provider is detected.
  */
-export const provider: ProviderName = providerInfo.name;
+// Wrapped in a `#__PURE__` IIFE (not a bare `providerInfo.name`) so bundlers can
+// tree-shake `providerInfo` — and the whole provider table — away when unused.
+// See AGENTS.md "Build & Tree-shaking".
+export const provider: ProviderName = /* #__PURE__ */ (() => providerInfo.name)();
