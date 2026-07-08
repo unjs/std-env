@@ -42,9 +42,9 @@ Use `detectProvider()` to re-run detection. See [./src/providers.ts](./src/provi
 Extracts normalized git / build metadata (repo, branch, commit SHA, PR number, deployment environment, build URL, and more) for the detected provider.
 
 ```ts
-import { providerMetadata, detectProviderMetadata } from "std-env";
+import { providerMeta, detectProviderMeta } from "std-env";
 
-console.log(providerMetadata);
+console.log(providerMeta);
 // {
 //   name: "github_actions",
 //   repo: { owner: "unjs", name: "std-env" },
@@ -59,7 +59,7 @@ console.log(providerMetadata);
 // }
 ```
 
-Every field except `name` is optional and depends on the provider and current event. The extractors live in a separate module ([./src/provider-metadata.ts](./src/provider-metadata.ts)) so importing only `isCI`/`provider` does not pull them into your bundle. Use `detectProviderMetadata()` to re-run extraction.
+Every field except `name` is optional and depends on the provider and current event. The extractors live in a separate module ([./src/provider-meta.ts](./src/provider-meta.ts)) so importing only `isCI`/`provider` does not pull them into your bundle. Use `detectProviderMeta()` to re-run extraction.
 
 ## Agent Detection
 

@@ -44,7 +44,7 @@ export type DeploymentEnvironment =
  * Every field except `name` is optional — availability depends on the provider
  * and the current event (e.g. `prNumber` is only set for pull request builds).
  */
-export type ProviderMetadata = {
+export type ProviderMeta = {
   /**
    * The name of the detected provider. See {@link ProviderName}. Empty string if
    * no provider was detected.
@@ -54,7 +54,7 @@ export type ProviderMetadata = {
   /** Repository owner/name, when derivable from the environment. */
   repo?: RepoInfo;
 
-  /** Convenience `owner/name` slug, when {@link ProviderMetadata.repo} is set. */
+  /** Convenience `owner/name` slug, when {@link ProviderMeta.repo} is set. */
   repoSlug?: string;
 
   /** Branch name (refs like `refs/heads/foo` are normalized to `foo`). */
@@ -98,7 +98,7 @@ type EnvironmentMap = { var: string; map: Record<string, DeploymentEnvironment> 
 // minified, so with ~18 providers the repeated field names would add up in the
 // bundle. Fields a provider cannot supply are elided (`,` holes mid-tuple,
 // nothing at the tail). The labels below are the single source for the order —
-// `detectProviderMetadata()` destructures in the same order.
+// `detectProviderMeta()` destructures in the same order.
 // `isPR` is an env var name (truthy and not `"false"` = PR) or a function;
 // when omitted it is inferred from `prNumber`.
 type ProviderExtractors = [
@@ -342,9 +342,9 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
  * Detects the current provider (via {@link detectProvider}) and extracts
  * normalized git / build metadata from its environment variables.
  */
-export function detectProviderMetadata(): ProviderMetadata {
+export function detectProviderMeta(): ProviderMeta {
   const name = detectProvider().name;
-  const meta: ProviderMetadata = { name };
+  const meta: ProviderMeta = { name };
 
   const ext = extractors[name];
   if (!ext) return meta;
@@ -398,7 +398,7 @@ export function detectProviderMetadata(): ProviderMetadata {
  * Normalized git / build metadata for the current execution context.
  * This value is evaluated once at module initialisation.
  */
-export const providerMetadata: ProviderMetadata = /* #__PURE__ */ detectProviderMetadata();
+export const providerMeta: ProviderMeta = /* #__PURE__ */ detectProviderMeta();
 
 // --- internals ---
 

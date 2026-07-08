@@ -36,12 +36,12 @@ export {
 } from "./providers.ts";
 
 export {
-  type ProviderMetadata,
+  type ProviderMeta,
   type RepoInfo,
   type DeploymentEnvironment,
-  providerMetadata,
-  detectProviderMetadata,
-} from "./provider-metadata.ts";
+  providerMeta,
+  detectProviderMeta,
+} from "./provider-meta.ts";
 
 export {
   type RuntimeInfo,

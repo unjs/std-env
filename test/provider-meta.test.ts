@@ -1,5 +1,5 @@
 import { expect, it, describe, vi, beforeEach, afterEach } from "vitest";
-import { detectProviderMetadata } from "../src/provider-metadata.ts";
+import { detectProviderMeta } from "../src/provider-meta.ts";
 
 // Env vars touched by provider detection or metadata extraction. Cleared before
 // each test so the ambient CI environment (e.g. GitHub Actions) does not leak in.
@@ -49,7 +49,7 @@ const envKeys = [
   "SEMAPHORE_GIT_SHA",
 ];
 
-describe("detectProviderMetadata", () => {
+describe("detectProviderMeta", () => {
   beforeEach(() => {
     for (const key of envKeys) {
       vi.stubEnv(key, "");
@@ -61,7 +61,7 @@ describe("detectProviderMetadata", () => {
   });
 
   it("returns an empty name when no provider is detected", () => {
-    expect(detectProviderMetadata()).toEqual({ name: "" });
+    expect(detectProviderMeta()).toEqual({ name: "" });
   });
 
   it("extracts GitHub Actions push metadata", () => {
@@ -75,7 +75,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("GITHUB_ACTOR", "octocat");
     vi.stubEnv("GITHUB_WORKFLOW", "CI");
 
-    expect(detectProviderMetadata()).toMatchObject({
+    expect(detectProviderMeta()).toMatchObject({
       name: "github_actions",
       repo: { owner: "unjs", name: "std-env" },
       repoSlug: "unjs/std-env",
@@ -96,7 +96,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("GITHUB_HEAD_REF", "feat/new-thing");
     vi.stubEnv("GITHUB_REF", "refs/pull/123/merge");
 
-    const meta = detectProviderMetadata();
+    const meta = detectProviderMeta();
     expect(meta.isPR).toBe(true);
     expect(meta.prNumber).toBe(123);
     expect(meta.branch).toBe("feat/new-thing");
@@ -109,7 +109,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("CI_COMMIT_SHA", "0123456789abcdef");
     vi.stubEnv("CI_PIPELINE_URL", "https://gitlab.com/group/subgroup/repo/-/pipelines/1");
 
-    expect(detectProviderMetadata()).toMatchObject({
+    expect(detectProviderMeta()).toMatchObject({
       name: "gitlab",
       repo: { owner: "group/subgroup", name: "repo" },
       branch: "develop",
@@ -125,7 +125,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("HEAD", "topic-branch");
     vi.stubEnv("DEPLOY_URL", "https://deploy-preview-1--example.netlify.app");
 
-    expect(detectProviderMetadata()).toMatchObject({
+    expect(detectProviderMeta()).toMatchObject({
       name: "netlify",
       environment: "preview",
       isPR: true,
@@ -141,7 +141,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("VERCEL_GIT_REPO_SLUG", "site");
     vi.stubEnv("VERCEL_GIT_COMMIT_REF", "main");
 
-    expect(detectProviderMetadata()).toMatchObject({
+    expect(detectProviderMeta()).toMatchObject({
       name: "vercel",
       repo: { owner: "acme", name: "site" },
       environment: "production",
@@ -155,7 +155,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("CIRCLE_REPOSITORY_URL", "git@github.com:acme/site.git");
     vi.stubEnv("CIRCLE_BRANCH", "fix/bug");
 
-    expect(detectProviderMetadata()).toMatchObject({
+    expect(detectProviderMeta()).toMatchObject({
       name: "circle",
       prNumber: 77,
       isPR: true,
@@ -171,7 +171,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("SEMAPHORE_GIT_BRANCH", "main");
     vi.stubEnv("SEMAPHORE_GIT_SHA", "abcdef1234567890");
 
-    expect(detectProviderMetadata()).toMatchObject({
+    expect(detectProviderMeta()).toMatchObject({
       name: "semaphore",
       prNumber: 55,
       isPR: true,
@@ -186,7 +186,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("CF_PAGES_BRANCH", "main");
     vi.stubEnv("CF_PAGES_COMMIT_SHA", "deadbeefcafebabe");
 
-    expect(detectProviderMetadata()).toMatchObject({
+    expect(detectProviderMeta()).toMatchObject({
       name: "cloudflare_pages",
       branch: "main",
       commitSha: "deadbeefcafebabe",
