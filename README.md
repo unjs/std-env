@@ -37,6 +37,31 @@ console.log({ isCI, provider, providerInfo });
 
 Use `detectProvider()` to re-run detection. See [./src/providers.ts](./src/providers.ts) for the full list.
 
+### Provider Metadata
+
+Extracts normalized git / build metadata (repo, branch, commit SHA, PR number, deployment environment, build URL, and more) for the detected provider.
+
+```ts
+import { providerMetadata, detectProviderMetadata } from "std-env";
+
+console.log(providerMetadata);
+// {
+//   name: "github_actions",
+//   repo: { owner: "unjs", name: "std-env" },
+//   repoSlug: "unjs/std-env",
+//   branch: "main",
+//   commitSha: "abcdef1234567890...",
+//   commitShaShort: "abcdef1",
+//   isPR: false,
+//   runId: "42",
+//   buildUrl: "https://github.com/unjs/std-env/actions/runs/42",
+//   actor: "octocat",
+//   eventName: "push",
+// }
+```
+
+Every field except `name` is optional and depends on the provider and current event. The extractors live in a separate module ([./src/provider-metadata.ts](./src/provider-metadata.ts)) so importing only `isCI`/`provider` does not pull them into your bundle. Use `detectProviderMetadata()` to re-run extraction.
+
 ## Agent Detection
 
 Detects if the environment is running inside an AI coding agent.
