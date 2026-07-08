@@ -97,6 +97,7 @@ The goal: a consumer that imports only e.g. `runtime` or `provider` should not d
 - Priority order: netlify → edge-light → workerd → fastly → deno → bun → node
 - Uses global objects (e.g., `globalThis.Bun`, `globalThis.Deno`, `navigator.userAgent`)
 - `isNode` is true for Node-compatible runtimes (Bun, Deno with compat); use `runtime === "node"` for strict check
+- `isNub` (`!!process.versions.nub`) detects [Nub](https://github.com/nubjs/nub), a Node.js augmentation layer — additive, so `isNode` stays true and `runtime` stays `"node"`; it is deliberately NOT in `runtimeChecks` or `RuntimeName`
 
 ### Flags (`src/flags.ts`)
 
