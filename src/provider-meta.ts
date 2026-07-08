@@ -200,8 +200,8 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* commitSha    */ "VERCEL_GIT_COMMIT_SHA",
     /* repo         */ (env) => {
       const owner = env.VERCEL_GIT_REPO_OWNER;
-      const name = env.VERCEL_GIT_REPO_SLUG;
-      return owner && name ? { owner, name } : parseRepoSlug(env.VERCEL_GIT_REPO_SLUG);
+      const name = env.VERCEL_GIT_REPO_SLUG; // just the repo name, not `owner/name`
+      return owner && name ? { owner, name } : undefined;
     },
     /* isPR         */ , // derived from prNumber
     /* prNumber     */ "VERCEL_GIT_PULL_REQUEST_ID",
@@ -233,10 +233,11 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* branch       */ "BITBUCKET_BRANCH",
     /* commitSha    */ "BITBUCKET_COMMIT",
     /* repo         */ (env) => {
-      // BITBUCKET_REPO_OWNER is deprecated in favor of BITBUCKET_WORKSPACE.
-      const owner = env.BITBUCKET_WORKSPACE || env.BITBUCKET_REPO_FULL_NAME?.split("/")[0];
-      const name = env.BITBUCKET_REPO_FULL_NAME?.split("/").pop() || env.BITBUCKET_REPO_SLUG;
-      return owner && name ? { owner, name } : parseRepoSlug(env.BITBUCKET_REPO_FULL_NAME);
+      // Canonical split vars (BITBUCKET_REPO_OWNER is deprecated in favor of
+      // BITBUCKET_WORKSPACE; BITBUCKET_REPO_SLUG is the repo name).
+      const owner = env.BITBUCKET_WORKSPACE;
+      const name = env.BITBUCKET_REPO_SLUG;
+      return owner && name ? { owner, name } : undefined;
     },
     /* isPR         */ , // derived from prNumber
     /* prNumber     */ "BITBUCKET_PR_ID",
@@ -317,7 +318,6 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* branch       */ "DRONE_COMMIT_BRANCH",
     /* commitSha    */ "DRONE_COMMIT_SHA",
     /* repo         */ (env) => {
-      if (env.DRONE_REPO) return parseRepoSlug(env.DRONE_REPO);
       const owner = env.DRONE_REPO_OWNER;
       const name = env.DRONE_REPO_NAME;
       return owner && name ? { owner, name } : undefined;
