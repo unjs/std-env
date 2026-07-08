@@ -29,12 +29,12 @@
     "@typescript/native-preview": "latest",
     "@vitest/coverage-v8": "^4.1.10",
     "changelogen": "^0.6.2",
-    "esbuild": "^0.28.1",
     "mitata": "^1.0.34",
     "obuild": "^0.4.37",
     "oxfmt": "^0.57.0",
     "oxlint": "^1.72.0",
     "rollup": "^4.62.2",
+    "terser": "^5.48.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
   },

@@ -94,6 +94,15 @@ All detection modules follow the same pattern:
 - Normalization helpers (`refToBranch`, `parseRepoSlug`, `parsePrNumber`, `shortSha`, `mapEnvironment`) are module-local; env access goes through the `env` proxy (no bare `process`).
 - Adapted from `@varlock/ci-env-info` (unjs/std-env#59). When adding a provider's metadata, key it by the existing `ProviderName` and keep it in sync with the README example if the shape changes.
 
+### Build & Tree-shaking (`build.config.ts`)
+
+The goal: a consumer that imports only e.g. `runtime` or `provider` should not drag the agent/provider detection tables into their bundle. Two things make this work, and both must be kept in sync:
+
+- **Annotations must survive minification.** The eager singletons (`agentInfo`, `providerInfo`) — and the `envMatcher(...)` calls inside the `agents` table — carry `/* #__PURE__ */` so bundlers can drop them when unused. oxc and esbuild both strip annotation comments when minifying, so the build uses `minify: "dce-only"` plus an `end` hook that re-minifies with **terser** using `format.preserve_annotations` (mangles identifiers, keeps the annotations). Do not switch to `minify: true` or remove the hook.
+- **Derived exports must not pin the singletons.** A `#__PURE__` annotation only applies to a call/`new`, never a property access — so a bare `export const provider = providerInfo.name` is _not_ droppable and keeps `providerInfo` (and its table) alive in every consumer bundle. Any export whose value is derived from a singleton (directly, like `provider`/`agent`/`isCI`, or transitively, like `isMinimal`/`isColorSupported` which reference `isCI`) is therefore wrapped in a `#__PURE__` IIFE: `export const provider = /* #__PURE__ */ (() => providerInfo.name)();`. **When adding a new export that reads off a singleton or another such derived flag, wrap it the same way**, or it will silently re-pin the table for everyone.
+
+`test/bundle.test.ts` guards both invariants: it builds `dist`, then tree-shakes single named imports with rollup and asserts the `agents`/`providers` tables (and the `#__PURE__` annotations) are present/absent as expected. Run it after any change to `build.config.ts` or to how a singleton-derived export is written.
+
 ### Runtime Detection (`src/runtimes.ts`)
 
 - Priority order: netlify → edge-light → workerd → fastly → deno → bun → node

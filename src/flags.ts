@@ -5,7 +5,9 @@ import { env, nodeENV, process } from "./env.ts";
 export const platform: string = process.platform || "";
 
 /** Detect if `CI` environment variable is set or a provider CI detected */
-export const isCI: boolean = !!env.CI || providerInfo.ci !== false;
+// `#__PURE__` IIFE so importing `isCI` is the only thing that pulls in `providerInfo`
+// (and the provider table); unrelated flags stay free of it. See AGENTS.md.
+export const isCI: boolean = /* #__PURE__ */ (() => !!env.CI || providerInfo.ci !== false)();
 
 /** Detect if stdout.TTY is available */
 export const hasTTY: boolean = !!process.stdout?.isTTY;
@@ -28,7 +30,10 @@ export const isDevelopment: boolean =
   nodeENV === "dev" || nodeENV === "development" || env.MODE === "development";
 
 /** Detect if MINIMAL environment variable is set, running in CI or test or TTY is unavailable */
-export const isMinimal: boolean = !!env.MINIMAL || isCI || isTest || !hasTTY;
+// `#__PURE__` IIFE so this (which references `isCI`) doesn't pin `providerInfo` —
+// otherwise its impure `env.MINIMAL` access keeps it alive in every bundle. See AGENTS.md.
+export const isMinimal: boolean = /* #__PURE__ */ (() =>
+  !!env.MINIMAL || isCI || isTest || !hasTTY)();
 
 /** Detect if process.platform is Windows */
 export const isWindows: boolean = /^win/i.test(platform);
@@ -40,8 +45,9 @@ export const isLinux: boolean = /^linux/i.test(platform);
 export const isMacOS: boolean = /^darwin/i.test(platform);
 
 /** Detect if terminal color output is supported based on `NO_COLOR`, `FORCE_COLOR`, TTY, and CI environment */
-export const isColorSupported: boolean =
-  !env.NO_COLOR && (!!env.FORCE_COLOR || ((hasTTY || isWindows) && env.TERM !== "dumb") || isCI);
+// `#__PURE__` IIFE so this (which references `isCI`) doesn't pin `providerInfo`. See AGENTS.md.
+export const isColorSupported: boolean = /* #__PURE__ */ (() =>
+  !env.NO_COLOR && (!!env.FORCE_COLOR || ((hasTTY || isWindows) && env.TERM !== "dumb") || isCI))();
 
 /** Node.js version string (e.g. `"20.11.0"`), or `null` if not running in Node.js */
 export const nodeVersion: string | null = (process.versions?.node || "").replace(/^v/, "") || null;
