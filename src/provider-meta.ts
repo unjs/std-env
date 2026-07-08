@@ -11,7 +11,7 @@
 // `detectProvider()` as the single source of truth for the provider name.
 
 import { env } from "./env.ts";
-import { detectProvider, type ProviderName } from "./providers.ts";
+import { detectProvider, providerInfo, type ProviderName } from "./providers.ts";
 
 type Env = Record<string, string | undefined>;
 
@@ -340,7 +340,12 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
  * normalized git / build metadata from its environment variables.
  */
 export function detectProviderMeta(): ProviderMeta {
-  const name = detectProvider().name;
+  // Re-detect the provider fresh so callers can re-run after the environment
+  // changes; the `providerMeta` singleton below instead reuses `providerInfo`.
+  return extractProviderMeta(detectProvider().name);
+}
+
+function extractProviderMeta(name: ProviderName): ProviderMeta {
   const meta: ProviderMeta = { name };
 
   const ext = extractors[name];
@@ -392,7 +397,14 @@ export function detectProviderMeta(): ProviderMeta {
  * Normalized git / build metadata for the current execution context.
  * This value is evaluated once at module initialisation.
  */
-export const providerMeta: ProviderMeta = /* #__PURE__ */ detectProviderMeta();
+// Reuse the already-computed `providerInfo` singleton rather than calling
+// detectProvider() again: in a bundle that keeps both `provider*` and
+// `providerMeta`, provider detection then runs once at init instead of twice.
+// Wrapped in a `#__PURE__` IIFE (like `provider` in providers.ts) so the
+// `providerInfo.name` property access stays inside the closure — a bare
+// property-access argument would defeat the annotation and re-pin the table.
+export const providerMeta: ProviderMeta = /* #__PURE__ */ (() =>
+  extractProviderMeta(providerInfo.name))();
 
 // --- internals ---
 
