@@ -91,7 +91,7 @@ All detection modules follow the same pattern:
 - **Single source of truth for detection**: `detectProviderMeta()` calls `detectProvider()` for the provider name, then looks up extractors in a `Partial<Record<ProviderName, ProviderExtractors>>` map keyed by the same lowercase names. Providers without git/build metadata are simply omitted from the map.
 - Per-field extractor is `string | ((env) => T | undefined)`. A string is an env var name run through a field-specific parser (`repo` → `parseRepoSlug`, `branch` → `refToBranch`, `prNumber` → `parsePrNumber`); a function receives the full `env` and returns the value directly.
 - `environment` also accepts `{ var, map }` to normalize a platform value (e.g. Netlify `CONTEXT`) onto `DeploymentEnvironment`.
-- Normalization helpers (`refToBranch`, `parseRepoSlug`, `parsePrNumber`, `mapEnvironment`) are module-local; env access goes through the `env` proxy (no bare `process`).
+- Normalization helpers (`refToBranch`, `parseRepoSlug`, `parsePrNumber`) are module-local; env access goes through the `env` proxy (no bare `process`).
 - Adapted from `@varlock/ci-env-info` (unjs/std-env#59). When adding a provider's metadata, key it by the existing `ProviderName` and keep it in sync with the README example if the shape changes.
 
 ### Build & Tree-shaking (`build.config.ts`)

@@ -413,7 +413,10 @@ function runEnvironment(
   if (ext === undefined) return undefined;
   if (typeof ext === "function") return ext(env);
   if (typeof ext === "string") return env[ext] || undefined;
-  return mapEnvironment(env[ext.var], ext.map);
+  // Map a platform-specific value onto a normalized environment (case-insensitive).
+  const value = env[ext.var]?.trim();
+  if (!value) return undefined;
+  return ext.map[value.toLowerCase()] ?? ext.map[value];
 }
 
 /**
@@ -468,14 +471,4 @@ function parsePrNumber(value: string | undefined): number | undefined {
     if (!Number.isNaN(num) && num > 0) return num;
   }
   return undefined;
-}
-
-/** Map a platform-specific value onto a normalized deployment environment (case-insensitive). */
-function mapEnvironment(
-  value: string | undefined,
-  map: Record<string, DeploymentEnvironment>,
-): DeploymentEnvironment | undefined {
-  const trimmed = value?.trim();
-  if (!trimmed) return undefined;
-  return map[trimmed.toLowerCase()] ?? map[trimmed];
 }
