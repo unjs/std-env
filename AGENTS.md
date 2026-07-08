@@ -33,14 +33,15 @@ When adding new features or changing behavior, update both files accordingly.
 
 All source lives in `src/`, single entry point at `src/index.ts` which re-exports everything.
 
-| File               | Purpose                                                                                                         |
-| ------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `src/index.ts`     | Barrel re-export of all modules                                                                                 |
-| `src/agents.ts`    | AI coding agent detection (`detectAgent`, `agentInfo`, `agent`, `isAgent`)                                      |
-| `src/providers.ts` | CI/CD provider detection (`detectProvider`, `providerInfo`, `provider`)                                         |
-| `src/runtimes.ts`  | JS runtime detection (`runtime`, `runtimeInfo`, `isNode`, `isBun`, `isDeno`, etc.)                              |
-| `src/flags.ts`     | Environment flags (`isCI`, `isDebug`, `isTest`, `isProduction`, `isDevelopment`, `isMinimal`, `platform`, etc.) |
-| `src/env.ts`       | Universal `env` proxy + `nodeENV` constant                                                                      |
+| File                   | Purpose                                                                                                         |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `src/index.ts`         | Barrel re-export of all modules                                                                                 |
+| `src/agents.ts`        | AI coding agent detection (`detectAgent`, `agentInfo`, `agent`, `isAgent`)                                      |
+| `src/providers.ts`     | CI/CD provider detection (`detectProvider`, `providerInfo`, `provider`)                                         |
+| `src/provider-meta.ts` | Normalized git/build metadata extraction (`detectProviderMeta`, `providerMeta`)                                 |
+| `src/runtimes.ts`      | JS runtime detection (`runtime`, `runtimeInfo`, `isNode`, `isBun`, `isDeno`, etc.)                              |
+| `src/flags.ts`         | Environment flags (`isCI`, `isDebug`, `isTest`, `isProduction`, `isDevelopment`, `isMinimal`, `platform`, etc.) |
+| `src/env.ts`           | Universal `env` proxy + `nodeENV` constant                                                                      |
 
 ## Benchmarks
 
@@ -82,6 +83,16 @@ All detection modules follow the same pattern:
 - Some providers have `{ ci: false }` metadata (e.g., Vercel, CodeSandbox — deployment platforms, not CI)
 - Some providers have `{ ci: true }` explicitly (e.g., AWS Amplify, Cloudflare Pages/Workers)
 - Special case: StackBlitz/WebContainer detected via `SHELL === "/bin/jsh"` + `process.versions.webcontainer`
+
+### Provider Metadata (`src/provider-meta.ts`)
+
+- Extracts normalized git/build metadata (`repo`, `branch`, `commitSha`, `isPR`, `prNumber`, `environment`, `buildUrl`, `deployUrl`, `runId`, `actor`, `eventName`, `workflowName`). `buildUrl` is the CI dashboard/log link; `deployUrl` is the live publicly-reachable deployment URL (e.g. Vercel `VERCEL_URL`, Netlify `DEPLOY_URL`, Cloudflare Pages `CF_PAGES_URL`, Render `RENDER_EXTERNAL_URL`, GitLab opt-in `CI_ENVIRONMENT_URL`).
+- **Deliberately separate from `providers.ts`**: detection (`provider`, `isCI`, `providerInfo`) stays free of per-provider extractor closures. Because the extractors live here, importing only `isCI`/`provider` tree-shakes the metadata engine out (verified: side-effect-free, `esbuild` drops it). Do **not** move extractors into `providers.ts`.
+- **Single source of truth for detection**: the internal `extractProviderMeta(name)` looks up extractors in a `Partial<Record<ProviderName, ProviderExtractors>>` map keyed by the same lowercase names, and providers without git/build metadata are simply omitted. `detectProviderMeta()` calls it with a fresh `detectProvider().name` (re-run semantics), while the eager `providerMeta` singleton passes the already-computed `providerInfo.name` so provider detection is not re-run at init when both `provider*` and `providerMeta` are bundled.
+- Per-field extractor is `string | ((env) => T | undefined)`. A string is an env var name run through a field-specific parser (`repo` → `parseRepoSlug`, `branch` → `refToBranch`, `prNumber` → `parsePrNumber`); a function receives the full `env` and returns the value directly.
+- `environment` also accepts `{ var, map }` to normalize a platform value (e.g. Netlify `CONTEXT`) onto `DeploymentEnvironment`.
+- Normalization helpers (`refToBranch`, `parseRepoSlug`, `parsePrNumber`) are module-local; env access goes through the `env` proxy (no bare `process`).
+- Adapted from `@varlock/ci-env-info` (unjs/std-env#59). When adding a provider's metadata, key it by the existing `ProviderName` and keep it in sync with the README example if the shape changes.
 
 ### Build & Tree-shaking (`build.config.ts`)
 
