@@ -42,6 +42,11 @@ const envKeys = [
   "CIRCLE_PULL_REQUEST",
   "CIRCLE_REPOSITORY_URL",
   "CIRCLE_BRANCH",
+  "SEMAPHORE",
+  "SEMAPHORE_GIT_PR_NUMBER",
+  "SEMAPHORE_GIT_REPO_SLUG",
+  "SEMAPHORE_GIT_BRANCH",
+  "SEMAPHORE_GIT_SHA",
 ];
 
 describe("detectProviderMetadata", () => {
@@ -68,6 +73,7 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("GITHUB_RUN_ID", "42");
     vi.stubEnv("GITHUB_SERVER_URL", "https://github.com");
     vi.stubEnv("GITHUB_ACTOR", "octocat");
+    vi.stubEnv("GITHUB_WORKFLOW", "CI");
 
     expect(detectProviderMetadata()).toMatchObject({
       name: "github_actions",
@@ -81,13 +87,13 @@ describe("detectProviderMetadata", () => {
       buildUrl: "https://github.com/unjs/std-env/actions/runs/42",
       actor: "octocat",
       eventName: "push",
+      workflowName: "CI",
     });
   });
 
   it("detects a GitHub Actions pull request and prefers the head ref", () => {
     vi.stubEnv("GITHUB_ACTIONS", "true");
     vi.stubEnv("GITHUB_EVENT_NAME", "pull_request");
-    vi.stubEnv("GITHUB_EVENT_NUMBER", "123");
     vi.stubEnv("GITHUB_HEAD_REF", "feat/new-thing");
     vi.stubEnv("GITHUB_REF", "refs/pull/123/merge");
 
@@ -118,14 +124,14 @@ describe("detectProviderMetadata", () => {
     vi.stubEnv("CONTEXT", "deploy-preview");
     vi.stubEnv("PULL_REQUEST", "true");
     vi.stubEnv("HEAD", "topic-branch");
-    vi.stubEnv("DEPLOY_URL", "example.netlify.app");
+    vi.stubEnv("DEPLOY_URL", "https://deploy-preview-1--example.netlify.app");
 
     expect(detectProviderMetadata()).toMatchObject({
       name: "netlify",
       environment: "preview",
       isPR: true,
       branch: "topic-branch",
-      buildUrl: "https://example.netlify.app",
+      buildUrl: "https://deploy-preview-1--example.netlify.app",
     });
   });
 
@@ -156,6 +162,23 @@ describe("detectProviderMetadata", () => {
       isPR: true,
       repo: { owner: "acme", name: "site" },
       branch: "fix/bug",
+    });
+  });
+
+  it("extracts Semaphore metadata via SEMAPHORE_GIT_PR_NUMBER", () => {
+    vi.stubEnv("SEMAPHORE", "true");
+    vi.stubEnv("SEMAPHORE_GIT_PR_NUMBER", "55");
+    vi.stubEnv("SEMAPHORE_GIT_REPO_SLUG", "acme/site");
+    vi.stubEnv("SEMAPHORE_GIT_BRANCH", "main");
+    vi.stubEnv("SEMAPHORE_GIT_SHA", "abcdef1234567890");
+
+    expect(detectProviderMetadata()).toMatchObject({
+      name: "semaphore",
+      prNumber: 55,
+      isPR: true,
+      repo: { owner: "acme", name: "site" },
+      branch: "main",
+      commitShaShort: "abcdef1",
     });
   });
 

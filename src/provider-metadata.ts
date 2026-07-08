@@ -125,9 +125,15 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
   },
   github_actions: {
     isPR: (env) => env.GITHUB_EVENT_NAME === "pull_request",
-    prNumber: (env) => parsePrNumber(env.GITHUB_EVENT_NUMBER),
+    // GitHub Actions has no dedicated PR-number env var; it lives in the
+    // `refs/pull/<n>/merge` ref. Only parse it from an actual pull ref so branch
+    // names ending in digits are not mistaken for PR numbers.
+    prNumber: (env) =>
+      env.GITHUB_REF?.startsWith("refs/pull/") ? parsePrNumber(env.GITHUB_REF) : undefined,
     repo: (env) => parseRepoSlug(env.GITHUB_REPOSITORY),
-    branch: (env) => env.GITHUB_HEAD_REF || refToBranch(env.GITHUB_REF),
+    // On PRs GITHUB_HEAD_REF is the short source branch; otherwise GITHUB_REF_NAME
+    // is already the short branch/tag name. Fall back to parsing the raw ref.
+    branch: (env) => env.GITHUB_HEAD_REF || env.GITHUB_REF_NAME || refToBranch(env.GITHUB_REF),
     commitSha: "GITHUB_SHA",
     runId: "GITHUB_RUN_ID",
     buildUrl: (env) => {
@@ -140,7 +146,9 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
   },
   gitlab: {
     isPR: "CI_MERGE_REQUEST_ID",
-    prNumber: "CI_MERGE_REQUEST_ID",
+    // IID is the project-scoped, user-facing MR number (the `!123` in the UI);
+    // CI_MERGE_REQUEST_ID is an instance-wide internal id.
+    prNumber: "CI_MERGE_REQUEST_IID",
     repo: (env) => {
       const parts = (env.CI_PROJECT_PATH || "").split("/").filter(Boolean);
       if (parts.length >= 2) {
@@ -159,7 +167,8 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     branch: (env) => env.HEAD || env.BRANCH,
     commitSha: "COMMIT_REF",
     runId: "BUILD_ID",
-    buildUrl: (env) => (env.DEPLOY_URL ? `https://${env.DEPLOY_URL}` : undefined),
+    // DEPLOY_URL is already a fully-qualified `https://` URL — use it verbatim.
+    buildUrl: "DEPLOY_URL",
     environment: {
       var: "CONTEXT",
       map: {
@@ -195,7 +204,11 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
   },
   azure_pipelines: {
     isPR: (env) => env.BUILD_REASON === "PullRequest",
-    prNumber: (env) => parsePrNumber(env.SYSTEM_PULLREQUEST_PULLREQUESTID),
+    // For GitHub-based PRs, PULLREQUESTID is Azure's internal id; PULLREQUESTNUMBER
+    // is the user-facing number. They coincide for Azure Repos, so fall back to id.
+    prNumber: (env) =>
+      parsePrNumber(env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER) ??
+      parsePrNumber(env.SYSTEM_PULLREQUEST_PULLREQUESTID),
     branch: "BUILD_SOURCEBRANCHNAME",
     commitSha: "BUILD_SOURCEVERSION",
   },
@@ -203,7 +216,8 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     isPR: "BITBUCKET_PR_ID",
     prNumber: "BITBUCKET_PR_ID",
     repo: (env) => {
-      const owner = env.BITBUCKET_REPO_OWNER;
+      // BITBUCKET_REPO_OWNER is deprecated in favor of BITBUCKET_WORKSPACE.
+      const owner = env.BITBUCKET_WORKSPACE || env.BITBUCKET_REPO_FULL_NAME?.split("/")[0];
       const name = env.BITBUCKET_REPO_FULL_NAME?.split("/").pop() || env.BITBUCKET_REPO_SLUG;
       return owner && name ? { owner, name } : parseRepoSlug(env.BITBUCKET_REPO_FULL_NAME);
     },
@@ -243,6 +257,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     isPR: (env) => env.TRAVIS_PULL_REQUEST !== undefined && env.TRAVIS_PULL_REQUEST !== "false",
     prNumber: "TRAVIS_PULL_REQUEST",
     repo: (env) => parseRepoSlug(env.TRAVIS_REPO_SLUG),
+    // On PR builds this is the target branch the PR is merging into.
     branch: "TRAVIS_BRANCH",
     commitSha: "TRAVIS_COMMIT",
   },
@@ -250,12 +265,18 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     isPR: "APPVEYOR_PULL_REQUEST_NUMBER",
     prNumber: "APPVEYOR_PULL_REQUEST_NUMBER",
     repo: (env) => parseRepoSlug(env.APPVEYOR_REPO_NAME),
+    // On PR builds this is the base branch the PR is merging into.
     branch: "APPVEYOR_REPO_BRANCH",
     commitSha: "APPVEYOR_REPO_COMMIT",
   },
   bitrise: {
     isPR: "BITRISE_PULL_REQUEST",
     prNumber: "BITRISE_PULL_REQUEST",
+    repo: (env) => {
+      const owner = env.BITRISEIO_GIT_REPOSITORY_OWNER;
+      const name = env.BITRISEIO_GIT_REPOSITORY_SLUG;
+      return owner && name ? { owner, name } : undefined;
+    },
     branch: "BITRISE_GIT_BRANCH",
     commitSha: "BITRISE_GIT_COMMIT",
   },
@@ -285,9 +306,10 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     commitSha: "DRONE_COMMIT_SHA",
   },
   semaphore: {
-    isPR: "PULL_REQUEST_NUMBER",
-    prNumber: "PULL_REQUEST_NUMBER",
+    isPR: "SEMAPHORE_GIT_PR_NUMBER",
+    prNumber: "SEMAPHORE_GIT_PR_NUMBER",
     repo: (env) => parseRepoSlug(env.SEMAPHORE_GIT_REPO_SLUG),
+    // On PR builds this is the target branch; SEMAPHORE_GIT_PR_BRANCH is the source.
     branch: "SEMAPHORE_GIT_BRANCH",
     commitSha: "SEMAPHORE_GIT_SHA",
   },
