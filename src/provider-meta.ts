@@ -69,8 +69,11 @@ export type ProviderMeta = {
   /** Normalized deployment environment. */
   environment?: DeploymentEnvironment;
 
-  /** URL to the build/run/deploy in the provider's UI. */
+  /** URL to the build/run in the provider's CI dashboard (a log link, not a live app URL). */
   buildUrl?: string;
+
+  /** URL where the deployed app/site is publicly reachable (a live deployment, not CI logs). */
+  deployUrl?: string;
 
   /** Unique run/build id (e.g. `GITHUB_RUN_ID`). */
   runId?: string;
@@ -110,12 +113,13 @@ type ProviderExtractors = [
   actor?: Extractor<string>,
   eventName?: Extractor<string>,
   workflowName?: Extractor<string>,
+  deployUrl?: Extractor<string>,
 ];
 
 // Keyed by the same lowercase provider names used in `providers.ts`, so
 // `detectProvider()` selects the entry. Providers without git/build metadata are
 // simply omitted.
-// Tuple order: [branch, commitSha, repo, isPR, prNumber, buildUrl, runId, environment, actor, eventName, workflowName]
+// Tuple order: [branch, commitSha, repo, isPR, prNumber, buildUrl, runId, environment, actor, eventName, workflowName, deployUrl]
 // prettier-ignore / oxfmt-ignore: the table is hand-aligned so every tuple slot
 // carries a `/* field */` label (including the elided `,` holes); the formatter
 // would otherwise strip the labels off the holes. Keep this directive.
@@ -128,7 +132,13 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* repo         */ ,
     /* isPR         */ ,
     /* prNumber     */ ,
-    /* buildUrl     */ "CF_PAGES_URL",
+    /* buildUrl     */ ,
+    /* runId        */ ,
+    /* environment  */ ,
+    /* actor        */ ,
+    /* eventName    */ ,
+    /* workflowName */ ,
+    /* deployUrl    */ "CF_PAGES_URL",
   ],
   // Docs: https://developers.cloudflare.com/workers/ci-cd/builds/configuration/
   cloudflare_workers: [
@@ -179,6 +189,13 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* prNumber     */ "CI_MERGE_REQUEST_IID",
     /* buildUrl     */ "CI_PIPELINE_URL",
     /* runId        */ "CI_PIPELINE_ID",
+    /* environment  */ ,
+    /* actor        */ ,
+    /* eventName    */ ,
+    /* workflowName */ ,
+    // Opt-in: only set when the job defines an `environment:` block with a `url:`
+    // key in `.gitlab-ci.yml`; unset for ordinary CI-only pipelines.
+    /* deployUrl    */ "CI_ENVIRONMENT_URL",
   ],
   // Docs: https://docs.netlify.com/configure-builds/environment-variables/
   netlify: [
@@ -189,8 +206,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     // REVIEW_ID is documented as always matching the deploy-preview number, i.e.
     // the PR number (e.g. `deploy-preview-12` <-> PR #12).
     /* prNumber     */ "REVIEW_ID",
-    // DEPLOY_URL is already a fully-qualified `https://` URL — use it verbatim.
-    /* buildUrl     */ "DEPLOY_URL",
+    /* buildUrl     */ ,
     /* runId        */ "BUILD_ID",
     /* environment  */ {
       var: "CONTEXT",
@@ -201,6 +217,11 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
         dev: "development",
       },
     },
+    /* actor        */ ,
+    /* eventName    */ ,
+    /* workflowName */ ,
+    // DEPLOY_URL is already a fully-qualified `https://` URL — use it verbatim.
+    /* deployUrl    */ "DEPLOY_URL",
   ],
   // Docs: https://vercel.com/docs/environment-variables/system-environment-variables
   vercel: [
@@ -213,9 +234,13 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     },
     /* isPR         */ , // derived from prNumber
     /* prNumber     */ "VERCEL_GIT_PULL_REQUEST_ID",
-    /* buildUrl     */ (env) => (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : undefined),
+    /* buildUrl     */ ,
     /* runId        */ "VERCEL_DEPLOYMENT_ID",
     /* environment  */ "VERCEL_ENV",
+    /* actor        */ ,
+    /* eventName    */ ,
+    /* workflowName */ ,
+    /* deployUrl    */ (env) => (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : undefined),
   ],
   // Docs: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
   codebuild: [
@@ -304,6 +329,16 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* commitSha    */ "RENDER_GIT_COMMIT",
     /* repo         */ "RENDER_GIT_REPO_SLUG",
     /* isPR         */ "IS_PULL_REQUEST",
+    /* prNumber     */ ,
+    /* buildUrl     */ ,
+    /* runId        */ ,
+    /* environment  */ ,
+    /* actor        */ ,
+    /* eventName    */ ,
+    /* workflowName */ ,
+    // Only populated for web services / static sites (empty for background
+    // workers, cron jobs, and private services per Render's docs).
+    /* deployUrl    */ "RENDER_EXTERNAL_URL",
   ],
   // Docs: https://docs.travis-ci.com/user/environment-variables/
   travis: [
@@ -392,7 +427,20 @@ function extractProviderMeta(name: ProviderName): ProviderMeta {
   const ext = extractors[name];
   if (!ext) return meta;
 
-  const [branch, commitSha, repo, isPR, prNumber, buildUrl, runId, environment, ...rest] = ext;
+  const [
+    branch,
+    commitSha,
+    repo,
+    isPR,
+    prNumber,
+    buildUrl,
+    runId,
+    environment,
+    actor,
+    eventName,
+    workflowName,
+    deployUrl,
+  ] = ext;
 
   const repoInfo = runExtractor(repo, parseRepoSlug);
   if (repoInfo) meta.repo = repoInfo;
@@ -424,8 +472,7 @@ function extractProviderMeta(name: ProviderName): ProviderMeta {
   const environmentName = runEnvironment(environment);
   if (environmentName) meta.environment = environmentName;
 
-  const [actor, eventName, workflowName] = rest;
-  const plainFields = { buildUrl, runId, actor, eventName, workflowName };
+  const plainFields = { buildUrl, runId, actor, eventName, workflowName, deployUrl };
   for (const field of Object.keys(plainFields) as (keyof typeof plainFields)[]) {
     const value = runExtractor(plainFields[field]);
     if (value) meta[field] = value;

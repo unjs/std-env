@@ -22,6 +22,7 @@ const envKeys = [
   "CI_COMMIT_REF_NAME",
   "CI_COMMIT_SHA",
   "CI_PIPELINE_URL",
+  "CI_ENVIRONMENT_URL",
   "NETLIFY",
   "CONTEXT",
   "PULL_REQUEST",
@@ -41,6 +42,7 @@ const envKeys = [
   "CF_PAGES",
   "CF_PAGES_BRANCH",
   "CF_PAGES_COMMIT_SHA",
+  "CF_PAGES_URL",
   "WORKERS_CI",
   "WORKERS_CI_BRANCH",
   "WORKERS_CI_COMMIT_SHA",
@@ -81,6 +83,7 @@ const envKeys = [
   "RENDER_GIT_COMMIT",
   "RENDER_GIT_REPO_SLUG",
   "IS_PULL_REQUEST",
+  "RENDER_EXTERNAL_URL",
   "TRAVIS",
   "TRAVIS_BRANCH",
   "TRAVIS_COMMIT",
@@ -196,6 +199,27 @@ describe("detectProviderMeta", () => {
     expect(detectProviderMeta().repo).toEqual({ owner: "repo", name: "repo" });
   });
 
+  it("captures GitLab's opt-in CI_ENVIRONMENT_URL as deployUrl alongside the pipeline buildUrl", () => {
+    vi.stubEnv("GITLAB_CI", "true");
+    vi.stubEnv("CI_PIPELINE_URL", "https://gitlab.com/acme/site/-/pipelines/1");
+    vi.stubEnv("CI_ENVIRONMENT_URL", "https://staging.example.com");
+
+    expect(detectProviderMeta()).toMatchObject({
+      name: "gitlab",
+      buildUrl: "https://gitlab.com/acme/site/-/pipelines/1",
+      deployUrl: "https://staging.example.com",
+    });
+  });
+
+  it("leaves GitLab's deployUrl undefined for an ordinary CI-only pipeline", () => {
+    vi.stubEnv("GITLAB_CI", "true");
+    vi.stubEnv("CI_PIPELINE_URL", "https://gitlab.com/acme/site/-/pipelines/1");
+
+    const meta = detectProviderMeta();
+    expect(meta.buildUrl).toBe("https://gitlab.com/acme/site/-/pipelines/1");
+    expect(meta.deployUrl).toBeUndefined();
+  });
+
   it("normalizes the Netlify deploy-preview context to preview", () => {
     vi.stubEnv("NETLIFY", "true");
     vi.stubEnv("CONTEXT", "deploy-preview");
@@ -210,7 +234,7 @@ describe("detectProviderMeta", () => {
       isPR: true,
       prNumber: 1,
       branch: "topic-branch",
-      buildUrl: "https://deploy-preview-1--example.netlify.app",
+      deployUrl: "https://deploy-preview-1--example.netlify.app",
     });
   });
 
@@ -269,7 +293,7 @@ describe("detectProviderMeta", () => {
     vi.stubEnv("NOW_BUILDER", "1");
     vi.stubEnv("VERCEL_URL", "my-app-abc123.vercel.app");
 
-    expect(detectProviderMeta().buildUrl).toBe("https://my-app-abc123.vercel.app");
+    expect(detectProviderMeta().deployUrl).toBe("https://my-app-abc123.vercel.app");
   });
 
   it("extracts Azure Pipelines metadata for a PR build", () => {
@@ -397,6 +421,7 @@ describe("detectProviderMeta", () => {
     vi.stubEnv("RENDER_GIT_COMMIT", "abcdef1234567890");
     vi.stubEnv("RENDER_GIT_REPO_SLUG", "acme/site");
     vi.stubEnv("IS_PULL_REQUEST", "true");
+    vi.stubEnv("RENDER_EXTERNAL_URL", "https://myapp.onrender.com");
 
     expect(detectProviderMeta()).toMatchObject({
       name: "render",
@@ -404,6 +429,7 @@ describe("detectProviderMeta", () => {
       commitSha: "abcdef1234567890",
       repo: { owner: "acme", name: "site" },
       isPR: true,
+      deployUrl: "https://myapp.onrender.com",
     });
   });
 
@@ -560,11 +586,13 @@ describe("detectProviderMeta", () => {
     vi.stubEnv("CF_PAGES", "1");
     vi.stubEnv("CF_PAGES_BRANCH", "main");
     vi.stubEnv("CF_PAGES_COMMIT_SHA", "deadbeefcafebabe");
+    vi.stubEnv("CF_PAGES_URL", "https://abc123.example.pages.dev");
 
     expect(detectProviderMeta()).toMatchObject({
       name: "cloudflare_pages",
       branch: "main",
       commitSha: "deadbeefcafebabe",
+      deployUrl: "https://abc123.example.pages.dev",
     });
   });
 });

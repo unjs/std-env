@@ -39,7 +39,7 @@ Use `detectProvider()` to re-run detection. See [./src/providers.ts](./src/provi
 
 ### Provider Metadata
 
-Extracts normalized git / build metadata (repo, branch, commit SHA, PR number, deployment environment, build URL, and more) for the detected provider.
+Extracts normalized git / build metadata (repo, branch, commit SHA, PR number, deployment environment, CI build/log URL, live deploy URL, and more) for the detected provider.
 
 ```ts
 import { providerMeta, detectProviderMeta } from "std-env";
@@ -52,9 +52,10 @@ console.log(providerMeta);
 //   commitSha: "abcdef1234567890...",
 //   isPR: false,
 //   runId: "42",
-//   buildUrl: "https://github.com/unjs/std-env/actions/runs/42",
+//   buildUrl: "https://github.com/unjs/std-env/actions/runs/42", // CI dashboard/log link
 //   actor: "octocat",
 //   eventName: "push",
+//   // deployUrl: live app URL on deploy platforms (e.g. Vercel, Netlify, Cloudflare Pages, Render)
 // }
 ```
 
