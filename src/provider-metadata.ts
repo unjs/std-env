@@ -1,3 +1,6 @@
+// oxlint-disable no-sparse-arrays -- extractor tuples use `,,` holes for fields
+// a provider cannot supply; see the `ProviderExtractors` comment.
+
 // Adapted from https://github.com/dmno-dev/varlock (@varlock/ci-env-info) — the
 // per-provider env var mappings and normalization logic originate there.
 //
@@ -94,82 +97,90 @@ type Extractor<T> = string | ((env: Env) => T | undefined);
 /** Inline env var + value map used to normalize a deployment environment. */
 type EnvironmentMap = { var: string; map: Record<string, DeploymentEnvironment> };
 
-type ProviderExtractors = {
-  repo?: Extractor<RepoInfo>;
-  branch?: Extractor<string>;
-  commitSha?: Extractor<string>;
-  prNumber?: Extractor<number>;
-  /** Env var name (truthy = PR) or function; falls back to inferring from `prNumber`. */
-  isPR?: string | ((env: Env) => boolean);
-  environment?: Extractor<DeploymentEnvironment> | EnvironmentMap;
-  buildUrl?: Extractor<string>;
-  runId?: Extractor<string>;
-  actor?: Extractor<string>;
-  eventName?: Extractor<string>;
-  workflowName?: Extractor<string>;
-};
+// A positional tuple rather than a keyed object: property keys are never
+// minified, so with ~18 providers the repeated field names would add up in the
+// bundle. Fields a provider cannot supply are elided (`,` holes mid-tuple,
+// nothing at the tail). The labels below are the single source for the order —
+// `detectProviderMetadata()` destructures in the same order.
+// `isPR` is an env var name (truthy and not `"false"` = PR) or a function;
+// when omitted it is inferred from `prNumber`.
+type ProviderExtractors = [
+  branch?: Extractor<string>,
+  commitSha?: Extractor<string>,
+  repo?: Extractor<RepoInfo>,
+  isPR?: string | ((env: Env) => boolean),
+  prNumber?: Extractor<number>,
+  buildUrl?: Extractor<string>,
+  runId?: Extractor<string>,
+  environment?: Extractor<DeploymentEnvironment> | EnvironmentMap,
+  actor?: Extractor<string>,
+  eventName?: Extractor<string>,
+  workflowName?: Extractor<string>,
+];
 
 // Keyed by the same lowercase provider names used in `providers.ts`, so
 // `detectProvider()` selects the entry. Providers without git/build metadata are
 // simply omitted.
+// Tuple order: [branch, commitSha, repo, isPR, prNumber, buildUrl, runId, environment, actor, eventName, workflowName]
 const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
-  cloudflare_pages: {
-    branch: "CF_PAGES_BRANCH",
-    commitSha: "CF_PAGES_COMMIT_SHA",
-    buildUrl: "CF_PAGES_URL",
-  },
-  cloudflare_workers: {
-    branch: "WORKERS_CI_BRANCH",
-    commitSha: "WORKERS_CI_COMMIT_SHA",
-    runId: "WORKERS_CI_BUILD_UUID",
-  },
-  github_actions: {
-    isPR: (env) => env.GITHUB_EVENT_NAME === "pull_request",
+  cloudflare_pages: ["CF_PAGES_BRANCH", "CF_PAGES_COMMIT_SHA", , , , "CF_PAGES_URL"],
+  cloudflare_workers: [
+    "WORKERS_CI_BRANCH",
+    "WORKERS_CI_COMMIT_SHA",
+    ,
+    ,
+    ,
+    ,
+    "WORKERS_CI_BUILD_UUID",
+  ],
+  github_actions: [
+    // On PRs GITHUB_HEAD_REF is the short source branch; otherwise GITHUB_REF_NAME
+    // is already the short branch/tag name. Fall back to parsing the raw ref.
+    (env) => env.GITHUB_HEAD_REF || env.GITHUB_REF_NAME || refToBranch(env.GITHUB_REF),
+    "GITHUB_SHA",
+    "GITHUB_REPOSITORY",
+    (env) => env.GITHUB_EVENT_NAME === "pull_request",
     // GitHub Actions has no dedicated PR-number env var; it lives in the
     // `refs/pull/<n>/merge` ref. Only parse it from an actual pull ref so branch
     // names ending in digits are not mistaken for PR numbers.
-    prNumber: (env) =>
-      env.GITHUB_REF?.startsWith("refs/pull/") ? parsePrNumber(env.GITHUB_REF) : undefined,
-    repo: (env) => parseRepoSlug(env.GITHUB_REPOSITORY),
-    // On PRs GITHUB_HEAD_REF is the short source branch; otherwise GITHUB_REF_NAME
-    // is already the short branch/tag name. Fall back to parsing the raw ref.
-    branch: (env) => env.GITHUB_HEAD_REF || env.GITHUB_REF_NAME || refToBranch(env.GITHUB_REF),
-    commitSha: "GITHUB_SHA",
-    runId: "GITHUB_RUN_ID",
-    buildUrl: (env) => {
+    (env) => (env.GITHUB_REF?.startsWith("refs/pull/") ? parsePrNumber(env.GITHUB_REF) : undefined),
+    (env) => {
       const { GITHUB_SERVER_URL: server, GITHUB_REPOSITORY: repo, GITHUB_RUN_ID: runId } = env;
       return server && repo && runId ? `${server}/${repo}/actions/runs/${runId}` : undefined;
     },
-    workflowName: "GITHUB_WORKFLOW",
-    actor: "GITHUB_ACTOR",
-    eventName: "GITHUB_EVENT_NAME",
-  },
-  gitlab: {
-    isPR: "CI_MERGE_REQUEST_ID",
-    // IID is the project-scoped, user-facing MR number (the `!123` in the UI);
-    // CI_MERGE_REQUEST_ID is an instance-wide internal id.
-    prNumber: "CI_MERGE_REQUEST_IID",
-    repo: (env) => {
+    "GITHUB_RUN_ID",
+    ,
+    "GITHUB_ACTOR",
+    "GITHUB_EVENT_NAME",
+    "GITHUB_WORKFLOW",
+  ],
+  gitlab: [
+    "CI_COMMIT_REF_NAME",
+    "CI_COMMIT_SHA",
+    (env) => {
       const parts = (env.CI_PROJECT_PATH || "").split("/").filter(Boolean);
       if (parts.length >= 2) {
         return { owner: parts.slice(0, -1).join("/"), name: parts[parts.length - 1]! };
       }
       return parts.length === 1 ? { owner: parts[0]!, name: parts[0]! } : undefined;
     },
-    branch: "CI_COMMIT_REF_NAME",
-    commitSha: "CI_COMMIT_SHA",
-    runId: "CI_PIPELINE_ID",
-    buildUrl: "CI_PIPELINE_URL",
-  },
-  netlify: {
-    isPR: (env) => env.PULL_REQUEST !== undefined && env.PULL_REQUEST !== "false",
-    repo: (env) => parseRepoSlug(env.REPOSITORY_URL),
-    branch: (env) => env.HEAD || env.BRANCH,
-    commitSha: "COMMIT_REF",
-    runId: "BUILD_ID",
+    "CI_MERGE_REQUEST_ID",
+    // IID is the project-scoped, user-facing MR number (the `!123` in the UI);
+    // CI_MERGE_REQUEST_ID is an instance-wide internal id.
+    "CI_MERGE_REQUEST_IID",
+    "CI_PIPELINE_URL",
+    "CI_PIPELINE_ID",
+  ],
+  netlify: [
+    (env) => env.HEAD || env.BRANCH,
+    "COMMIT_REF",
+    "REPOSITORY_URL",
+    "PULL_REQUEST",
+    ,
     // DEPLOY_URL is already a fully-qualified `https://` URL — use it verbatim.
-    buildUrl: "DEPLOY_URL",
-    environment: {
+    "DEPLOY_URL",
+    "BUILD_ID",
+    {
       var: "CONTEXT",
       map: {
         production: "production",
@@ -178,141 +189,140 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
         dev: "development",
       },
     },
-  },
-  vercel: {
-    isPR: "VERCEL_GIT_PULL_REQUEST_ID",
-    prNumber: "VERCEL_GIT_PULL_REQUEST_ID",
-    repo: (env) => {
+  ],
+  vercel: [
+    "VERCEL_GIT_COMMIT_REF",
+    "VERCEL_GIT_COMMIT_SHA",
+    (env) => {
       const owner = env.VERCEL_GIT_REPO_OWNER;
       const name = env.VERCEL_GIT_REPO_SLUG;
       return owner && name ? { owner, name } : parseRepoSlug(env.VERCEL_GIT_REPO_SLUG);
     },
-    branch: "VERCEL_GIT_COMMIT_REF",
-    commitSha: "VERCEL_GIT_COMMIT_SHA",
-    buildUrl: (env) => (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : undefined),
-    environment: "VERCEL_ENV",
-    runId: "VERCEL_DEPLOYMENT_ID",
-  },
-  codebuild: {
-    isPR: (env) =>
+    "VERCEL_GIT_PULL_REQUEST_ID",
+    "VERCEL_GIT_PULL_REQUEST_ID",
+    (env) => (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : undefined),
+    "VERCEL_DEPLOYMENT_ID",
+    "VERCEL_ENV",
+  ],
+  codebuild: [
+    "CODEBUILD_WEBHOOK_HEAD_REF",
+    "CODEBUILD_RESOLVED_SOURCE_VERSION",
+    "CODEBUILD_SOURCE_REPO_URL",
+    (env) =>
       ["PULL_REQUEST_CREATED", "PULL_REQUEST_UPDATED", "PULL_REQUEST_REOPENED"].includes(
         env.CODEBUILD_WEBHOOK_EVENT || "",
       ),
-    repo: (env) => parseRepoSlug(env.CODEBUILD_SOURCE_REPO_URL),
-    branch: (env) => refToBranch(env.CODEBUILD_WEBHOOK_HEAD_REF),
-    commitSha: "CODEBUILD_RESOLVED_SOURCE_VERSION",
-  },
-  azure_pipelines: {
-    isPR: (env) => env.BUILD_REASON === "PullRequest",
+  ],
+  azure_pipelines: [
+    "BUILD_SOURCEBRANCHNAME",
+    "BUILD_SOURCEVERSION",
+    ,
+    (env) => env.BUILD_REASON === "PullRequest",
     // For GitHub-based PRs, PULLREQUESTID is Azure's internal id; PULLREQUESTNUMBER
     // is the user-facing number. They coincide for Azure Repos, so fall back to id.
-    prNumber: (env) =>
+    (env) =>
       parsePrNumber(env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER) ??
       parsePrNumber(env.SYSTEM_PULLREQUEST_PULLREQUESTID),
-    branch: "BUILD_SOURCEBRANCHNAME",
-    commitSha: "BUILD_SOURCEVERSION",
-  },
-  bitbucket: {
-    isPR: "BITBUCKET_PR_ID",
-    prNumber: "BITBUCKET_PR_ID",
-    repo: (env) => {
+  ],
+  bitbucket: [
+    "BITBUCKET_BRANCH",
+    "BITBUCKET_COMMIT",
+    (env) => {
       // BITBUCKET_REPO_OWNER is deprecated in favor of BITBUCKET_WORKSPACE.
       const owner = env.BITBUCKET_WORKSPACE || env.BITBUCKET_REPO_FULL_NAME?.split("/")[0];
       const name = env.BITBUCKET_REPO_FULL_NAME?.split("/").pop() || env.BITBUCKET_REPO_SLUG;
       return owner && name ? { owner, name } : parseRepoSlug(env.BITBUCKET_REPO_FULL_NAME);
     },
-    branch: "BITBUCKET_BRANCH",
-    commitSha: "BITBUCKET_COMMIT",
-  },
-  buildkite: {
-    isPR: (env) =>
-      env.BUILDKITE_PULL_REQUEST !== undefined && env.BUILDKITE_PULL_REQUEST !== "false",
-    prNumber: "BUILDKITE_PULL_REQUEST",
-    repo: (env) => parseRepoSlug(env.BUILDKITE_REPO),
-    branch: "BUILDKITE_BRANCH",
-    commitSha: "BUILDKITE_COMMIT",
-    runId: "BUILDKITE_BUILD_ID",
-    buildUrl: "BUILDKITE_BUILD_URL",
-  },
-  circle: {
-    isPR: "CIRCLE_PULL_REQUEST",
-    prNumber: "CIRCLE_PULL_REQUEST",
-    repo: (env) => parseRepoSlug(env.CIRCLE_REPOSITORY_URL),
-    branch: "CIRCLE_BRANCH",
-    commitSha: "CIRCLE_SHA1",
-    runId: "CIRCLE_BUILD_NUM",
-    buildUrl: "CIRCLE_BUILD_URL",
-  },
-  jenkins: {
-    isPR: (env) => !!(env.ghprbPullId || env.CHANGE_ID),
-    prNumber: (env) => parsePrNumber(env.ghprbPullId || env.CHANGE_ID),
-  },
-  render: {
-    isPR: (env) => env.IS_PULL_REQUEST === "true",
-    repo: (env) => parseRepoSlug(env.RENDER_GIT_REPO_SLUG),
-    branch: "RENDER_GIT_BRANCH",
-    commitSha: "RENDER_GIT_COMMIT",
-  },
-  travis: {
-    isPR: (env) => env.TRAVIS_PULL_REQUEST !== undefined && env.TRAVIS_PULL_REQUEST !== "false",
-    prNumber: "TRAVIS_PULL_REQUEST",
-    repo: (env) => parseRepoSlug(env.TRAVIS_REPO_SLUG),
+    "BITBUCKET_PR_ID",
+    "BITBUCKET_PR_ID",
+  ],
+  buildkite: [
+    "BUILDKITE_BRANCH",
+    "BUILDKITE_COMMIT",
+    "BUILDKITE_REPO",
+    "BUILDKITE_PULL_REQUEST",
+    "BUILDKITE_PULL_REQUEST",
+    "BUILDKITE_BUILD_URL",
+    "BUILDKITE_BUILD_ID",
+  ],
+  circle: [
+    "CIRCLE_BRANCH",
+    "CIRCLE_SHA1",
+    "CIRCLE_REPOSITORY_URL",
+    "CIRCLE_PULL_REQUEST",
+    "CIRCLE_PULL_REQUEST",
+    "CIRCLE_BUILD_URL",
+    "CIRCLE_BUILD_NUM",
+  ],
+  jenkins: [
+    ,
+    ,
+    ,
+    (env) => !!(env.ghprbPullId || env.CHANGE_ID),
+    (env) => parsePrNumber(env.ghprbPullId || env.CHANGE_ID),
+  ],
+  render: ["RENDER_GIT_BRANCH", "RENDER_GIT_COMMIT", "RENDER_GIT_REPO_SLUG", "IS_PULL_REQUEST"],
+  travis: [
     // On PR builds this is the target branch the PR is merging into.
-    branch: "TRAVIS_BRANCH",
-    commitSha: "TRAVIS_COMMIT",
-  },
-  appveyor: {
-    isPR: "APPVEYOR_PULL_REQUEST_NUMBER",
-    prNumber: "APPVEYOR_PULL_REQUEST_NUMBER",
-    repo: (env) => parseRepoSlug(env.APPVEYOR_REPO_NAME),
+    "TRAVIS_BRANCH",
+    "TRAVIS_COMMIT",
+    "TRAVIS_REPO_SLUG",
+    "TRAVIS_PULL_REQUEST",
+    "TRAVIS_PULL_REQUEST",
+  ],
+  appveyor: [
     // On PR builds this is the base branch the PR is merging into.
-    branch: "APPVEYOR_REPO_BRANCH",
-    commitSha: "APPVEYOR_REPO_COMMIT",
-  },
-  bitrise: {
-    isPR: "BITRISE_PULL_REQUEST",
-    prNumber: "BITRISE_PULL_REQUEST",
-    repo: (env) => {
+    "APPVEYOR_REPO_BRANCH",
+    "APPVEYOR_REPO_COMMIT",
+    "APPVEYOR_REPO_NAME",
+    "APPVEYOR_PULL_REQUEST_NUMBER",
+    "APPVEYOR_PULL_REQUEST_NUMBER",
+  ],
+  bitrise: [
+    "BITRISE_GIT_BRANCH",
+    "BITRISE_GIT_COMMIT",
+    (env) => {
       const owner = env.BITRISEIO_GIT_REPOSITORY_OWNER;
       const name = env.BITRISEIO_GIT_REPOSITORY_SLUG;
       return owner && name ? { owner, name } : undefined;
     },
-    branch: "BITRISE_GIT_BRANCH",
-    commitSha: "BITRISE_GIT_COMMIT",
-  },
-  cirrus: {
-    isPR: "CIRRUS_PR",
-    prNumber: "CIRRUS_PR",
-    repo: (env) => parseRepoSlug(env.CIRRUS_REPO_FULL_NAME),
-    branch: "CIRRUS_BRANCH",
-    commitSha: "CIRRUS_CHANGE_IN_REPO",
-  },
-  codefresh: {
-    isPR: (env) => !!(env.CF_PULL_REQUEST_NUMBER || env.CF_PULL_REQUEST_ID),
-    prNumber: (env) => parsePrNumber(env.CF_PULL_REQUEST_NUMBER || env.CF_PULL_REQUEST_ID),
-    branch: "CF_BRANCH",
-    commitSha: "CF_REVISION",
-  },
-  drone: {
-    isPR: (env) => env.DRONE_BUILD_EVENT === "pull_request",
-    prNumber: "DRONE_PULL_REQUEST",
-    repo: (env) => {
+    "BITRISE_PULL_REQUEST",
+    "BITRISE_PULL_REQUEST",
+  ],
+  cirrus: [
+    "CIRRUS_BRANCH",
+    "CIRRUS_CHANGE_IN_REPO",
+    "CIRRUS_REPO_FULL_NAME",
+    "CIRRUS_PR",
+    "CIRRUS_PR",
+  ],
+  codefresh: [
+    "CF_BRANCH",
+    "CF_REVISION",
+    ,
+    (env) => !!(env.CF_PULL_REQUEST_NUMBER || env.CF_PULL_REQUEST_ID),
+    (env) => parsePrNumber(env.CF_PULL_REQUEST_NUMBER || env.CF_PULL_REQUEST_ID),
+  ],
+  drone: [
+    "DRONE_COMMIT_BRANCH",
+    "DRONE_COMMIT_SHA",
+    (env) => {
       if (env.DRONE_REPO) return parseRepoSlug(env.DRONE_REPO);
       const owner = env.DRONE_REPO_OWNER;
       const name = env.DRONE_REPO_NAME;
       return owner && name ? { owner, name } : undefined;
     },
-    branch: "DRONE_COMMIT_BRANCH",
-    commitSha: "DRONE_COMMIT_SHA",
-  },
-  semaphore: {
-    isPR: "SEMAPHORE_GIT_PR_NUMBER",
-    prNumber: "SEMAPHORE_GIT_PR_NUMBER",
-    repo: (env) => parseRepoSlug(env.SEMAPHORE_GIT_REPO_SLUG),
+    (env) => env.DRONE_BUILD_EVENT === "pull_request",
+    "DRONE_PULL_REQUEST",
+  ],
+  semaphore: [
     // On PR builds this is the target branch; SEMAPHORE_GIT_PR_BRANCH is the source.
-    branch: "SEMAPHORE_GIT_BRANCH",
-    commitSha: "SEMAPHORE_GIT_SHA",
-  },
+    "SEMAPHORE_GIT_BRANCH",
+    "SEMAPHORE_GIT_SHA",
+    "SEMAPHORE_GIT_REPO_SLUG",
+    "SEMAPHORE_GIT_PR_NUMBER",
+    "SEMAPHORE_GIT_PR_NUMBER",
+  ],
 };
 
 /**
@@ -326,47 +336,46 @@ export function detectProviderMetadata(): ProviderMetadata {
   const ext = extractors[name];
   if (!ext) return meta;
 
-  const repo = runExtractor<RepoInfo>(ext.repo, "repo");
-  if (repo) {
-    meta.repo = repo;
-    meta.repoSlug = `${repo.owner}/${repo.name}`;
+  const [branch, commitSha, repo, isPR, prNumber, buildUrl, runId, environment, ...rest] = ext;
+
+  const repoInfo = runExtractor(repo, parseRepoSlug);
+  if (repoInfo) {
+    meta.repo = repoInfo;
+    meta.repoSlug = `${repoInfo.owner}/${repoInfo.name}`;
   }
 
-  const branch = runExtractor<string>(ext.branch, "branch");
-  if (branch) meta.branch = branch;
+  const branchName = runExtractor(branch, (raw) => refToBranch(raw) ?? raw);
+  if (branchName) meta.branch = branchName;
 
-  const commitSha = runExtractor<string>(ext.commitSha, "commitSha");
-  if (commitSha) {
-    meta.commitSha = commitSha;
-    meta.commitShaShort = shortSha(commitSha);
+  const sha = runExtractor(commitSha);
+  if (sha) {
+    meta.commitSha = sha;
+    meta.commitShaShort = shortSha(sha);
   }
 
-  const prNumber = runExtractor<number>(ext.prNumber, "prNumber");
-  if (prNumber !== undefined) meta.prNumber = prNumber;
+  const pr = runExtractor(prNumber, parsePrNumber);
+  if (pr !== undefined) meta.prNumber = pr;
 
-  if (ext.isPR !== undefined) {
-    meta.isPR = typeof ext.isPR === "string" ? !!env[ext.isPR] : ext.isPR(env);
-  } else if (prNumber !== undefined) {
-    meta.isPR = true;
+  if (isPR === undefined) {
+    if (pr !== undefined) meta.isPR = true;
+  } else if (typeof isPR === "string") {
+    const raw = env[isPR];
+    // Providers like Travis/Buildkite set the var to the literal string "false"
+    // on non-PR builds.
+    meta.isPR = !!raw && raw !== "false";
+  } else {
+    meta.isPR = isPR(env);
   }
 
-  const environment = runEnvironment(ext.environment);
-  if (environment) meta.environment = environment;
+  const environmentName = runEnvironment(environment);
+  if (environmentName) meta.environment = environmentName;
 
-  const buildUrl = runExtractor<string>(ext.buildUrl, "buildUrl");
-  if (buildUrl) meta.buildUrl = buildUrl;
-
-  const runId = runExtractor<string>(ext.runId, "runId");
-  if (runId) meta.runId = runId;
-
-  const actor = runExtractor<string>(ext.actor, "actor");
-  if (actor) meta.actor = actor;
-
-  const eventName = runExtractor<string>(ext.eventName, "eventName");
-  if (eventName) meta.eventName = eventName;
-
-  const workflowName = runExtractor<string>(ext.workflowName, "workflowName");
-  if (workflowName) meta.workflowName = workflowName;
+  const [actor, eventName, workflowName] = rest;
+  const plainFields = { buildUrl, runId, actor, eventName, workflowName };
+  for (const field of Object.keys(plainFields) as (keyof typeof plainFields)[]) {
+    const value = runExtractor(plainFields[field]);
+    if (value) meta[field] = value;
+  }
 
   return meta;
 }
@@ -379,27 +388,20 @@ export const providerMetadata: ProviderMetadata = /* #__PURE__ */ detectProvider
 
 // --- internals ---
 
-function runExtractor<T>(
+function runExtractor<T = string>(
   ext: Extractor<T> | undefined,
-  field: "repo" | "branch" | "prNumber" | "commitSha" | (string & {}),
+  parse?: (raw: string) => T | undefined,
 ): T | undefined {
   if (ext === undefined) return undefined;
   if (typeof ext === "function") return ext(env);
   const raw = env[ext];
   if (raw === undefined || raw === "") return undefined;
-  switch (field) {
-    case "repo":
-      return parseRepoSlug(raw) as T | undefined;
-    case "branch":
-      return (refToBranch(raw) ?? raw) as T;
-    case "prNumber":
-      return parsePrNumber(raw) as T | undefined;
-    default:
-      return raw as T;
-  }
+  return parse ? parse(raw) : (raw as T);
 }
 
-function runEnvironment(ext: ProviderExtractors["environment"]): DeploymentEnvironment | undefined {
+function runEnvironment(
+  ext: Extractor<DeploymentEnvironment> | EnvironmentMap | undefined,
+): DeploymentEnvironment | undefined {
   if (ext === undefined) return undefined;
   if (typeof ext === "function") return ext(env);
   if (typeof ext === "string") return env[ext] || undefined;
