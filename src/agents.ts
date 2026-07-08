@@ -36,7 +36,7 @@ const agents: InternalAgent[] = [
   // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER or OPENCODE_CLIENT?)
   ["opencode", ["OPENCODE"]],
   // ✅ Verified by pi (can be detected using PATH containing .pi/agent/bin)
-  ["pi", [envMatcher("PATH", /\.pi[\\/]agent/)]],
+  ["pi", [/* #__PURE__ */ envMatcher("PATH", /\.pi[\\/]agent/)]],
   // ❓ not tested
   ["auggie", ["AUGMENT_AGENT"]],
   // ❓ not tested
@@ -46,14 +46,14 @@ const agents: InternalAgent[] = [
 
   // -- IDEs (checked last — agents running inside these should be detected first) --
   // ✅ Verified by devin (can be detected using EDITOR, BROWSER, PATH)
-  ["devin", [envMatcher("EDITOR", /devin/)]],
+  ["devin", [/* #__PURE__ */ envMatcher("EDITOR", /devin/)]],
   // ✅ Verified by cursor (can be detected using CURSOR_AGENT, CURSOR_TRACE_ID, CURSOR_SANDBOX)
   ["cursor", ["CURSOR_AGENT"]],
   // ✅ Verified by kiro (can be detected using TERM_PROGRAM)
   // `TERM_PROGRAM=kiro` is set by both the Kiro IDE integrated terminal (interactive,
   // has a TTY) and the Kiro CLI agent (non-interactive, no TTY). Gate on `noTTY` so a
   // human typing in the IDE terminal is not mis-detected as an agent. See #185.
-  ["kiro", [envMatcher("TERM_PROGRAM", /kiro/, { noTTY: true })]],
+  ["kiro", [/* #__PURE__ */ envMatcher("TERM_PROGRAM", /kiro/, { noTTY: true })]],
 ];
 
 function envMatcher(envKey: string, regex: RegExp, opts?: { noTTY?: boolean }) {
@@ -109,9 +109,13 @@ export const agentInfo: AgentInfo = /* #__PURE__ */ detectAgent();
 /**
  * Name of the detected agent.
  */
-export const agent: AgentName | undefined = agentInfo.name;
+// Wrapped in a `#__PURE__` IIFE (not a bare `agentInfo.name`) so bundlers can
+// tree-shake `agentInfo` — and the whole agent-detection table — away when a
+// consumer imports only `provider`/`isCI`/etc. A property access can't be marked
+// pure, so it would otherwise pin the singleton. See AGENTS.md "Build & Tree-shaking".
+export const agent: AgentName | undefined = /* #__PURE__ */ (() => agentInfo.name)();
 
 /**
  * A boolean flag indicating whether the current environment is running inside an AI coding agent.
  */
-export const isAgent: boolean = !!agentInfo.name;
+export const isAgent: boolean = /* #__PURE__ */ (() => !!agentInfo.name)();
