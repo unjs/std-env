@@ -81,7 +81,6 @@ describe("detectProviderMetadata", () => {
       repoSlug: "unjs/std-env",
       branch: "main",
       commitSha: "abcdef1234567890",
-      commitShaShort: "abcdef1",
       isPR: false,
       runId: "42",
       buildUrl: "https://github.com/unjs/std-env/actions/runs/42",
@@ -114,7 +113,7 @@ describe("detectProviderMetadata", () => {
       name: "gitlab",
       repo: { owner: "group/subgroup", name: "repo" },
       branch: "develop",
-      commitShaShort: "0123456",
+      commitSha: "0123456789abcdef",
       buildUrl: "https://gitlab.com/group/subgroup/repo/-/pipelines/1",
     });
   });
@@ -178,7 +177,7 @@ describe("detectProviderMetadata", () => {
       isPR: true,
       repo: { owner: "acme", name: "site" },
       branch: "main",
-      commitShaShort: "abcdef1",
+      commitSha: "abcdef1234567890",
     });
   });
 
@@ -190,7 +189,7 @@ describe("detectProviderMetadata", () => {
     expect(detectProviderMetadata()).toMatchObject({
       name: "cloudflare_pages",
       branch: "main",
-      commitShaShort: "deadbee",
+      commitSha: "deadbeefcafebabe",
     });
   });
 });

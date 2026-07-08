@@ -51,7 +51,6 @@ console.log(providerMetadata);
 //   repoSlug: "unjs/std-env",
 //   branch: "main",
 //   commitSha: "abcdef1234567890...",
-//   commitShaShort: "abcdef1",
 //   isPR: false,
 //   runId: "42",
 //   buildUrl: "https://github.com/unjs/std-env/actions/runs/42",

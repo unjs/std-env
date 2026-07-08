@@ -63,9 +63,6 @@ export type ProviderMetadata = {
   /** Full commit SHA. */
   commitSha?: string;
 
-  /** Commit SHA shortened to 7 characters. */
-  commitShaShort?: string;
-
   /** Whether the current build is for a pull/merge request. */
   isPR?: boolean;
 
@@ -198,7 +195,8 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
       const name = env.VERCEL_GIT_REPO_SLUG;
       return owner && name ? { owner, name } : parseRepoSlug(env.VERCEL_GIT_REPO_SLUG);
     },
-    "VERCEL_GIT_PULL_REQUEST_ID",
+    ,
+    // isPR derived from prNumber
     "VERCEL_GIT_PULL_REQUEST_ID",
     (env) => (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : undefined),
     "VERCEL_DEPLOYMENT_ID",
@@ -233,14 +231,16 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
       const name = env.BITBUCKET_REPO_FULL_NAME?.split("/").pop() || env.BITBUCKET_REPO_SLUG;
       return owner && name ? { owner, name } : parseRepoSlug(env.BITBUCKET_REPO_FULL_NAME);
     },
-    "BITBUCKET_PR_ID",
+    ,
+    // isPR derived from prNumber
     "BITBUCKET_PR_ID",
   ],
   buildkite: [
     "BUILDKITE_BRANCH",
     "BUILDKITE_COMMIT",
     "BUILDKITE_REPO",
-    "BUILDKITE_PULL_REQUEST",
+    ,
+    // isPR derived from prNumber
     "BUILDKITE_PULL_REQUEST",
     "BUILDKITE_BUILD_URL",
     "BUILDKITE_BUILD_ID",
@@ -249,7 +249,8 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     "CIRCLE_BRANCH",
     "CIRCLE_SHA1",
     "CIRCLE_REPOSITORY_URL",
-    "CIRCLE_PULL_REQUEST",
+    ,
+    // isPR derived from prNumber
     "CIRCLE_PULL_REQUEST",
     "CIRCLE_BUILD_URL",
     "CIRCLE_BUILD_NUM",
@@ -267,7 +268,8 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     "TRAVIS_BRANCH",
     "TRAVIS_COMMIT",
     "TRAVIS_REPO_SLUG",
-    "TRAVIS_PULL_REQUEST",
+    ,
+    // isPR derived from prNumber
     "TRAVIS_PULL_REQUEST",
   ],
   appveyor: [
@@ -275,7 +277,8 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     "APPVEYOR_REPO_BRANCH",
     "APPVEYOR_REPO_COMMIT",
     "APPVEYOR_REPO_NAME",
-    "APPVEYOR_PULL_REQUEST_NUMBER",
+    ,
+    // isPR derived from prNumber
     "APPVEYOR_PULL_REQUEST_NUMBER",
   ],
   bitrise: [
@@ -286,14 +289,16 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
       const name = env.BITRISEIO_GIT_REPOSITORY_SLUG;
       return owner && name ? { owner, name } : undefined;
     },
-    "BITRISE_PULL_REQUEST",
+    ,
+    // isPR derived from prNumber
     "BITRISE_PULL_REQUEST",
   ],
   cirrus: [
     "CIRRUS_BRANCH",
     "CIRRUS_CHANGE_IN_REPO",
     "CIRRUS_REPO_FULL_NAME",
-    "CIRRUS_PR",
+    ,
+    // isPR derived from prNumber
     "CIRRUS_PR",
   ],
   codefresh: [
@@ -320,7 +325,8 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     "SEMAPHORE_GIT_BRANCH",
     "SEMAPHORE_GIT_SHA",
     "SEMAPHORE_GIT_REPO_SLUG",
-    "SEMAPHORE_GIT_PR_NUMBER",
+    ,
+    // isPR derived from prNumber
     "SEMAPHORE_GIT_PR_NUMBER",
   ],
 };
@@ -348,16 +354,17 @@ export function detectProviderMetadata(): ProviderMetadata {
   if (branchName) meta.branch = branchName;
 
   const sha = runExtractor(commitSha);
-  if (sha) {
-    meta.commitSha = sha;
-    meta.commitShaShort = shortSha(sha);
-  }
+  if (sha) meta.commitSha = sha;
 
   const pr = runExtractor(prNumber, parsePrNumber);
   if (pr !== undefined) meta.prNumber = pr;
 
   if (isPR === undefined) {
-    if (pr !== undefined) meta.isPR = true;
+    // When a provider exposes the PR number via the same env var it uses to
+    // signal a PR (most do), the `isPR` slot is omitted and derived here: the
+    // build is a PR iff a PR number was parsed. `prNumber` is the extractor
+    // slot, so this only applies when the provider actually declares one.
+    if (prNumber !== undefined) meta.isPR = pr !== undefined;
   } else if (typeof isPR === "string") {
     const raw = env[isPR];
     // Providers like Travis/Buildkite set the var to the literal string "false"
@@ -460,13 +467,6 @@ function parsePrNumber(value: string | undefined): number | undefined {
     if (!Number.isNaN(num) && num > 0) return num;
   }
   return undefined;
-}
-
-/** Shorten a commit SHA to 7 characters. */
-function shortSha(sha: string | undefined): string | undefined {
-  const s = sha?.trim();
-  if (!s) return undefined;
-  return s.length >= 7 ? s.slice(0, 7) : s;
 }
 
 /** Map a platform-specific value onto a normalized deployment environment (case-insensitive). */
