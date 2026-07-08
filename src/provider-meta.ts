@@ -121,6 +121,7 @@ type ProviderExtractors = [
 // would otherwise strip the labels off the holes. Keep this directive.
 // oxfmt-ignore
 const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
+  // Docs: https://developers.cloudflare.com/pages/configuration/build-configuration/#environment-variables
   cloudflare_pages: [
     /* branch       */ "CF_PAGES_BRANCH",
     /* commitSha    */ "CF_PAGES_COMMIT_SHA",
@@ -129,6 +130,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* prNumber     */ ,
     /* buildUrl     */ "CF_PAGES_URL",
   ],
+  // Docs: https://developers.cloudflare.com/workers/ci-cd/builds/configuration/
   cloudflare_workers: [
     /* branch       */ "WORKERS_CI_BRANCH",
     /* commitSha    */ "WORKERS_CI_COMMIT_SHA",
@@ -138,6 +140,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* buildUrl     */ ,
     /* runId        */ "WORKERS_CI_BUILD_UUID",
   ],
+  // Docs: https://docs.github.com/en/actions/reference/workflows-and-actions/variables
   github_actions: [
     // On PRs GITHUB_HEAD_REF is the short source branch; otherwise GITHUB_REF_NAME
     // is already the short branch/tag name. Fall back to parsing the raw ref.
@@ -159,6 +162,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* eventName    */ "GITHUB_EVENT_NAME",
     /* workflowName */ "GITHUB_WORKFLOW",
   ],
+  // Docs: https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
   gitlab: [
     /* branch       */ "CI_COMMIT_REF_NAME",
     /* commitSha    */ "CI_COMMIT_SHA",
@@ -176,12 +180,15 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* buildUrl     */ "CI_PIPELINE_URL",
     /* runId        */ "CI_PIPELINE_ID",
   ],
+  // Docs: https://docs.netlify.com/configure-builds/environment-variables/
   netlify: [
     /* branch       */ (env) => env.HEAD || env.BRANCH,
     /* commitSha    */ "COMMIT_REF",
     /* repo         */ "REPOSITORY_URL",
     /* isPR         */ "PULL_REQUEST",
-    /* prNumber     */ ,
+    // REVIEW_ID is documented as always matching the deploy-preview number, i.e.
+    // the PR number (e.g. `deploy-preview-12` <-> PR #12).
+    /* prNumber     */ "REVIEW_ID",
     // DEPLOY_URL is already a fully-qualified `https://` URL — use it verbatim.
     /* buildUrl     */ "DEPLOY_URL",
     /* runId        */ "BUILD_ID",
@@ -195,6 +202,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
       },
     },
   ],
+  // Docs: https://vercel.com/docs/environment-variables/system-environment-variables
   vercel: [
     /* branch       */ "VERCEL_GIT_COMMIT_REF",
     /* commitSha    */ "VERCEL_GIT_COMMIT_SHA",
@@ -209,16 +217,28 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* runId        */ "VERCEL_DEPLOYMENT_ID",
     /* environment  */ "VERCEL_ENV",
   ],
+  // Docs: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
   codebuild: [
     /* branch       */ "CODEBUILD_WEBHOOK_HEAD_REF",
     /* commitSha    */ "CODEBUILD_RESOLVED_SOURCE_VERSION",
     /* repo         */ "CODEBUILD_SOURCE_REPO_URL",
     /* isPR         */ (env) =>
-      ["PULL_REQUEST_CREATED", "PULL_REQUEST_UPDATED", "PULL_REQUEST_REOPENED"].includes(
-        env.CODEBUILD_WEBHOOK_EVENT || "",
-      ),
+      [
+        "PULL_REQUEST_CREATED",
+        "PULL_REQUEST_UPDATED",
+        "PULL_REQUEST_REOPENED",
+        "PULL_REQUEST_MERGED",
+        "PULL_REQUEST_CLOSED",
+      ].includes(env.CODEBUILD_WEBHOOK_EVENT || ""),
+    // CODEBUILD_WEBHOOK_TRIGGER is `pr/<number>` for PR-triggered builds; the
+    // trailing-digits fallback in parsePrNumber extracts the number.
+    /* prNumber     */ (env) => parsePrNumber(env.CODEBUILD_WEBHOOK_TRIGGER),
   ],
+  // Docs: https://learn.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops
   azure_pipelines: [
+    // BUILD_SOURCEBRANCHNAME is only the leaf segment of the ref (e.g.
+    // `refs/heads/feat/thing` -> `thing`, not `feat/thing`) — Azure exposes no
+    // var with the full short branch name for nested branches.
     /* branch       */ "BUILD_SOURCEBRANCHNAME",
     /* commitSha    */ "BUILD_SOURCEVERSION",
     /* repo         */ ,
@@ -229,6 +249,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
       parsePrNumber(env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER) ??
       parsePrNumber(env.SYSTEM_PULLREQUEST_PULLREQUESTID),
   ],
+  // Docs: https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/
   bitbucket: [
     /* branch       */ "BITBUCKET_BRANCH",
     /* commitSha    */ "BITBUCKET_COMMIT",
@@ -242,6 +263,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* isPR         */ , // derived from prNumber
     /* prNumber     */ "BITBUCKET_PR_ID",
   ],
+  // Docs: https://buildkite.com/docs/pipelines/configure/environment-variables
   buildkite: [
     /* branch       */ "BUILDKITE_BRANCH",
     /* commitSha    */ "BUILDKITE_COMMIT",
@@ -251,28 +273,39 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* buildUrl     */ "BUILDKITE_BUILD_URL",
     /* runId        */ "BUILDKITE_BUILD_ID",
   ],
+  // Docs: https://circleci.com/docs/reference/variables/
   circle: [
     /* branch       */ "CIRCLE_BRANCH",
     /* commitSha    */ "CIRCLE_SHA1",
     /* repo         */ "CIRCLE_REPOSITORY_URL",
     /* isPR         */ , // derived from prNumber
+    // CIRCLE_PULL_REQUEST is a full PR URL, not a bare number (parsePrNumber's
+    // trailing-/pull/<n> fallback handles it). CircleCI docs mark this var
+    // deprecated for GitLab/GitHub App/GitHub Enterprise Server/Bitbucket Data
+    // Center projects — it's only guaranteed for GitHub OAuth/Bitbucket Cloud.
     /* prNumber     */ "CIRCLE_PULL_REQUEST",
     /* buildUrl     */ "CIRCLE_BUILD_URL",
     /* runId        */ "CIRCLE_BUILD_NUM",
   ],
+  // Docs: https://www.jenkins.io/doc/book/pipeline/multibranch/#additional-behaviors
   jenkins: [
     /* branch       */ ,
     /* commitSha    */ ,
     /* repo         */ ,
-    /* isPR         */ (env) => !!(env.ghprbPullId || env.CHANGE_ID),
-    /* prNumber     */ (env) => parsePrNumber(env.ghprbPullId || env.CHANGE_ID),
+    // CHANGE_ID (GitHub Branch Source plugin, multibranch pipelines) takes
+    // priority over ghprbPullId (GitHub pull request builder plugin), which is
+    // deprecated/unmaintained.
+    /* isPR         */ (env) => !!(env.CHANGE_ID || env.ghprbPullId),
+    /* prNumber     */ (env) => parsePrNumber(env.CHANGE_ID || env.ghprbPullId),
   ],
+  // Docs: https://render.com/docs/environment-variables
   render: [
     /* branch       */ "RENDER_GIT_BRANCH",
     /* commitSha    */ "RENDER_GIT_COMMIT",
     /* repo         */ "RENDER_GIT_REPO_SLUG",
     /* isPR         */ "IS_PULL_REQUEST",
   ],
+  // Docs: https://docs.travis-ci.com/user/environment-variables/
   travis: [
     // On PR builds branch is the target branch the PR is merging into.
     /* branch       */ "TRAVIS_BRANCH",
@@ -281,6 +314,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* isPR         */ , // derived from prNumber
     /* prNumber     */ "TRAVIS_PULL_REQUEST",
   ],
+  // Docs: https://www.appveyor.com/docs/environment-variables/
   appveyor: [
     // On PR builds branch is the base branch the PR is merging into.
     /* branch       */ "APPVEYOR_REPO_BRANCH",
@@ -289,6 +323,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* isPR         */ , // derived from prNumber
     /* prNumber     */ "APPVEYOR_PULL_REQUEST_NUMBER",
   ],
+  // Docs: https://docs.bitrise.io/en/bitrise-ci/references/available-environment-variables
   bitrise: [
     /* branch       */ "BITRISE_GIT_BRANCH",
     /* commitSha    */ "BITRISE_GIT_COMMIT",
@@ -300,6 +335,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* isPR         */ , // derived from prNumber
     /* prNumber     */ "BITRISE_PULL_REQUEST",
   ],
+  // Docs: https://cirrus-ci.org/guide/writing-tasks/
   cirrus: [
     /* branch       */ "CIRRUS_BRANCH",
     /* commitSha    */ "CIRRUS_CHANGE_IN_REPO",
@@ -307,6 +343,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* isPR         */ , // derived from prNumber
     /* prNumber     */ "CIRRUS_PR",
   ],
+  // Docs: https://codefresh.io/docs/docs/pipelines/variables/
   codefresh: [
     /* branch       */ "CF_BRANCH",
     /* commitSha    */ "CF_REVISION",
@@ -314,7 +351,10 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* isPR         */ (env) => !!(env.CF_PULL_REQUEST_NUMBER || env.CF_PULL_REQUEST_ID),
     /* prNumber     */ (env) => parsePrNumber(env.CF_PULL_REQUEST_NUMBER || env.CF_PULL_REQUEST_ID),
   ],
+  // Docs: https://docs.drone.io/pipeline/environment/reference/
   drone: [
+    // DRONE_COMMIT_BRANCH is the target/base branch for both push and PR builds
+    // (Drone exposes no separate source-branch var for PRs).
     /* branch       */ "DRONE_COMMIT_BRANCH",
     /* commitSha    */ "DRONE_COMMIT_SHA",
     /* repo         */ (env) => {
@@ -325,6 +365,7 @@ const extractors: Partial<Record<ProviderName, ProviderExtractors>> = {
     /* isPR         */ (env) => env.DRONE_BUILD_EVENT === "pull_request",
     /* prNumber     */ "DRONE_PULL_REQUEST",
   ],
+  // Docs: https://docs.semaphore.io/reference/env-vars
   semaphore: [
     // On PR builds branch is the target branch; SEMAPHORE_GIT_PR_BRANCH is the source.
     /* branch       */ "SEMAPHORE_GIT_BRANCH",
@@ -440,7 +481,6 @@ function refToBranch(ref: string | undefined): string | undefined {
   if (!ref) return undefined;
   const s = ref.trim();
   if (s.startsWith("refs/heads/")) return s.slice("refs/heads/".length);
-  if (s.startsWith("refs/head/")) return s.slice("refs/head/".length);
   if (s.startsWith("refs/pull/")) return undefined;
   return s;
 }
