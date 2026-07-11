@@ -35,7 +35,7 @@
     "oxlint": "^1.72.0",
     "rollup": "^4.62.2",
     "terser": "^5.48.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.10"
   },
   "packageManager": "pnpm@11.10.0"
