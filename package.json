@@ -25,18 +25,18 @@
     "typecheck": "tsgo --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^26.1.0",
+    "@types/node": "^26.1.1",
     "@typescript/native-preview": "latest",
     "@vitest/coverage-v8": "^4.1.10",
     "changelogen": "^0.6.2",
     "mitata": "^1.0.34",
-    "obuild": "^0.4.37",
-    "oxfmt": "^0.57.0",
-    "oxlint": "^1.72.0",
+    "obuild": "^0.4.38",
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.74.0",
     "rollup": "^4.62.2",
-    "terser": "^5.48.0",
+    "terser": "^5.49.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
   },
-  "packageManager": "pnpm@11.10.0"
+  "packageManager": "pnpm@11.15.1"
 }
