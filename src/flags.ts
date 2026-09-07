@@ -19,8 +19,9 @@ export const hasWindow: boolean = typeof window !== "undefined";
 /** Detect if `DEBUG` environment variable is set */
 export const isDebug: boolean = !!env.DEBUG;
 
-/** Detect if `NODE_ENV` environment variable is `test` or `TEST` environment variable is set */
-export const isTest: boolean = nodeENV === "test" || !!env.TEST;
+/** Detect if `NODE_ENV` environment variable is `test`, `TEST` is set, or common test runners (Vitest, Jest) are detected */
+export const isTest: boolean =
+  nodeENV === "test" || !!env.TEST || !!env.VITEST || !!env.JEST_WORKER_ID;
 
 /** Detect if `NODE_ENV` or `MODE` environment variable is `production` */
 export const isProduction: boolean = nodeENV === "production" || env.MODE === "production";
