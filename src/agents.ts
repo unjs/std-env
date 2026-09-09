@@ -33,7 +33,7 @@ const agents: InternalAgent[] = [
   ["gemini", ["GEMINI_CLI"]],
   // ✅ Verified by codex (can be detected using CODEX_THREAD_ID)
   ["codex", ["CODEX_SANDBOX", "CODEX_THREAD_ID"]],
-  // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER or OPENCODE_CLIENT?)
+  // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER, OPENCODE_CLIENT, OPENCODE_PID)
   ["opencode", ["OPENCODE"]],
   // ✅ Verified by pi (can be detected using PATH containing .pi/agent/bin)
   ["pi", [/* #__PURE__ */ envMatcher("PATH", /\.pi[\\/]agent/)]],
