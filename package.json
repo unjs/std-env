@@ -27,7 +27,7 @@
   "devDependencies": {
     "@types/node": "^26.1.0",
     "@typescript/native-preview": "latest",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^5.0.0",
     "changelogen": "^0.6.2",
     "mitata": "^1.0.34",
     "obuild": "^0.4.37",
@@ -36,7 +36,7 @@
     "rollup": "^4.62.2",
     "terser": "^5.48.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.0"
   },
   "packageManager": "pnpm@11.10.0"
 }
