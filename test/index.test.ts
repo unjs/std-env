@@ -20,4 +20,14 @@ describe("std-env", () => {
       isColorSupported: expect.any(Boolean),
     });
   });
+
+  it("resolves env from import.meta.env fallback", () => {
+    (globalThis as any).__import_meta_env__ = {
+      ASTRO_ONLY_ENV: "from_import_meta",
+    };
+    delete process.env.ASTRO_ONLY_ENV;
+    expect(stdEnv.env.ASTRO_ONLY_ENV).toBe("from_import_meta");
+    expect("ASTRO_ONLY_ENV" in stdEnv.env).toBe(true);
+    delete (globalThis as any).__import_meta_env__;
+  });
 });
