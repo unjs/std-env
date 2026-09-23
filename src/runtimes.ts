@@ -32,6 +32,15 @@ export type RuntimeInfo = {
 export const isNode: boolean = !!process?.versions?.node;
 
 /**
+ * Indicates if running under [Nub](https://github.com/nubjs/nub).
+ *
+ * **Note:** Nub augments Node.js rather than replacing it, so `isNode` is also `true` and
+ * `runtime` stays `"node"`. This flag is additive — it detects the Nub augmentation layer
+ * on top of Node.
+ */
+export const isNub: boolean = !!process?.versions?.nub;
+
+/**
  * Indicates if running in Bun runtime.
  */
 export const isBun: boolean = "Bun" in globalThis;
