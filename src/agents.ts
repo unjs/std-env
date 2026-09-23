@@ -13,6 +13,7 @@ export type AgentName =
   | "replit"
   | "gemini"
   | "codex"
+  | "copilot"
   | "auggie"
   | "opencode"
   | "kiro"
@@ -33,6 +34,8 @@ const agents: InternalAgent[] = [
   ["gemini", ["GEMINI_CLI"]],
   // ✅ Verified by codex (can be detected using CODEX_THREAD_ID)
   ["codex", ["CODEX_SANDBOX", "CODEX_THREAD_ID"]],
+  // VS Code Copilot sets COPILOT_AGENT in agent terminal sessions
+  ["copilot", ["COPILOT_AGENT"]],
   // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER or OPENCODE_CLIENT?)
   ["opencode", ["OPENCODE"]],
   // ✅ Verified by pi (can be detected using PATH containing .pi/agent/bin)
@@ -81,7 +84,7 @@ export type AgentInfo = {
 /**
  * Detects the current AI coding agent from environment variables.
  *
- * Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
+ * Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `copilot`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
  *
  * You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
  */
