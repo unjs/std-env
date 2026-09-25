@@ -31,12 +31,12 @@
     "changelogen": "^0.6.2",
     "mitata": "^1.0.34",
     "obuild": "^0.4.40",
-    "oxfmt": "^0.68.0",
-    "oxlint": "^1.83.0",
+    "oxfmt": "^0.70.0",
+    "oxlint": "^1.85.0",
     "rollup": "^4.63.4",
     "terser": "^5.51.2",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   },
-  "packageManager": "pnpm@11.27.0"
+  "packageManager": "pnpm@11.27.1"
 }
