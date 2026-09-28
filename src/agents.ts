@@ -9,6 +9,7 @@ export type AgentName =
   | (string & {})
   | "cursor"
   | "claude"
+  | "copilot"
   | "devin"
   | "replit"
   | "gemini"
@@ -43,6 +44,9 @@ const agents: InternalAgent[] = [
   ["goose", ["GOOSE_PROVIDER"]],
   // ✅ Verified by junie (can be detected using JUNIE_DATA, JUNIE_SHIM_PATH)
   ["junie", ["JUNIE_DATA", "JUNIE_SHIM_PATH"]],
+
+  // ❓ not tested (can be detected using COPILOT_AGENT, COPILOT_CLI)
+  ["copilot", ["COPILOT_AGENT", "COPILOT_CLI"]],
 
   // -- IDEs (checked last — agents running inside these should be detected first) --
   // ✅ Verified by devin (can be detected using EDITOR, BROWSER, PATH)
@@ -81,14 +85,17 @@ export type AgentInfo = {
 /**
  * Detects the current AI coding agent from environment variables.
  *
- * Supported agents: `cursor`, `claude`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
+ * Supported agents: `cursor`, `claude`, `copilot`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
  *
  * You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
  */
 export function detectAgent(): AgentInfo {
   const aiAgent = env.AI_AGENT;
   if (aiAgent) {
-    return { name: aiAgent.toLowerCase() };
+    const normalized = aiAgent.toLowerCase();
+    return {
+      name: normalized === "github_copilot_vscode_agent" ? "copilot" : normalized,
+    };
   }
   for (const [name, checks] of agents) {
     for (const check of checks) {
