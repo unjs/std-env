@@ -65,7 +65,7 @@ All detection modules follow the same pattern:
 
 ### Agent Detection (`src/agents.ts`)
 
-- **Priority**: `AI_AGENT` env var (generic override) → ordered tuple scan
+- **Priority**: `AI_AGENT` env var (generic override, normalizing known aliases such as `github_copilot_vscode_agent` to `copilot`) → ordered tuple scan
 - Internal types:
   - `EnvCheck = string | ((env: Record<string, string | undefined>) => boolean)`
   - `InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]]`
@@ -73,6 +73,7 @@ All detection modules follow the same pattern:
 - When `EnvCheck` is a string, the env var must be truthy; when it's a function, it receives the full env object and returns a boolean
 - `envMatcher(envKey, regex, opts?)` helper creates regex-based env var matchers (e.g., `envMatcher("TERM_PROGRAM", /kiro/)`)
   - `opts.noTTY: true` makes the matcher only match in a non-interactive context (when `process.stdout.isTTY` is falsy). Use for detections keyed off generic terminal env vars that an IDE sets in its integrated terminal too — e.g. `kiro` (`TERM_PROGRAM=kiro`), where a TTY means a human is at the IDE terminal, not the agent CLI (see #185)
+- **GitHub Copilot** (`copilot`): detected via `COPILOT_AGENT` (VS Code Copilot agent terminals) or `COPILOT_CLI` (Copilot CLI / Copilot app). Explicit `AI_AGENT=github_copilot_vscode_agent` is normalized to `copilot`.
 - IDEs (cursor, devin, kiro) are checked last so agents running inside them are detected first
 - Exports: `detectAgent()`, `agentInfo` (singleton), `agent` (name shorthand), `isAgent` (boolean)
 
@@ -118,7 +119,7 @@ The goal: a consumer that imports only e.g. `runtime` or `provider` should not d
 
 ```bash
 pnpm run build
-node -e "console.log(require('./dist/index.cjs').agentInfo)"
+node -e "import('./dist/index.mjs').then(m => console.log(m.agentInfo))"
 ```
 
 If output is like `{ name: "..." }`, it works. If output is `{}`, agent is NOT DETECTED.
@@ -128,6 +129,8 @@ Debug current env variables:
 ```bash
 node -e "console.log(process.env)"
 ```
+
+Do **not** invent environment variables or mark a detector as verified unless those vars were actually present when the self-test ran. Unit tests may stub env vars to cover detection logic; stubbed tests do **not** replace the live self-test verification comment.
 
 **After running the self-test:**
 

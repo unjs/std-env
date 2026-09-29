@@ -16,6 +16,8 @@ const agentEnvKeys = [
   "GOOSE_PROVIDER",
   "JUNIE_DATA",
   "JUNIE_SHIM_PATH",
+  "COPILOT_AGENT",
+  "COPILOT_CLI",
   "CURSOR_AGENT",
   "TERM_PROGRAM",
   "EDITOR",
@@ -54,6 +56,17 @@ describe("detectAgent", () => {
     expect(detectAgent()).toEqual({ name: "custom-agent" });
   });
 
+  it("AI_AGENT normalizes github_copilot_vscode_agent to copilot", () => {
+    vi.stubEnv("AI_AGENT", "github_copilot_vscode_agent");
+    expect(detectAgent()).toEqual({ name: "copilot" });
+  });
+
+  it("AI_AGENT normalizes github_copilot_vscode_agent even when COPILOT_AGENT is set", () => {
+    vi.stubEnv("AI_AGENT", "github_copilot_vscode_agent");
+    vi.stubEnv("COPILOT_AGENT", "1");
+    expect(detectAgent()).toEqual({ name: "copilot" });
+  });
+
   describe("simple env var checks", () => {
     const cases: [string, string, string][] = [
       ["claude", "CLAUDECODE", "1"],
@@ -67,6 +80,8 @@ describe("detectAgent", () => {
       ["goose", "GOOSE_PROVIDER", "openai"],
       ["junie", "JUNIE_DATA", "/home/user/.local/share/junie"],
       ["junie", "JUNIE_SHIM_PATH", "/home/user/.local/bin/junie"],
+      ["copilot", "COPILOT_AGENT", "1"],
+      ["copilot", "COPILOT_CLI", "1"],
       ["cursor", "CURSOR_AGENT", "1"],
     ];
 
