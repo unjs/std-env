@@ -95,8 +95,7 @@ export function detectAgent(): AgentInfo {
     const normalized = aiAgent.toLowerCase();
     return {
       name:
-        normalized === "github_copilot_vscode_agent" ||
-        normalized === "github_copilot_cloud_agent"
+        normalized === "github_copilot_vscode_agent" || normalized === "github_copilot_cloud_agent"
           ? "copilot"
           : normalized,
     };
