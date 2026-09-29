@@ -65,7 +65,7 @@ All detection modules follow the same pattern:
 
 ### Agent Detection (`src/agents.ts`)
 
-- **Priority**: `AI_AGENT` env var (generic override, normalizing known aliases such as `github_copilot_vscode_agent` to `copilot`) → ordered tuple scan
+- **Priority**: `AI_AGENT` env var (generic override, normalizing known aliases such as `github_copilot_vscode_agent` and `github_copilot_cloud_agent` to `copilot`) → ordered tuple scan
 - Internal types:
   - `EnvCheck = string | ((env: Record<string, string | undefined>) => boolean)`
   - `InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]]`
@@ -73,7 +73,7 @@ All detection modules follow the same pattern:
 - When `EnvCheck` is a string, the env var must be truthy; when it's a function, it receives the full env object and returns a boolean
 - `envMatcher(envKey, regex, opts?)` helper creates regex-based env var matchers (e.g., `envMatcher("TERM_PROGRAM", /kiro/)`)
   - `opts.noTTY: true` makes the matcher only match in a non-interactive context (when `process.stdout.isTTY` is falsy). Use for detections keyed off generic terminal env vars that an IDE sets in its integrated terminal too — e.g. `kiro` (`TERM_PROGRAM=kiro`), where a TTY means a human is at the IDE terminal, not the agent CLI (see #185)
-- **GitHub Copilot** (`copilot`): detected via `COPILOT_AGENT` (VS Code Copilot agent terminals) or `COPILOT_CLI` (Copilot CLI / Copilot app). Explicit `AI_AGENT=github_copilot_vscode_agent` is normalized to `copilot`.
+- **GitHub Copilot** (`copilot`): detected via `COPILOT_AGENT` (VS Code Copilot agent terminals) or `COPILOT_CLI` (Copilot CLI / Copilot app). Explicit `AI_AGENT=github_copilot_vscode_agent` and `AI_AGENT=github_copilot_cloud_agent` are normalized to `copilot`.
 - IDEs (cursor, devin, kiro) are checked last so agents running inside them are detected first
 - Exports: `detectAgent()`, `agentInfo` (singleton), `agent` (name shorthand), `isAgent` (boolean)
 

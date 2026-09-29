@@ -45,7 +45,7 @@ const agents: InternalAgent[] = [
   // ✅ Verified by junie (can be detected using JUNIE_DATA, JUNIE_SHIM_PATH)
   ["junie", ["JUNIE_DATA", "JUNIE_SHIM_PATH"]],
 
-  // ❓ not tested
+  // ✅ Verified by github_copilot_cloud_agent (can be detected using AI_AGENT, COPILOT_CLI)
   ["copilot", ["COPILOT_AGENT", "COPILOT_CLI"]],
 
   // -- IDEs (checked last — agents running inside these should be detected first) --
@@ -94,7 +94,10 @@ export function detectAgent(): AgentInfo {
   if (aiAgent) {
     const normalized = aiAgent.toLowerCase();
     return {
-      name: normalized === "github_copilot_vscode_agent" ? "copilot" : normalized,
+      name:
+        normalized === "github_copilot_vscode_agent" || normalized === "github_copilot_cloud_agent"
+          ? "copilot"
+          : normalized,
     };
   }
   for (const [name, checks] of agents) {
