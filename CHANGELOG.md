@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v4.3.0
+
+[compare changes](https://github.com/unjs/std-env/compare/v4.2.0...v4.3.0)
+
+### 🚀 Enhancements
+
+- **agents:** Detect GitHub Copilot agent and CLI ([#217](https://github.com/unjs/std-env/pull/217))
+- Add isNub runtime detection ([#197](https://github.com/unjs/std-env/pull/197))
+
+### 💅 Refactors
+
+- Normalize gitHub copilot cloud agent alias ([#219](https://github.com/unjs/std-env/pull/219))
+
+### 📦 Build
+
+- Make std-env tree-shakable (#__PURE__ via terser + un-pinned singletons) ([#199](https://github.com/unjs/std-env/pull/199))
+
+### 🏡 Chore
+
+- Update release script ([7b6b8b1](https://github.com/unjs/std-env/commit/7b6b8b1))
+- Update opencode comment ([#211](https://github.com/unjs/std-env/pull/211))
+
+### ❤️ Contributors
+
+- Copilot
+- Colin McDonnell ([@colinhacks](https://github.com/colinhacks))
+- 00200200
+- Rihan Arfan <me@file.properties>
+- Pi0x <x@pi0.io>
+- Pooya Parsa <pooya@pi0.io>
+
 ## v4.2.0
 
 [compare changes](https://github.com/unjs/std-env/compare/v4.1.0...v4.2.0)
