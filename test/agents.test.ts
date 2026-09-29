@@ -61,6 +61,11 @@ describe("detectAgent", () => {
     expect(detectAgent()).toEqual({ name: "copilot" });
   });
 
+  it("AI_AGENT normalizes github_copilot_cloud_agent to copilot", () => {
+    vi.stubEnv("AI_AGENT", "github_copilot_cloud_agent");
+    expect(detectAgent()).toEqual({ name: "copilot" });
+  });
+
   it("AI_AGENT normalizes github_copilot_vscode_agent even when COPILOT_AGENT is set", () => {
     vi.stubEnv("AI_AGENT", "github_copilot_vscode_agent");
     vi.stubEnv("COPILOT_AGENT", "1");
