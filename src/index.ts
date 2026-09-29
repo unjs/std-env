@@ -36,6 +36,14 @@ export {
 } from "./providers.ts";
 
 export {
+  type ProviderMeta,
+  type RepoInfo,
+  type DeploymentEnvironment,
+  providerMeta,
+  detectProviderMeta,
+} from "./provider-meta.ts";
+
+export {
   type RuntimeInfo,
   type RuntimeName,
   isBun,
