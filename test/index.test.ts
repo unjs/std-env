@@ -14,6 +14,7 @@ describe("std-env", () => {
       isProduction: false,
       isDevelopment: false,
       isMinimal: true,
+      isNub: false,
       isWindows: expect.any(Boolean),
       isLinux: expect.any(Boolean),
       isMacOS: expect.any(Boolean),
