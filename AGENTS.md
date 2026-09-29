@@ -65,7 +65,7 @@ All detection modules follow the same pattern:
 
 ### Agent Detection (`src/agents.ts`)
 
-- **Priority**: `AI_AGENT` env var (generic override) → ordered tuple scan
+- **Priority**: `AI_AGENT` env var (generic override, normalizing known aliases such as `github_copilot_vscode_agent` to `copilot`) → ordered tuple scan
 - Internal types:
   - `EnvCheck = string | ((env: Record<string, string | undefined>) => boolean)`
   - `InternalAgent = [agentName: AgentName, envChecks: EnvCheck[]]`

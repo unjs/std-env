@@ -45,7 +45,7 @@ const agents: InternalAgent[] = [
   // ✅ Verified by junie (can be detected using JUNIE_DATA, JUNIE_SHIM_PATH)
   ["junie", ["JUNIE_DATA", "JUNIE_SHIM_PATH"]],
 
-  // ❓ not tested (can be detected using COPILOT_AGENT, COPILOT_CLI)
+  // ❓ not tested
   ["copilot", ["COPILOT_AGENT", "COPILOT_CLI"]],
 
   // -- IDEs (checked last — agents running inside these should be detected first) --
