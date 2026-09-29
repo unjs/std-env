@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 📦 Build
 
-- Make std-env tree-shakable (#__PURE__ via terser + un-pinned singletons) ([#199](https://github.com/unjs/std-env/pull/199))
+- Make std-env tree-shakable (#**PURE** via terser + un-pinned singletons) ([#199](https://github.com/unjs/std-env/pull/199))
 
 ### 🏡 Chore
 
