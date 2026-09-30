@@ -4,7 +4,7 @@ import { minify } from "terser";
 import { defineBuildConfig } from "obuild/config";
 
 export default defineBuildConfig({
-  entries: [{ type: "bundle", input: "src/index.ts" }],
+  entries: [{ type: "bundle", input: ["src/index", "src/containers/index", "src/wsl/index"] }],
   hooks: {
     rolldownOutput(cfg) {
       // Not `true`: full oxc minification strips the `#__PURE__` annotations that
