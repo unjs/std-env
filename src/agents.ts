@@ -19,7 +19,8 @@ export type AgentName =
   | "kiro"
   | "goose"
   | "pi"
-  | "junie";
+  | "junie"
+  | "antigravity";
 
 type EnvCheck = string | (() => boolean);
 
@@ -44,6 +45,8 @@ const agents: InternalAgent[] = [
   ["goose", ["GOOSE_PROVIDER"]],
   // ✅ Verified by junie (can be detected using JUNIE_DATA, JUNIE_SHIM_PATH)
   ["junie", ["JUNIE_DATA", "JUNIE_SHIM_PATH"]],
+  // ✅ Verified by antigravity (can be detected using ANTIGRAVITY_AGENT)
+  ["antigravity", ["ANTIGRAVITY_AGENT"]],
 
   // ✅ Verified by github_copilot_cloud_agent (can be detected using AI_AGENT, COPILOT_CLI)
   ["copilot", ["COPILOT_AGENT", "COPILOT_CLI"]],
@@ -85,7 +88,7 @@ export type AgentInfo = {
 /**
  * Detects the current AI coding agent from environment variables.
  *
- * Supported agents: `cursor`, `claude`, `copilot`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
+ * Supported agents: `cursor`, `claude`, `copilot`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`, `antigravity`
  *
  * You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
  */

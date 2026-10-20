@@ -52,7 +52,7 @@ console.log({ isAgent, agent, agentInfo });
 
 Set the `AI_AGENT` env var to explicitly specify the agent name. GitHub Copilot aliases `github_copilot_vscode_agent` and `github_copilot_cloud_agent` are normalized to `copilot`. Use `detectAgent()` to re-run detection.
 
-Supported agents: `cursor`, `claude`, `copilot`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
+Supported agents: `cursor`, `claude`, `copilot`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`, `antigravity`
 
 ## Flags
 
