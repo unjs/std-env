@@ -19,7 +19,8 @@ export type AgentName =
   | "kiro"
   | "goose"
   | "pi"
-  | "junie";
+  | "junie"
+  | "antigravity";
 
 type EnvCheck = string | (() => boolean);
 
@@ -32,6 +33,8 @@ const agents: InternalAgent[] = [
   ["replit", ["REPL_ID"]],
   // ✅ Verified by gemini (can be detected using GEMINI_CLI, GEMINI_CLI_NO_RELAUNCH)
   ["gemini", ["GEMINI_CLI"]],
+  // ✅ Verified by antigravity (can be detected using ANTIGRAVITY_AGENT)
+  ["antigravity", ["ANTIGRAVITY_AGENT"]],
   // ✅ Verified by codex (can be detected using CODEX_THREAD_ID)
   ["codex", ["CODEX_SANDBOX", "CODEX_THREAD_ID"]],
   // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER, OPENCODE_CLIENT, OPENCODE_PID)
@@ -85,7 +88,7 @@ export type AgentInfo = {
 /**
  * Detects the current AI coding agent from environment variables.
  *
- * Supported agents: `cursor`, `claude`, `copilot`, `devin`, `replit`, `gemini`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
+ * Supported agents: `cursor`, `claude`, `copilot`, `devin`, `replit`, `gemini`, `antigravity`, `codex`, `auggie`, `opencode`, `kiro`, `goose`, `pi`, `junie`
  *
  * You can also set the `AI_AGENT` environment variable to explicitly specify the agent name.
  */
