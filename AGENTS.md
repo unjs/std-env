@@ -80,7 +80,7 @@ All detection modules follow the same pattern:
 ### Provider Detection (`src/providers.ts`)
 
 - 50+ CI/CD providers detected via env vars
-- Some providers have `{ ci: false }` metadata (e.g., Vercel, CodeSandbox — deployment platforms, not CI)
+- Some providers have `{ ci: false }` metadata (e.g., Vercel, CodeSandbox, Google Cloud Run, Render, Railway, Deno Deploy — deployment platforms, not CI)
 - Some providers have `{ ci: true }` explicitly (e.g., AWS Amplify, Cloudflare Pages/Workers)
 - Special case: StackBlitz/WebContainer detected via `SHELL === "/bin/jsh"` + `process.versions.webcontainer`
 
