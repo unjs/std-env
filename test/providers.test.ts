@@ -1,7 +1,26 @@
-import { expect, it, describe, vi, afterEach } from "vitest";
+import { expect, it, describe, vi, beforeEach, afterEach } from "vitest";
 import { detectProvider } from "../src/providers.ts";
 
+const AMBIENT_CI_VARS = [
+  "GITHUB_ACTIONS",
+  "CI",
+  "GITLAB_CI",
+  "CIRCLECI",
+  "TRAVIS",
+  "BITBUCKET_COMMIT",
+  "BUILDKITE",
+  "APPVEYOR",
+  "DRONE",
+  "NETLIFY",
+];
+
 describe("detectProvider", () => {
+  beforeEach(() => {
+    for (const v of AMBIENT_CI_VARS) {
+      vi.stubEnv(v, "");
+    }
+  });
+
   afterEach(() => {
     vi.unstubAllEnvs();
   });
