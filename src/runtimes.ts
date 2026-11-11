@@ -3,7 +3,7 @@ import { process } from "./env.ts";
 /**
  * Represents the name of a JavaScript runtime.
  *
- * @see https://runtime-keys.proposal.wintercg.org/
+ * @see https://runtime-keys.proposal.wintertc.org
  */
 export type RuntimeName =
   | (string & {})

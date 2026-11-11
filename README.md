@@ -8,7 +8,7 @@ Runtime-agnostic JS utils for detecting environments, runtimes, CI providers, an
 
 ## Runtime Detection
 
-Detects the current JavaScript runtime based on global variables, following the [WinterCG Runtime Keys proposal](https://runtime-keys.proposal.wintercg.org/).
+Detects the current JavaScript runtime based on global variables, following the [WinterTC Runtime Keys proposal](https://runtime-keys.proposal.wintertc.org).
 
 ```ts
 import { runtime, runtimeInfo } from "std-env";
