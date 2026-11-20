@@ -36,8 +36,8 @@ const agents: InternalAgent[] = [
   ["codex", ["CODEX_SANDBOX", "CODEX_THREAD_ID"]],
   // ✅ Verified by opencode (can be detected using OPENCODE, OPENCODE_CALLER, OPENCODE_CLIENT, OPENCODE_PID)
   ["opencode", ["OPENCODE"]],
-  // ✅ Verified by pi (can be detected using PATH containing .pi/agent/bin)
-  ["pi", [/* #__PURE__ */ envMatcher("PATH", /\.pi[\\/]agent/)]],
+  // ✅ Verified by pi (can be detected using PI_CODING_AGENT, AI_AGENT)
+  ["pi", ["PI_CODING_AGENT"]],
   // ❓ not tested
   ["auggie", ["AUGMENT_AGENT"]],
   // ❓ not tested
