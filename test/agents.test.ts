@@ -22,6 +22,7 @@ const agentEnvKeys = [
   "TERM_PROGRAM",
   "EDITOR",
   "PATH",
+  "PI_CODING_AGENT",
 ];
 
 describe("detectAgent", () => {
@@ -127,13 +128,23 @@ describe("detectAgent", () => {
       expect(detectAgent()).toEqual({});
     });
 
-    it("detects pi via PATH containing .pi/agent/bin", () => {
-      vi.stubEnv("PATH", "/home/user/.pi/agent/bin:/usr/bin");
+    it("detects pi via PI_CODING_AGENT", () => {
+      vi.stubEnv("PI_CODING_AGENT", "true");
       expect(detectAgent()).toEqual({ name: "pi" });
     });
 
-    it("does not detect pi when PATH does not contain .pi/agent/bin", () => {
-      vi.stubEnv("PATH", "/usr/bin:/usr/local/bin");
+    it("does not detect pi when PI_CODING_AGENT is not set", () => {
+      vi.stubEnv("PI_CODING_AGENT", "");
+      expect(detectAgent()).toEqual({});
+    });
+
+    // Regression: pi's installer adds `~/.pi/agent/bin` to the user's persistent
+    // PATH, so PATH alone must never be treated as proof of running inside pi.
+    it("does not detect pi from PATH containing .pi/agent/bin", () => {
+      vi.stubEnv("PATH", "/home/user/.pi/agent/bin:/usr/bin");
+      expect(detectAgent()).toEqual({});
+
+      vi.stubEnv("PATH", "C:\\Users\\user\\.pi\\agent\\bin;C:\\Windows\\system32");
       expect(detectAgent()).toEqual({});
     });
   });
